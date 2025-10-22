@@ -6,6 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\PermissionRegistrar;
 
 class RoleSeeder extends Seeder
 {
@@ -14,10 +15,13 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create roles
-        $userRole = Role::create(['name' => 'user']);
-        $contentManagerRole = Role::create(['name' => 'content_manager']);
-        $adminRole = Role::create(['name' => 'admin']);
+        // Ensure permission cache is cleared to avoid stale data
+        app()[PermissionRegistrar::class]->forgetCachedPermissions();
+
+        // Create roles idempotently
+        $userRole = Role::firstOrCreate(['name' => 'user']);
+        $contentManagerRole = Role::firstOrCreate(['name' => 'content_manager']);
+        $adminRole = Role::firstOrCreate(['name' => 'admin']);
 
         // Create permissions
         $permissions = [
@@ -41,19 +45,19 @@ class RoleSeeder extends Seeder
         ];
 
         foreach ($permissions as $permission) {
-            Permission::create(['name' => $permission]);
+            Permission::firstOrCreate(['name' => $permission]);
         }
 
         // Assign permissions to roles
-        $userRole->givePermissionTo(['view_articles', 'use_chatbot']);
+        $userRole->syncPermissions(['view_articles', 'use_chatbot']);
         
-        $contentManagerRole->givePermissionTo([
+        $contentManagerRole->syncPermissions([
             'view_articles', 'use_chatbot',
             'create_articles', 'edit_articles', 'delete_articles', 'publish_articles',
             'manage_categories', 'view_dashboard'
         ]);
         
-        $adminRole->givePermissionTo([
+        $adminRole->syncPermissions([
             'view_articles', 'use_chatbot',
             'create_articles', 'edit_articles', 'delete_articles', 'publish_articles',
             'manage_categories', 'view_dashboard',
