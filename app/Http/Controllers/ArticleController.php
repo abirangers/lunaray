@@ -31,12 +31,13 @@ class ArticleController extends Controller
     {
         $query = Article::with(['author', 'categories']);
 
-        // Search functionality
+        // Enhanced search functionality
         if ($request->filled('search')) {
             $search = $request->get('search');
             $query->where(function ($q) use ($search) {
                 $q->where('title', 'like', "%{$search}%")
-                  ->orWhere('excerpt', 'like', "%{$search}%");
+                  ->orWhere('excerpt', 'like', "%{$search}%")
+                  ->orWhere('content', 'like', "%{$search}%");
             });
         }
 
@@ -52,15 +53,42 @@ class ArticleController extends Controller
             $query->where('status', $request->get('status'));
         }
 
+        // Filter by author
+        if ($request->filled('author')) {
+            $query->where('author_id', $request->get('author'));
+        }
+
         // Filter by featured
         if ($request->boolean('featured')) {
             $query->featured();
         }
 
-        $articles = $query->latest('created_at')->paginate(15);
-        $categories = Category::active()->get();
+        // Filter by has image
+        if ($request->boolean('has_image')) {
+            $query->whereNotNull('featured_image');
+        }
 
-        return view('admin.articles.index', compact('articles', 'categories'));
+        // Filter by high views
+        if ($request->boolean('high_views')) {
+            $query->where('view_count', '>=', 100);
+        }
+
+        // Sorting options
+        $sortBy = $request->get('sort', 'created_at');
+        $sortOrder = $request->get('order', 'desc');
+        
+        $allowedSorts = ['created_at', 'updated_at', 'title', 'view_count', 'status'];
+        if (in_array($sortBy, $allowedSorts)) {
+            $query->orderBy($sortBy, $sortOrder);
+        } else {
+            $query->latest('created_at');
+        }
+
+        $articles = $query->paginate(15);
+        $categories = Category::active()->withCount('articles')->get();
+        $authors = \App\Models\User::whereHas('articles')->select('id', 'name')->get();
+
+        return view('admin.articles.index', compact('articles', 'categories', 'authors'));
     }
 
     /**
@@ -343,5 +371,152 @@ class ArticleController extends Controller
 
         return redirect()->back()
             ->with('success', $message);
+    }
+
+    /**
+     * Auto-save article draft
+     */
+    public function autoSave(Request $request)
+    {
+        $request->validate([
+            'title' => 'nullable|string|max:255',
+            'excerpt' => 'nullable|string|max:500',
+            'content' => 'nullable|string',
+            'article_id' => 'nullable|exists:articles,id',
+        ]);
+
+        $data = $request->only(['title', 'excerpt', 'content']);
+        $data['author_id'] = Auth::id();
+        $data['status'] = 'draft'; // Auto-save as draft
+        $data['updated_at'] = now();
+
+        if ($request->filled('article_id')) {
+            // Update existing article
+            $article = Article::findOrFail($request->article_id);
+            $article->update($data);
+        } else {
+            // Create new draft
+            $data['slug'] = Str::slug($request->title ?? 'untitled-' . time());
+            $article = Article::create($data);
+        }
+
+        return response()->json([
+            'success' => true,
+            'article_id' => $article->id,
+            'saved_at' => $article->updated_at->format('M j, Y g:i A'),
+            'message' => 'Draft saved successfully'
+        ]);
+    }
+
+    /**
+     * Get article preview
+     */
+    public function preview(Article $article)
+    {
+        return response()->json([
+            'title' => $article->title,
+            'excerpt' => $article->excerpt,
+            'content' => $article->content,
+            'status' => $article->status,
+            'is_featured' => $article->is_featured,
+            'categories' => $article->categories->pluck('name'),
+            'author' => $article->author->name,
+            'created_at' => $article->created_at->format('M j, Y'),
+            'updated_at' => $article->updated_at->format('M j, Y g:i A'),
+        ]);
+    }
+
+    /**
+     * Duplicate article
+     */
+    public function duplicate(Article $article)
+    {
+        $newArticle = $article->replicate();
+        $newArticle->title = $article->title . ' (Copy)';
+        $newArticle->slug = Str::slug($newArticle->title);
+        $newArticle->status = 'draft';
+        $newArticle->published_at = null;
+        $newArticle->view_count = 0;
+        $newArticle->is_featured = false;
+        $newArticle->author_id = Auth::id();
+        $newArticle->save();
+
+        // Copy categories
+        $newArticle->categories()->attach($article->categories->pluck('id'));
+
+        return redirect()->route('articles.edit', $newArticle)
+            ->with('success', 'Article duplicated successfully.');
+    }
+
+    /**
+     * Export articles
+     */
+    public function export(Request $request)
+    {
+        $query = Article::with(['author', 'categories']);
+
+        // Apply same filters as index
+        if ($request->filled('search')) {
+            $search = $request->get('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('excerpt', 'like', "%{$search}%")
+                  ->orWhere('content', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('category')) {
+            $query->whereHas('categories', function ($q) use ($request) {
+                $q->where('slug', $request->get('category'));
+            });
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->get('status'));
+        }
+
+        if ($request->boolean('featured')) {
+            $query->featured();
+        }
+
+        $articles = $query->latest('created_at')->get();
+
+        $filename = 'articles-export-' . now()->format('Y-m-d-H-i-s') . '.csv';
+        
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+        ];
+
+        $callback = function() use ($articles) {
+            $file = fopen('php://output', 'w');
+            
+            // CSV headers
+            fputcsv($file, [
+                'ID', 'Title', 'Slug', 'Excerpt', 'Status', 'Featured', 
+                'Author', 'Categories', 'Views', 'Created At', 'Updated At'
+            ]);
+
+            // CSV data
+            foreach ($articles as $article) {
+                fputcsv($file, [
+                    $article->id,
+                    $article->title,
+                    $article->slug,
+                    $article->excerpt,
+                    $article->status,
+                    $article->is_featured ? 'Yes' : 'No',
+                    $article->author->name,
+                    $article->categories->pluck('name')->join(', '),
+                    $article->view_count,
+                    $article->created_at->format('Y-m-d H:i:s'),
+                    $article->updated_at->format('Y-m-d H:i:s'),
+                ]);
+            }
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
     }
 }

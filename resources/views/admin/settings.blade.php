@@ -1,46 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>System Settings - Lunaray Beauty Factory</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-</head>
-<body class="bg-gradient-to-br from-purple-50 to-indigo-50 min-h-screen">
-    <!-- Navigation -->
-    <nav class="bg-white shadow-lg">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0 flex items-center">
-                        <div class="h-8 w-8 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-full flex items-center justify-center">
-                            <span class="text-white text-sm font-bold">L</span>
-                        </div>
-                        <span class="ml-2 text-xl font-bold text-gray-900">Lunaray Admin</span>
-                    </div>
-                </div>
-                
-                <div class="flex items-center space-x-4">
-                    <a href="/admin/dashboard" class="text-gray-700 hover:text-purple-600">Dashboard</a>
-                    <span class="text-gray-700">Welcome, {{ Auth::user()->name }}!</span>
-                    <span class="px-2 py-1 bg-purple-100 text-purple-800 text-xs font-medium rounded-full">
-                        {{ Auth::user()->getRoleNames()->first() }}
-                    </span>
-                    <form action="/staff/logout" method="POST" class="inline">
-                        @csrf
-                        <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors">
-                            Logout
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </nav>
+@extends('layouts.admin')
 
-    <!-- Main Content -->
-    <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div class="px-4 py-6 sm:px-0">
+@section('title', 'System Settings - Lunaray Beauty Factory')
+@section('pageTitle', 'System Settings')
+@section('pageDescription', 'Configure system settings, manage integrations, and maintain the Lunaray Beauty Factory platform')
+
+@section('content')
             <!-- Header -->
             <div class="bg-white overflow-hidden shadow-xl rounded-lg mb-8">
                 <div class="px-4 py-5 sm:p-6">
@@ -193,6 +157,4 @@
                 </div>
             </div>
         </div>
-    </div>
-</body>
-</html>
+@endsection

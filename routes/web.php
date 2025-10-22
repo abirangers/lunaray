@@ -69,6 +69,12 @@ Route::middleware(['auth', 'permission:edit articles'])->group(function () {
     Route::post('/articles/bulk-action', [ArticleController::class, 'bulkAction'])->name('articles.bulk-action');
     Route::patch('/articles/{article}/toggle-status', [ArticleController::class, 'toggleStatus'])->name('articles.toggle-status');
     Route::patch('/articles/{article}/toggle-featured', [ArticleController::class, 'toggleFeatured'])->name('articles.toggle-featured');
+    
+    // Enhanced article features
+    Route::post('/articles/auto-save', [ArticleController::class, 'autoSave'])->name('articles.auto-save');
+    Route::get('/articles/{article}/preview', [ArticleController::class, 'preview'])->name('articles.preview');
+    Route::post('/articles/{article}/duplicate', [ArticleController::class, 'duplicate'])->name('articles.duplicate');
+    Route::get('/articles/export', [ArticleController::class, 'export'])->name('articles.export');
 });
 
 // Public Article Routes
@@ -78,15 +84,20 @@ Route::get('/categories/{category}', [CategoryController::class, 'show'])->name(
 
 // Admin Only Routes - using permissions
 Route::middleware(['auth', 'permission:manage users'])->group(function () {
-    Route::get('/admin/users', function () {
-        return view('admin.users');
-    })->name('admin.users');
+    Route::get('/admin/users', [\App\Http\Controllers\Admin\UserController::class, 'index'])->name('admin.users');
+    Route::get('/admin/users/create', [\App\Http\Controllers\Admin\UserController::class, 'create'])->name('admin.users.create');
+    Route::post('/admin/users', [\App\Http\Controllers\Admin\UserController::class, 'store'])->name('admin.users.store');
+    Route::get('/admin/users/{user}', [\App\Http\Controllers\Admin\UserController::class, 'show'])->name('admin.users.show');
+    Route::get('/admin/users/{user}/edit', [\App\Http\Controllers\Admin\UserController::class, 'edit'])->name('admin.users.edit');
+    Route::put('/admin/users/{user}', [\App\Http\Controllers\Admin\UserController::class, 'update'])->name('admin.users.update');
+    Route::delete('/admin/users/{user}', [\App\Http\Controllers\Admin\UserController::class, 'destroy'])->name('admin.users.destroy');
 });
 
 Route::middleware(['auth', 'permission:manage system settings'])->group(function () {
-    Route::get('/admin/settings', function () {
-        return view('admin.settings');
-    })->name('admin.settings');
+    Route::get('/admin/settings', [\App\Http\Controllers\Admin\SettingsController::class, 'index'])->name('admin.settings');
+    Route::put('/admin/settings', [\App\Http\Controllers\Admin\SettingsController::class, 'update'])->name('admin.settings.update');
+    Route::post('/admin/settings/clear-cache', [\App\Http\Controllers\Admin\SettingsController::class, 'clearCache'])->name('admin.settings.clear-cache');
+    Route::post('/admin/settings/backup', [\App\Http\Controllers\Admin\SettingsController::class, 'createBackup'])->name('admin.settings.backup');
     
     Route::get('/admin/chatbot', function () {
         return view('admin.chatbot');
