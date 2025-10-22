@@ -1,0 +1,31 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@theme {
+    /* Lunaray Beauty Factory Custom Theme */
+    
+    /* Brand Colors - Based on actual brand identity */
+    --color-primary: oklch(0.45 0.15 240); /* Deep Blue (header background) */
+    --color-secondary: oklch(0.75 0.12 200); /* Light Blue (accent elements) */
+    --color-accent: oklch(0.85 0.08 200); /* Bright Blue (social icons, highlights) */
+    
+    /* Neutral Colors */
+    --color-neutral: oklch(0.95 0.02 0); /* Light Gray/White */
+    --color-dark: oklch(0.25 0.02 0); /* Dark Gray */
+    
+    /* Status Colors */
+    --color-success: oklch(0.65 0.15 140); /* Success Green */
+    --color-warning: oklch(0.75 0.15 60); /* Warning Orange */
+    --color-error: oklch(0.65 0.15 20); /* Error Red */
+    --color-info: oklch(0.65 0.15 220); /* Info Blue */
+    
+    /* Typography */
+    --font-sans: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --font-serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+}
+

@@ -1,0 +1,150 @@
+---
+alwaysApply: true
+---
+# Lunaray Beauty Factory - Cursor User Rules
+
+## Project Overview
+This is a Laravel 11.x application for Lunaray Beauty Factory, a comprehensive platform for the cosmetics industry. The project uses spec-driven development with OpenSpec, TailwindCSS 4 for styling, and implements a hybrid authentication system.
+
+## Tech Stack
+- **Backend**: Laravel 11.x, PHP 8.2+
+- **Frontend**: TailwindCSS 4, Alpine.js, Vite
+- **Authentication**: Laravel Socialite (Google OAuth) + Email/Password
+- **Database**: MySQL/PostgreSQL with migrations and seeders
+- **Spec Management**: OpenSpec for spec-driven development
+- **Styling**: Custom TailwindCSS theme with brand colors
+
+## Brand Identity
+- **Primary Color**: Deep Blue (oklch(0.45 0.15 240))
+- **Secondary Color**: Light Blue (oklch(0.75 0.12 200))
+- **Accent Color**: Bright Blue (oklch(0.85 0.08 200))
+- **Neutral Color**: White/Light Gray (oklch(0.95 0.02 0))
+- **Typography**: Inter (sans-serif), Playfair Display (serif), JetBrains Mono (monospace)
+
+## Code Style & Conventions
+
+### PHP/Laravel
+- Follow PSR-12 coding standards
+- Use meaningful variable and function names
+- Add PHPDoc comments for complex functions
+- Use Laravel's built-in helpers and facades
+- Follow Laravel naming conventions (controllers, models, migrations)
+
+### Frontend
+- Use TailwindCSS utility classes
+- Custom theme classes: `text-primary`, `bg-secondary`, `text-accent`
+- Mobile-first responsive design
+- Use Alpine.js for interactivity
+- Semantic HTML structure
+
+### Database
+- Use descriptive migration names
+- Add proper indexes for performance
+- Use `updateOrCreate()` for seeders
+- Follow Laravel naming conventions for tables and columns
+
+## Authentication System
+- **Public Users**: Google OAuth authentication (role: user)
+- **Staff Users**: Email/password authentication (roles: content_manager, admin)
+- **Role-Based Access**: Use `role:admin`, `role:content_manager`, `role:user` middleware
+- **Security**: Hash passwords, validate inputs, protect routes
+
+## File Organization
+```
+app/
+├── Http/Controllers/Auth/     # Authentication controllers
+├── Http/Middleware/           # Custom middleware
+└── Models/                    # Eloquent models
+
+resources/
+├── css/                       # Custom TailwindCSS theme
+├── views/
+│   ├── auth/                  # Authentication views
+│   ├── admin/                 # Admin dashboard views
+│   └── home.blade.php         # Landing page
+└── js/                        # Frontend JavaScript
+
+database/
+├── migrations/                # Database schema
+└── seeders/                   # Test data and users
+
+openspec/                      # OpenSpec documentation
+├── specs/                     # Current specifications
+└── changes/                   # Proposed changes
+```
+
+## Development Workflow
+
+### OpenSpec Integration
+- Use OpenSpec for all feature changes
+- Create change proposals before implementation
+- Follow the three-stage workflow: Create → Implement → Archive
+- Use `openspec list`, `openspec show`, `openspec validate`, `openspec archive`
+
+### Git Commit Messages
+Use conventional commit format:
+```
+type(scope): description
+```
+Examples:
+- `feat(auth): add Google OAuth integration`
+- `fix(ui): resolve button styling issue`
+- `chore(deps): update TailwindCSS to v4`
+- `docs(readme): update installation guide`
+
+### Testing
+- Test all authentication flows
+- Verify role-based access control
+- Test responsive design on multiple devices
+- Use provided test credentials from TESTING_CREDENTIALS.md
+
+## Security Guidelines
+- Never commit sensitive data (passwords, API keys, credentials)
+- Use environment variables for configuration
+- Validate all user inputs
+- Implement proper authorization checks
+- Follow Laravel security best practices
+
+## UI/UX Guidelines
+- Use brand colors consistently
+- Implement responsive design (mobile-first)
+- Use semantic HTML and proper ARIA labels
+- Ensure good contrast and readability
+- Follow accessibility best practices
+
+## Performance
+- Optimize database queries
+- Use eager loading for relationships
+- Minify and compress assets
+- Implement proper caching strategies
+- Monitor and optimize page load times
+
+## Common Commands
+```bash
+# Development
+php artisan serve
+npm run dev
+npm run build
+
+# Database
+php artisan migrate
+php artisan db:seed
+php artisan migrate:fresh --seed
+
+# OpenSpec
+openspec list
+openspec show <change-id>
+openspec validate --strict
+openspec archive <change-id> --yes
+
+# Testing
+php artisan test
+```
+
+## Important Notes
+- Always test changes thoroughly
+- Follow OpenSpec workflow for new features
+- Maintain code quality and consistency
+- Document any breaking changes
+- Keep dependencies updated
+- Ensure responsive design compatibility
