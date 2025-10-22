@@ -22,7 +22,7 @@ class GoogleAuthController extends Controller
     /**
      * Handle Google OAuth callback
      */
-    public function callback()
+    public function callback(Request $request)
     {
         try {
             $googleUser = Socialite::driver('google')->user();
@@ -41,7 +41,12 @@ class GoogleAuthController extends Controller
                 $existingUser = User::where('email', $googleUser->email)->first();
                 
                 if ($existingUser) {
-                    // Link Google account to existing user
+                    // For security: do NOT link Google to staff accounts
+                    if (!is_null($existingUser->password) || $existingUser->hasAnyRole(['content_manager', 'admin'])) {
+                        return redirect('/login')->with('error', 'Staff accounts must sign in with email/password.');
+                    }
+
+                    // Safe to link Google account to public user
                     $existingUser->update([
                         'google_id' => $googleUser->id,
                         'google_token' => $googleUser->token,
@@ -56,6 +61,7 @@ class GoogleAuthController extends Controller
                         'google_id' => $googleUser->id,
                         'google_token' => $googleUser->token,
                         'google_refresh_token' => $googleUser->refreshToken,
+                        'email_verified_at' => now(),
                     ]);
                 }
             }
@@ -65,8 +71,9 @@ class GoogleAuthController extends Controller
                 $user->assignRole('user');
             }
 
-            // Log the user in
+            // Log the user in and prevent session fixation
             Auth::login($user);
+            $request->session()->regenerate();
 
             return redirect('/dashboard');
 
@@ -79,9 +86,11 @@ class GoogleAuthController extends Controller
     /**
      * Logout user
      */
-    public function logout()
+    public function logout(Request $request)
     {
         Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
         return redirect('/');
     }
 }
