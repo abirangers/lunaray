@@ -161,6 +161,13 @@ php artisan test                    # Run PHP tests
 - ✅ **Database Seeding** - Test data and credentials
 - ✅ **Middleware Protection** - Route-based access control
 
+## 📚 Documentation
+
+- **[Project Context](./CONTEXT.md)** - Current focus, status, and project overview
+- **[Changelog](./CHANGELOG.md)** - Detailed change history and version tracking
+- **[OpenSpec Documentation](./openspec/AGENTS.md)** - Spec-driven development workflow
+- **[Project Specifications](./openspec/specs/)** - Current requirements and capabilities
+
 ## 🤝 Contributing
 
 We welcome contributions! Please follow these steps:

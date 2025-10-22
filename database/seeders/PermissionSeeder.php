@@ -21,6 +21,7 @@ class PermissionSeeder extends Seeder
         $permissions = [
             // User permissions
             'access chat',
+            'use_chatbot',
             'view articles',
             
             // Content Manager permissions
@@ -53,12 +54,14 @@ class PermissionSeeder extends Seeder
         // User role - basic permissions
         $userRole->givePermissionTo([
             $permissionObjects['access chat'],
+            $permissionObjects['use_chatbot'],
             $permissionObjects['view articles'],
         ]);
 
         // Content Manager role - content management permissions
         $contentManagerRole->givePermissionTo([
             $permissionObjects['access chat'],
+            $permissionObjects['use_chatbot'],
             $permissionObjects['view articles'],
             $permissionObjects['edit articles'],
             $permissionObjects['create articles'],
@@ -71,6 +74,7 @@ class PermissionSeeder extends Seeder
         // Admin role - all permissions
         $adminRole->givePermissionTo([
             $permissionObjects['access chat'],
+            $permissionObjects['use_chatbot'],
             $permissionObjects['view articles'],
             $permissionObjects['edit articles'],
             $permissionObjects['create articles'],

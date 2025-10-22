@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\GoogleAuthController;
 use App\Http\Controllers\Auth\StaffAuthController;
+use App\Http\Controllers\ChatbotController;
+use App\Http\Controllers\Admin\ChatbotConfigurationController;
 
 Route::get('/', function () {
     return view('home');
@@ -40,6 +42,15 @@ Route::middleware(['auth', 'permission:access chat'])->group(function () {
     })->name('user.chat');
 });
 
+// Chatbot API Routes
+Route::middleware(['auth', 'permission:access chat', 'chatbot.access'])->prefix('api/chatbot')->group(function () {
+    Route::get('/session', [ChatbotController::class, 'getSession'])->name('chatbot.session');
+    Route::get('/history', [ChatbotController::class, 'getHistory'])->name('chatbot.history');
+    Route::post('/send', [ChatbotController::class, 'sendMessage'])->name('chatbot.send');
+    Route::post('/close', [ChatbotController::class, 'closeSession'])->name('chatbot.close');
+    Route::get('/status', [ChatbotController::class, 'getStatus'])->name('chatbot.status');
+});
+
 // Content Management Routes - using permissions
 Route::middleware(['auth', 'permission:view admin dashboard'])->group(function () {
     Route::get('/admin/dashboard', function () {
@@ -64,4 +75,18 @@ Route::middleware(['auth', 'permission:manage system settings'])->group(function
     Route::get('/admin/settings', function () {
         return view('admin.settings');
     })->name('admin.settings');
+    
+    Route::get('/admin/chatbot', function () {
+        return view('admin.chatbot');
+    })->name('admin.chatbot');
+});
+
+// Admin Chatbot Configuration Routes
+Route::middleware(['auth', 'permission:manage system settings'])->prefix('api/admin/chatbot')->group(function () {
+    Route::get('/config', [ChatbotConfigurationController::class, 'index'])->name('admin.chatbot.config');
+    Route::put('/config', [ChatbotConfigurationController::class, 'update'])->name('admin.chatbot.config.update');
+    Route::post('/test-webhook', [ChatbotConfigurationController::class, 'testWebhook'])->name('admin.chatbot.test');
+    Route::get('/statistics', [ChatbotConfigurationController::class, 'statistics'])->name('admin.chatbot.stats');
+    Route::get('/logs', [ChatbotConfigurationController::class, 'chatLogs'])->name('admin.chatbot.logs');
+    Route::post('/reset', [ChatbotConfigurationController::class, 'reset'])->name('admin.chatbot.reset');
 });
