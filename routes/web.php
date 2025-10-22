@@ -5,6 +5,9 @@ use App\Http\Controllers\Auth\GoogleAuthController;
 use App\Http\Controllers\Auth\StaffAuthController;
 use App\Http\Controllers\ChatbotController;
 use App\Http\Controllers\Admin\ChatbotConfigurationController;
+use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ContentManagerController;
 
 Route::get('/', function () {
     return view('home');
@@ -53,16 +56,25 @@ Route::middleware(['auth', 'permission:access chat', 'chatbot.access'])->prefix(
 
 // Content Management Routes - using permissions
 Route::middleware(['auth', 'permission:view admin dashboard'])->group(function () {
-    Route::get('/admin/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('admin.dashboard');
+    Route::get('/admin/dashboard', [ContentManagerController::class, 'dashboard'])->name('admin.dashboard');
+    Route::get('/admin/analytics', [ContentManagerController::class, 'analytics'])->name('admin.analytics');
 });
 
+// Article Management Routes
 Route::middleware(['auth', 'permission:edit articles'])->group(function () {
-    Route::get('/admin/articles', function () {
-        return view('admin.articles');
-    })->name('admin.articles');
+    Route::resource('articles', ArticleController::class);
+    Route::resource('categories', CategoryController::class);
+    
+    // Additional article routes
+    Route::post('/articles/bulk-action', [ArticleController::class, 'bulkAction'])->name('articles.bulk-action');
+    Route::patch('/articles/{article}/toggle-status', [ArticleController::class, 'toggleStatus'])->name('articles.toggle-status');
+    Route::patch('/articles/{article}/toggle-featured', [ArticleController::class, 'toggleFeatured'])->name('articles.toggle-featured');
 });
+
+// Public Article Routes
+Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index');
+Route::get('/articles/{article}', [ArticleController::class, 'show'])->name('articles.show');
+Route::get('/categories/{category}', [CategoryController::class, 'show'])->name('categories.show');
 
 // Admin Only Routes - using permissions
 Route::middleware(['auth', 'permission:manage users'])->group(function () {

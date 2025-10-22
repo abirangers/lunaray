@@ -1,4 +1,10 @@
-<x-layouts.app pageTitle="AI Chatbot" pageDescription="Get instant support with our AI chatbot">
+@extends('layouts.app')
+
+@section('title', 'AI Chatbot')
+@section('pageTitle', 'AI Chatbot')
+@section('pageDescription', 'Get instant support with our AI chatbot')
+
+@section('content')
     <!-- Chat Interface -->
     <div class="max-w-4xl mx-auto" x-data="chatbot()" x-init="init()">
         <div class="bg-white shadow-xl rounded-lg overflow-hidden">
@@ -284,4 +290,4 @@
         }
     </script>
     @endpush
-</x-layouts.app>
+@endsection

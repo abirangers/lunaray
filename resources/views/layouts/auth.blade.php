@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ $title ?? 'Authentication - Lunaray Beauty Factory' }}</title>
+    <title>@yield('title', 'Authentication - Lunaray Beauty Factory')</title>
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -28,11 +28,11 @@
                 </a>
             </div>
             <h2 class="mt-6 text-center text-3xl font-serif font-bold text-gray-900">
-                {{ $header ?? 'Welcome Back' }}
+                @yield('header', 'Welcome Back')
             </h2>
-            @if(isset($subheader))
+            @hasSection('subheader')
                 <p class="mt-2 text-center text-sm text-gray-600">
-                    {{ $subheader }}
+                    @yield('subheader')
                 </p>
             @endif
         </div>
@@ -40,7 +40,7 @@
         <!-- Main Content -->
         <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
             <div class="bg-white py-8 px-4 shadow-xl rounded-lg sm:px-10 border border-gray-200">
-                {{ $slot }}
+                @yield('content')
             </div>
         </div>
 
@@ -50,12 +50,8 @@
                 <a href="{{ route('home') }}" class="text-gray-600 hover:text-primary">
                     ← Back to Home
                 </a>
-                @if(isset($footerLinks))
-                    @foreach($footerLinks as $link)
-                        <a href="{{ $link['url'] }}" class="text-gray-600 hover:text-primary">
-                            {{ $link['text'] }}
-                        </a>
-                    @endforeach
+                @hasSection('footerLinks')
+                    @yield('footerLinks')
                 @endif
             </div>
         </div>
@@ -64,3 +60,4 @@
     @stack('scripts')
 </body>
 </html>
+

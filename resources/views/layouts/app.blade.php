@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ $title ?? 'Lunaray Beauty Factory' }}</title>
+    <title>@yield('title', 'Lunaray Beauty Factory')</title>
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -113,7 +113,7 @@
 
         <!-- Main Content -->
         <main class="flex-1">
-            {{ $slot }}
+            @yield('content')
         </main>
 
         <!-- Footer -->
@@ -164,3 +164,4 @@
     @stack('scripts')
 </body>
 </html>
+

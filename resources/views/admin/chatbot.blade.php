@@ -1,4 +1,10 @@
-<x-layouts.app pageTitle="Chatbot Configuration" pageDescription="Manage chatbot settings and monitor chat activity">
+@extends('layouts.app')
+
+@section('title', 'Chatbot Configuration')
+@section('pageTitle', 'Chatbot Configuration')
+@section('pageDescription', 'Manage chatbot settings and monitor chat activity')
+
+@section('content')
     <div class="max-w-7xl mx-auto" x-data="chatbotAdmin()" x-init="init()">
         <!-- Header -->
         <div class="mb-8">
@@ -321,4 +327,4 @@
         }
     </script>
     @endpush
-</x-layouts.app>
+@endsection

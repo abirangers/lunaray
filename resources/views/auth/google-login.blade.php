@@ -1,4 +1,10 @@
-<x-layouts.auth header="Welcome to Lunaray" subheader="Beauty Factory - Your Trusted Partner">
+@extends('layouts.auth')
+
+@section('title', 'Welcome to Lunaray - Beauty Factory')
+@section('header', 'Welcome to Lunaray')
+@section('subheader', 'Beauty Factory - Your Trusted Partner')
+
+@section('content')
     <div class="space-y-6">
         <!-- Google OAuth Button -->
         <div>
@@ -54,8 +60,9 @@
         </div>
     </div>
 
-    <x-slot name="footerLinks">
-        <a href="#" class="text-gray-600 hover:text-primary">Terms of Service</a>
-        <a href="#" class="text-gray-600 hover:text-primary">Privacy Policy</a>
-    </x-slot>
-</x-layouts.auth>
+@endsection
+
+@section('footerLinks')
+    <a href="#" class="text-gray-600 hover:text-primary">Terms of Service</a>
+    <a href="#" class="text-gray-600 hover:text-primary">Privacy Policy</a>
+@endsection

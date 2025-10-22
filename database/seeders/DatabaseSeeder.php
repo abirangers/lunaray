@@ -27,6 +27,9 @@ class DatabaseSeeder extends Seeder
         // Seed chatbot configurations
         $this->call(ChatbotConfigurationSeeder::class);
 
+        // Seed articles and categories
+        $this->call(ArticleSeeder::class);
+
         // Create additional test users if needed
         User::factory()->create([
             'name' => 'Test User',

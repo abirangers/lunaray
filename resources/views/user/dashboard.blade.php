@@ -1,4 +1,10 @@
-<x-layouts.app pageTitle="User Dashboard" pageDescription="Welcome to your personal dashboard">
+@extends('layouts.app')
+
+@section('title', 'User Dashboard')
+@section('pageTitle', 'User Dashboard')
+@section('pageDescription', 'Welcome to your personal dashboard')
+
+@section('content')
     <!-- Welcome Section -->
     <div class="bg-white overflow-hidden shadow-xl rounded-lg mb-8">
         <div class="px-4 py-5 sm:p-6">
@@ -144,4 +150,4 @@
             </div>
         </div>
     </div>
-</x-layouts.app>
+@endsection

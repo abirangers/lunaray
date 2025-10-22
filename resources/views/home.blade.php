@@ -1,6 +1,13 @@
-<x-layouts.guest :showHero="true" :showFeatures="true">
-    <x-slot name="heroTitle">Solusi Total untuk Kosmetik Berkualitas</x-slot>
-    <x-slot name="heroSubtitle">Membantu brand kosmetik tumbuh melalui inovasi, legalitas resmi, dan layanan menyeluruh dari ide hingga produk siap edar.</x-slot>
+@extends('layouts.guest')
+
+@section('title', 'Lunaray Beauty Factory - Solusi Total untuk Kosmetik Berkualitas')
+@section('heroTitle', 'Solusi Total untuk Kosmetik Berkualitas')
+@section('heroSubtitle', 'Membantu brand kosmetik tumbuh melalui inovasi, legalitas resmi, dan layanan menyeluruh dari ide hingga produk siap edar.')
+
+@section('showHero', true)
+@section('showFeatures', true)
+
+@section('content')
 
     <!-- Hero Section -->
     <main class="container mx-auto px-4 py-16">
@@ -100,4 +107,4 @@
             </div>
         </div>
     </section>
-</x-layouts.guest>
+@endsection

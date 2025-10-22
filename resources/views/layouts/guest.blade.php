@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ $title ?? 'Lunaray Beauty Factory' }}</title>
+    <title>@yield('title', 'Lunaray Beauty Factory')</title>
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -60,16 +60,16 @@
         </nav>
 
         <!-- Hero Section -->
-        @if(isset($showHero) && $showHero)
+        @hasSection('showHero')
             <div class="relative bg-gradient-to-r from-primary to-secondary">
                 <div class="absolute inset-0 bg-black/10"></div>
                 <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
                     <div class="text-center">
                         <h1 class="text-4xl md:text-6xl font-serif font-bold text-white mb-6">
-                            {{ $heroTitle ?? 'Beauty Manufacturing Excellence' }}
+                            @yield('heroTitle', 'Beauty Manufacturing Excellence')
                         </h1>
                         <p class="text-xl text-white/90 mb-8 max-w-3xl mx-auto">
-                            {{ $heroSubtitle ?? 'Your trusted partner in creating exceptional beauty products for the modern cosmetics industry.' }}
+                            @yield('heroSubtitle', 'Your trusted partner in creating exceptional beauty products for the modern cosmetics industry.')
                         </p>
                         <div class="flex flex-col sm:flex-row gap-4 justify-center">
                             <a href="{{ route('login') }}" class="inline-flex items-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-primary bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white transition-colors duration-200">
@@ -86,11 +86,11 @@
 
         <!-- Main Content -->
         <main class="flex-1">
-            {{ $slot }}
+            @yield('content')
         </main>
 
         <!-- Features Section -->
-        @if(isset($showFeatures) && $showFeatures)
+        @hasSection('showFeatures')
             <div class="py-16 bg-white">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="text-center mb-12">
@@ -202,3 +202,4 @@
     @stack('scripts')
 </body>
 </html>
+
