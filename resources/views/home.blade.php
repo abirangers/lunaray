@@ -1,43 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lunaray Beauty Factory - Solusi Total untuk Kosmetik Berkualitas</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-</head>
-<body class="bg-neutral min-h-screen">
-    <!-- Header -->
-    <header class="bg-primary text-white">
-        <div class="container mx-auto px-4 py-4">
-            <div class="flex items-center justify-between">
-                <!-- Logo -->
-                <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 bg-secondary rounded-full flex items-center justify-center">
-                        <span class="text-white font-bold text-lg">L</span>
-                    </div>
-                    <div>
-                        <h1 class="text-xl font-bold">LUNARAY</h1>
-                        <p class="text-xs text-secondary">BEAUTY FACTORY</p>
-                    </div>
-                </div>
-                
-                <!-- Navigation -->
-                <nav class="hidden md:flex space-x-6">
-                    <a href="#" class="hover:text-secondary transition-colors">Home</a>
-                    <a href="#" class="hover:text-secondary transition-colors">About Us</a>
-                    <a href="#" class="hover:text-secondary transition-colors">Services</a>
-                    <a href="#" class="hover:text-secondary transition-colors">Contact Us</a>
-                </nav>
-                
-                <!-- CTA Button -->
-                <a href="/auth/google/redirect" class="bg-secondary text-white px-6 py-2 rounded-lg hover:bg-accent transition-colors">
-                    GET STARTED
-                </a>
-            </div>
-        </div>
-    </header>
+<x-layouts.guest :showHero="true" :showFeatures="true">
+    <x-slot name="heroTitle">Solusi Total untuk Kosmetik Berkualitas</x-slot>
+    <x-slot name="heroSubtitle">Membantu brand kosmetik tumbuh melalui inovasi, legalitas resmi, dan layanan menyeluruh dari ide hingga produk siap edar.</x-slot>
 
     <!-- Hero Section -->
     <main class="container mx-auto px-4 py-16">
@@ -74,7 +37,7 @@
                 
                 <!-- CTA Buttons -->
                 <div class="flex space-x-4 pt-6">
-                    <a href="/auth/google/redirect" class="bg-primary text-white px-8 py-3 rounded-lg hover:bg-primary/90 transition-colors">
+                    <a href="{{ route('login') }}" class="bg-primary text-white px-8 py-3 rounded-lg hover:bg-primary/90 transition-colors">
                         Mulai Sekarang
                     </a>
                     <a href="#" class="bg-neutral text-primary px-8 py-3 rounded-lg hover:bg-accent hover:text-white transition-colors">
@@ -137,69 +100,4 @@
             </div>
         </div>
     </section>
-
-    <!-- Footer -->
-    <footer class="bg-primary text-white py-12">
-        <div class="container mx-auto px-4">
-            <div class="grid md:grid-cols-4 gap-8">
-                <div>
-                    <div class="flex items-center space-x-3 mb-4">
-                        <div class="w-8 h-8 bg-secondary rounded-full flex items-center justify-center">
-                            <span class="text-white font-bold">L</span>
-                        </div>
-                        <div>
-                            <h4 class="font-bold">LUNARAY</h4>
-                            <p class="text-xs text-secondary">BEAUTY FACTORY</p>
-                        </div>
-                    </div>
-                    <p class="text-secondary text-sm">
-                        Solusi total untuk kosmetik berkualitas dengan inovasi dan legalitas resmi.
-                    </p>
-                </div>
-                
-                <div>
-                    <h5 class="font-semibold mb-4">Perusahaan</h5>
-                    <ul class="space-y-2 text-sm text-secondary">
-                        <li><a href="#" class="hover:text-white transition-colors">Tentang Kami</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Layanan</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Portfolio</a></li>
-                    </ul>
-                </div>
-                
-                <div>
-                    <h5 class="font-semibold mb-4">Dukungan</h5>
-                    <ul class="space-y-2 text-sm text-secondary">
-                        <li><a href="#" class="hover:text-white transition-colors">FAQ</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Kontak</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Bantuan</a></li>
-                    </ul>
-                </div>
-                
-                <div>
-                    <h5 class="font-semibold mb-4">Ikuti Kami</h5>
-                    <div class="flex space-x-4">
-                        <a href="#" class="w-10 h-10 bg-secondary rounded-full flex items-center justify-center hover:bg-accent transition-colors">
-                            <span class="text-white text-sm font-bold">f</span>
-                        </a>
-                        <a href="#" class="w-10 h-10 bg-secondary rounded-full flex items-center justify-center hover:bg-accent transition-colors">
-                            <span class="text-white text-sm font-bold">ig</span>
-                        </a>
-                        <a href="#" class="w-10 h-10 bg-secondary rounded-full flex items-center justify-center hover:bg-accent transition-colors">
-                            <span class="text-white text-sm font-bold">tw</span>
-                        </a>
-                        <a href="#" class="w-10 h-10 bg-secondary rounded-full flex items-center justify-center hover:bg-accent transition-colors">
-                            <span class="text-white text-sm font-bold">in</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="border-t border-primary/20 mt-8 pt-8 text-center">
-                <p class="text-secondary text-sm">
-                    © 2024 Lunaray Beauty Factory. All rights reserved.
-                </p>
-            </div>
-        </div>
-    </footer>
-</body>
-</html>
+</x-layouts.guest>

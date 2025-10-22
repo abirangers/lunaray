@@ -18,8 +18,8 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable(); // Made nullable for Google OAuth users
             $table->string('google_id')->nullable()->unique(); // Google OAuth ID
-            $table->string('google_token')->nullable(); // Google OAuth access token
-            $table->string('google_refresh_token')->nullable(); // Google OAuth refresh token
+            $table->text('google_token')->nullable(); // Google OAuth access token
+            $table->text('google_refresh_token')->nullable(); // Google OAuth refresh token
             $table->rememberToken();
             $table->timestamps();
         });

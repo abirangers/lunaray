@@ -15,8 +15,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Seed roles and permissions first
+        // Seed roles first
         $this->call(RoleSeeder::class);
+        
+        // Seed permissions and assign them to roles
+        $this->call(PermissionSeeder::class);
 
         // Seed staff users with roles
         $this->call(StaffSeeder::class);
