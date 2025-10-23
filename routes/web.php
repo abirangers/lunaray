@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\ChatbotConfigurationController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ContentManagerController;
+use App\Http\Controllers\ProfileController;
 
 Route::get('/', function () {
     return view('home');
@@ -36,21 +37,29 @@ Route::post('/staff/register', [StaffAuthController::class, 'register']);
 
 // Public User Routes - using permissions
 Route::middleware(['auth', 'permission:access chat'])->group(function () {
-    Route::get('/user/dashboard', function () {
-        return view('user.dashboard');
-    })->name('user.dashboard');
-    
     Route::get('/chat', function () {
         return view('user.chat');
     })->name('user.chat');
 });
 
+// Profile Routes - accessible to all authenticated users
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::post('/profile/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.avatar.update');
+    Route::delete('/profile/avatar', [ProfileController::class, 'deleteAvatar'])->name('profile.avatar.delete');
+    Route::get('/profile/password', [ProfileController::class, 'showPasswordForm'])->name('profile.password');
+    Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
+});
+
 // Chatbot API Routes
-Route::middleware(['auth', 'permission:access chat', 'chatbot.access'])->prefix('api/chatbot')->group(function () {
+Route::middleware(['auth', 'permission:access chat', 'chatbot.access', 'chatbot.rate_limit'])->prefix('api/chatbot')->group(function () {
     Route::get('/session', [ChatbotController::class, 'getSession'])->name('chatbot.session');
     Route::get('/history', [ChatbotController::class, 'getHistory'])->name('chatbot.history');
     Route::post('/send', [ChatbotController::class, 'sendMessage'])->name('chatbot.send');
     Route::post('/close', [ChatbotController::class, 'closeSession'])->name('chatbot.close');
+    Route::post('/reset', [ChatbotController::class, 'resetSession'])->name('chatbot.reset');
     Route::get('/status', [ChatbotController::class, 'getStatus'])->name('chatbot.status');
 });
 
@@ -62,7 +71,8 @@ Route::middleware(['auth', 'permission:view admin dashboard'])->group(function (
 
 // Article Management Routes
 Route::middleware(['auth', 'permission:edit articles'])->group(function () {
-    Route::resource('articles', ArticleController::class);
+    Route::get('/admin/articles', [ArticleController::class, 'adminIndex'])->name('admin.articles.index');
+    Route::resource('articles', ArticleController::class)->except(['index']);
     Route::resource('categories', CategoryController::class);
     
     // Additional article routes

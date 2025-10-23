@@ -8,8 +8,189 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Enhanced view count tracking with session-based duplicate prevention
+- Cache-based batch updates for improved performance (no Redis dependency)
+- Bot protection for accurate view count tracking via user agent filtering
+- Session-based duplicate prevention to avoid counting page refreshes
+- Laravel cache integration for optimized database performance
+- Comprehensive view count testing and validation system
+- Author selection feature for article creation and editing
+- Flexible author name input with default value from current user
+- Author name display across all article views
 - Changelog and context tracking system
 - Project documentation improvements
+- Navigation Articles redirect functionality
+- Separate admin articles management route
+- Comprehensive user profile management system
+- Profile editing functionality with validation and security measures
+- Avatar upload and management system with drag & drop support
+- Activity tracking and profile statistics for all user types
+- Profile navigation integration in all layouts
+- Role-based profile features and permissions
+- **Complete Chatbot MVP implementation with production-ready features**
+- **Database persistence for all chat messages (user and bot)**
+- **Enhanced n8n webhook integration with comprehensive error handling**
+- **Advanced session management system with automatic cleanup**
+- **Rate limiting middleware (30 requests/minute per user)**
+- **Bot detection and filtering system**
+- **Advanced chat UI features: message copy, auto-resize textarea, status indicators**
+- **Chat reset functionality with confirmation dialog**
+- **Optimistic UI implementation for immediate message display**
+- **Comprehensive error handling with user-friendly messages**
+- **Database optimization with proper indexing and cleanup policies**
+- **Security measures: authentication, validation, and data protection**
+- **Performance monitoring and logging system**
+
+### Changed
+- View count behavior now prevents duplicate counts within same user session
+- View count updates now use cache-based batch processing for better performance
+- Bot traffic is now filtered out for more accurate view count statistics
+- Article creation and editing now supports custom author names
+- Author display now uses custom author_name field with fallback to user name
+- Navigation "Articles" now always points to public articles page regardless of user role
+- Admin articles management now accessible via separate "Manage Articles" link
+- ArticleController index method now always returns public articles view
+- User model now supports additional profile fields (avatar, bio, phone, location, website, social_links)
+- Profile management system now provides role-based features and statistics
+- **Chatbot system enhanced with production-ready MVP implementation**
+- **Chat interface upgraded with modern UI/UX and advanced features**
+- **Database schema optimized with proper indexing for chat performance**
+- **API endpoints enhanced with comprehensive validation and error handling**
+- **Session management improved with automatic cleanup and retention policies**
+
+### Fixed
+- Fixed Article model SEO data generation error with toPlainText() method
+- Fixed null content handling in article views
+- Fixed cache-based view count increment logic for better reliability
+- Fixed session handling for view count duplicate prevention
+- Fixed bot detection method accessibility for testing purposes
+- Fixed navigation redirect issue where admin users were redirected to admin articles page
+- **Fixed chatbot session persistence across page refreshes**
+- **Fixed chat message alignment (user right, bot left)**
+- **Fixed keyboard shortcuts (Enter vs Shift+Enter) behavior**
+- **Fixed chat reset functionality with proper session management**
+- **Fixed message copy feature with visual feedback**
+- **Fixed rate limiting and error handling in chatbot API**
+
+### Technical Improvements
+- Improved view count accuracy by implementing session-based tracking
+- Enhanced system performance through cache-based batch updates
+- Added comprehensive bot protection for accurate analytics
+- Optimized database writes by reducing direct updates
+- Implemented graceful fallback mechanisms for cache failures
+- Improved navigation consistency across different user roles
+- Enhanced admin interface with clearer separation between public and admin views
+- Implemented comprehensive user profile management with avatar upload functionality
+- Added activity tracking system for user actions and profile statistics
+- Enhanced user experience with role-based profile features and navigation integration
+
+## [2025-10-23] - Bulk Actions & Bug Fixes
+
+### Added
+- Complete bulk actions functionality for article management
+- Toggle all checkbox with indeterminate state support
+- Modern bulk actions UI with selected counter
+- Toast notification system for user feedback
+- Enhanced error handling and validation
+- Comprehensive logging for debugging
+- Fetch API integration for form submissions
+- Success/error message display system
+- Loading states with spinner animations
+
+### Changed
+- Updated Alpine.js component architecture for better state management
+- Enhanced controller validation and error handling
+- Improved form submission using modern fetch API
+- Updated UI feedback system with better user experience
+- Enhanced debugging capabilities with comprehensive logging
+
+### Fixed
+- Alpine.js scope errors for bulk actions variables
+- Form data format issues causing validation errors
+- Checkbox synchronization between select all and individual checkboxes
+- Bulk actions form submission and data handling
+- Error message display and user feedback
+- JavaScript reference errors in Alpine.js components
+- Controller validation and data processing
+- UI state management and user interactions
+
+### Technical Improvements
+- Proper FormData API usage for form submissions
+- Enhanced error handling with try-catch blocks
+- Improved logging system for debugging
+- Better validation rules and error messages
+- Modern JavaScript async/await patterns
+- Enhanced user experience with loading states
+
+## [2025-10-23] - Admin Interface Redesign
+
+### Added
+- Modern minimalist admin interface with dark/light mode support
+- Advanced data tables with search, filter, and bulk operations
+- Enhanced form experience with floating labels and drag & drop
+- Interactive dashboard with modern statistics cards
+- Dark mode toggle with Alpine.js integration
+- Custom TailwindCSS design system with OKLCH color palette
+- Component classes for consistent modern styling
+- Auto-save functionality for forms
+- Image preview and drag & drop upload
+- Export functionality for data tables
+- Enhanced user management with role statistics
+- Category management with color coding and live preview
+- Article management with rich text editor and preview
+- Modern card layouts with hover effects and animations
+
+### Changed
+- Redesigned admin layout with modern sidebar navigation
+- Updated all admin pages to use modern component classes
+- Enhanced dashboard with interactive statistics
+- Improved form layouts with better UX patterns
+- Updated table designs with advanced filtering
+- Modernized authentication pages with minimalist design
+- Enhanced user experience across all admin interfaces
+
+### Fixed
+- TailwindCSS build errors with component class definitions
+- Duplicate header elements in admin pages
+- Drag & drop functionality for image uploads
+- Alpine.js component initialization issues
+- Form validation and error handling
+
+## [2025-10-23] - Public Pages Redesign
+
+### Added
+- Modern minimalist public pages design
+- Responsive authentication pages (Google OAuth + Staff login)
+- Enhanced home page with hero, features, stats, and CTA sections
+- Redesigned chat interface with modern messaging UI
+- Public article pages with clean card layouts
+- Mobile optimization for all public pages
+- SEO optimization with Laravel SEO package
+- Meta tags, structured data, and social sharing
+- Default image placeholders for articles
+- Breadcrumb navigation for articles and categories
+- Modern navigation with minimalist design
+
+### Changed
+- Updated guest layout with clean, minimalist design
+- Enhanced authentication flow with modern UI
+- Improved home page with complete landing page structure
+- Redesigned chat interface with better UX
+- Updated article pages with modern card design
+- Enhanced mobile responsiveness across all pages
+- Improved SEO with dynamic meta tags and structured data
+
+### Fixed
+- Authentication page styling issues
+- Mobile responsiveness problems
+- SEO meta tag implementation
+- Image placeholder handling
+- Navigation consistency across pages
+
+### Security
+- Enhanced SEO security with proper meta tag sanitization
+- Improved authentication page security
+- Better input validation for public forms
 
 ## [2025-10-22] - Content Management System Implementation
 

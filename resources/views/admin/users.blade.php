@@ -18,19 +18,19 @@
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                 </svg>
-                Export Users
-            </button>
-        </div>
-    </div>
+                                Export Users
+                            </button>
+                        </div>
+                    </div>
 
     <!-- Modern Users Table -->
     <div class="card-modern mb-8">
         <div class="card-modern-header">
             <h2 class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">All Users</h2>
             <p class="text-sm text-neutral-600 dark:text-neutral-400">Manage user accounts and permissions</p>
-        </div>
+                </div>
         <div class="card-modern-body">
-            <div class="overflow-x-auto">
+                    <div class="overflow-x-auto">
                 <table class="table-modern">
                     <thead class="table-modern-header">
                         <tr>
@@ -40,44 +40,44 @@
                             <th class="table-modern-header-cell">Login Method</th>
                             <th class="table-modern-header-cell">Created</th>
                             <th class="table-modern-header-cell">Actions</th>
-                        </tr>
-                    </thead>
+                                </tr>
+                            </thead>
                     <tbody class="table-modern-body">
                         @forelse($users as $user)
                             <tr class="table-modern-row">
                                 <td class="table-modern-cell">
-                                    <div class="flex items-center">
-                                        <div class="h-10 w-10 flex-shrink-0">
+                                        <div class="flex items-center">
+                                            <div class="h-10 w-10 flex-shrink-0">
                                             <div class="h-10 w-10 rounded-full bg-gradient-to-r from-primary-500 to-secondary-500 flex items-center justify-center">
-                                                <span class="text-white text-sm font-medium">{{ substr($user->name, 0, 1) }}</span>
+                                                    <span class="text-white text-sm font-medium">{{ substr($user->name, 0, 1) }}</span>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="ml-4">
+                                            <div class="ml-4">
                                             <div class="text-sm font-medium text-neutral-900 dark:text-neutral-100">{{ $user->name }}</div>
                                             <div class="text-sm text-neutral-500 dark:text-neutral-400">ID: {{ $user->id }}</div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
+                                    </td>
                                 <td class="table-modern-cell">
                                     <div class="text-sm text-neutral-900 dark:text-neutral-100">{{ $user->email }}</div>
-                                </td>
+                                    </td>
                                 <td class="table-modern-cell">
                                     <span class="badge-modern {{ $user->hasRole('admin') ? 'badge-modern-error' : ($user->hasRole('content_manager') ? 'badge-modern-primary' : 'badge-modern-success') }}">
-                                        {{ $user->getRoleNames()->first() }}
-                                    </span>
-                                </td>
+                                            {{ $user->getRoleNames()->first() }}
+                                        </span>
+                                    </td>
                                 <td class="table-modern-cell">
                                     <div class="text-sm text-neutral-900 dark:text-neutral-100">
-                                        @if($user->google_id)
+                                            @if($user->google_id)
                                             <span class="text-error-600 dark:text-error-400">Google OAuth</span>
-                                        @else
+                                            @else
                                             <span class="text-primary-600 dark:text-primary-400">Email/Password</span>
-                                        @endif
-                                    </div>
-                                </td>
+                                            @endif
+                                        </div>
+                                    </td>
                                 <td class="table-modern-cell">
                                     <div class="text-sm text-neutral-500 dark:text-neutral-400">{{ $user->created_at->format('M d, Y') }}</div>
-                                </td>
+                                    </td>
                                 <td class="table-modern-cell">
                                     <div class="flex items-center space-x-1">
                                         <a href="{{ route('admin.users.show', $user) }}" class="btn-modern btn-modern-ghost p-2" title="View">
@@ -103,11 +103,11 @@
                                                 </button>
                                             </form>
                                         @endif
-                                    </div>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
+                                        </div>
+                                    </td>
+                                </tr>
+                                @empty
+                                <tr>
                                 <td colspan="6" class="table-modern-cell">
                                     <div class="text-center py-12">
                                         <svg class="mx-auto h-12 w-12 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -124,63 +124,63 @@
                                             </a>
                                         </div>
                                     </div>
-                                </td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
+                                    </td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
 
     <!-- Modern Role Statistics -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div class="card-modern hover:shadow-lg transition-all duration-300">
             <div class="card-modern-body">
-                <div class="flex items-center">
+                        <div class="flex items-center">
                     <div class="p-3 bg-success-100 dark:bg-success-900/20 rounded-xl">
                         <svg class="h-8 w-8 text-success-600 dark:text-success-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
-                        </svg>
-                    </div>
-                    <div class="ml-4">
+                                </svg>
+                            </div>
+                            <div class="ml-4">
                         <h3 class="text-lg font-medium text-neutral-900 dark:text-neutral-100">Public Users</h3>
                         <p class="text-2xl font-bold text-success-600 dark:text-success-400">{{ $userStats['public_users'] ?? 0 }}</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
 
         <div class="card-modern hover:shadow-lg transition-all duration-300">
             <div class="card-modern-body">
-                <div class="flex items-center">
+                        <div class="flex items-center">
                     <div class="p-3 bg-primary-100 dark:bg-primary-900/20 rounded-xl">
                         <svg class="h-8 w-8 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                        </svg>
-                    </div>
-                    <div class="ml-4">
+                                </svg>
+                            </div>
+                            <div class="ml-4">
                         <h3 class="text-lg font-medium text-neutral-900 dark:text-neutral-100">Content Managers</h3>
                         <p class="text-2xl font-bold text-primary-600 dark:text-primary-400">{{ $userStats['content_managers'] ?? 0 }}</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
 
         <div class="card-modern hover:shadow-lg transition-all duration-300">
             <div class="card-modern-body">
-                <div class="flex items-center">
+                        <div class="flex items-center">
                     <div class="p-3 bg-error-100 dark:bg-error-900/20 rounded-xl">
                         <svg class="h-8 w-8 text-error-600 dark:text-error-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                    </div>
-                    <div class="ml-4">
+                                </svg>
+                            </div>
+                            <div class="ml-4">
                         <h3 class="text-lg font-medium text-neutral-900 dark:text-neutral-100">Admins</h3>
                         <p class="text-2xl font-bold text-error-600 dark:text-error-400">{{ $userStats['admin_users'] ?? 0 }}</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
 @endsection

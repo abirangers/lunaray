@@ -83,6 +83,8 @@ The system SHALL provide a modern, intuitive chat interface that matches the ove
 - **THEN** they see a modern chat interface with smooth animations
 - **AND** the interface is responsive and works on all device sizes
 - **AND** the design is consistent with the overall site theme
+- **AND** message bubbles are properly aligned (user right, bot left)
+- **AND** spacing and typography are optimized for readability
 
 #### Scenario: Typing indicators
 - **WHEN** a user sends a message

@@ -5,6 +5,12 @@
 @source '../**/*.blade.php';
 @source '../**/*.js';
 
+@layer base {
+    [x-cloak] { 
+        display: none !important; 
+    }
+}
+
 @theme {
     /* Lunaray Beauty Factory - Modern Minimalis Admin Theme */
     
@@ -236,6 +242,177 @@
     
     .input-group-modern-input {
         @apply block w-full px-3 py-2 text-sm border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 placeholder-neutral-500 dark:placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 pl-10;
+    }
+    
+    /* Public Page Components */
+    .hero-modern {
+        @apply relative overflow-hidden bg-gradient-to-br from-primary-50 to-secondary-50 dark:from-neutral-900 dark:to-neutral-800;
+    }
+    
+    .hero-modern-content {
+        @apply relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24;
+    }
+    
+    .hero-modern-title {
+        @apply text-4xl sm:text-5xl lg:text-6xl font-bold text-neutral-900 dark:text-white leading-tight;
+    }
+    
+    .hero-modern-subtitle {
+        @apply text-xl sm:text-2xl text-neutral-600 dark:text-neutral-300 mt-6 max-w-3xl;
+    }
+    
+    .hero-modern-cta {
+        @apply mt-8 flex flex-col sm:flex-row gap-4;
+    }
+    
+    /* Modern Auth Components */
+    .auth-modern {
+        @apply min-h-screen bg-gradient-to-br from-primary-50 via-white to-secondary-50 dark:from-neutral-900 dark:via-neutral-800 dark:to-neutral-900 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8;
+    }
+    
+    .auth-modern-card {
+        @apply max-w-md w-full bg-white dark:bg-neutral-800 rounded-2xl shadow-2xl border border-neutral-200 dark:border-neutral-700 overflow-hidden;
+    }
+    
+    .auth-modern-header {
+        @apply bg-gradient-to-r from-primary-500 to-secondary-500 px-8 py-8 text-center;
+    }
+    
+    .auth-modern-logo {
+        @apply w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4;
+    }
+    
+    .auth-modern-title {
+        @apply text-2xl font-bold text-white mb-2;
+    }
+    
+    .auth-modern-subtitle {
+        @apply text-primary-100 text-sm;
+    }
+    
+    .auth-modern-body {
+        @apply px-8 py-8;
+    }
+    
+    .auth-modern-footer {
+        @apply px-8 py-6 bg-neutral-50 dark:bg-neutral-700/50 text-center;
+    }
+    
+    /* Modern Chat Components */
+    .chat-modern {
+        @apply bg-white dark:bg-neutral-800 rounded-2xl shadow-xl border border-neutral-200 dark:border-neutral-700 overflow-hidden;
+    }
+    
+    .chat-modern-header {
+        @apply bg-gradient-to-r from-primary-500 to-secondary-500 px-6 py-4 text-white;
+    }
+    
+    .chat-modern-messages {
+        @apply h-96 overflow-y-auto p-6 space-y-4 bg-neutral-50 dark:bg-neutral-700/30;
+    }
+    
+    .chat-modern-input {
+        @apply border-t border-neutral-200 dark:border-neutral-600 bg-white dark:bg-neutral-800 px-6 py-4;
+    }
+    
+    /* Modern Article Components */
+    .article-modern-card {
+        @apply bg-white dark:bg-neutral-800 rounded-xl shadow-lg border border-neutral-200 dark:border-neutral-700 overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1;
+    }
+    
+    .article-modern-image {
+        @apply w-full h-48 object-cover;
+    }
+    
+    .article-modern-content {
+        @apply p-6;
+    }
+    
+    .article-modern-title {
+        @apply text-xl font-bold text-neutral-900 dark:text-white mb-2 line-clamp-2;
+    }
+    
+    .article-modern-excerpt {
+        @apply text-neutral-600 dark:text-neutral-300 mb-4 line-clamp-3;
+    }
+    
+    .article-modern-meta {
+        @apply flex items-center justify-between text-sm text-neutral-500 dark:text-neutral-400;
+    }
+    
+    /* Modern Button Variants for Public Pages */
+    .btn-modern-hero {
+        @apply inline-flex items-center justify-center px-8 py-4 text-lg font-semibold rounded-xl border-2 border-transparent transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-offset-2;
+    }
+    
+    .btn-modern-hero-primary {
+        @apply inline-flex items-center justify-center px-8 py-4 text-lg font-semibold rounded-xl border-2 border-transparent transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-offset-2 bg-primary-500 text-white border-primary-500 hover:bg-primary-600 hover:border-primary-600 focus:ring-primary-500 shadow-lg hover:shadow-xl;
+    }
+    
+    .btn-modern-hero-secondary {
+        @apply inline-flex items-center justify-center px-8 py-4 text-lg font-semibold rounded-xl border-2 border-transparent transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-offset-2 bg-white text-primary-600 border-primary-200 hover:bg-primary-50 hover:border-primary-300 focus:ring-primary-500 shadow-lg hover:shadow-xl;
+    }
+    
+    /* Modern Form Components for Public Pages */
+    .form-modern-floating {
+        @apply relative;
+    }
+    
+    .form-modern-floating-input {
+        @apply block w-full px-3 pt-6 pb-2 text-sm border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 placeholder-transparent focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200;
+    }
+    
+    .form-modern-floating-label {
+        @apply absolute left-3 top-2 text-xs text-neutral-500 dark:text-neutral-400 transition-all duration-200;
+    }
+    
+    /* Modern Loading States */
+    .loading-modern {
+        @apply animate-pulse bg-neutral-200 dark:bg-neutral-700 rounded;
+    }
+    
+    .loading-modern-spinner {
+        @apply animate-spin rounded-full border-2 border-neutral-300 border-t-primary-500;
+    }
+    
+    /* Modern Animations */
+    .animate-fade-in {
+        animation: fadeIn 0.5s ease-in-out;
+    }
+    
+    .animate-slide-up {
+        animation: slideUp 0.5s ease-out;
+    }
+    
+    .animate-scale-in {
+        animation: scaleIn 0.3s ease-out;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    
+    @keyframes slideUp {
+        from { 
+            opacity: 0; 
+            transform: translateY(20px); 
+        }
+        to { 
+            opacity: 1; 
+            transform: translateY(0); 
+        }
+    }
+    
+    @keyframes scaleIn {
+        from { 
+            opacity: 0; 
+            transform: scale(0.95); 
+        }
+        to { 
+            opacity: 1; 
+            transform: scale(1); 
+        }
     }
 }
 

@@ -26,6 +26,12 @@ class User extends Authenticatable
         'google_id',
         'google_token',
         'google_refresh_token',
+        'avatar',
+        'bio',
+        'phone',
+        'location',
+        'website',
+        'social_links',
     ];
 
     /**
@@ -53,6 +59,7 @@ class User extends Authenticatable
             // Encrypt sensitive OAuth tokens at rest
             'google_token' => 'encrypted',
             'google_refresh_token' => 'encrypted',
+            'social_links' => 'array',
         ];
     }
 
@@ -62,5 +69,13 @@ class User extends Authenticatable
     public function articles(): HasMany
     {
         return $this->hasMany(Article::class, 'author_id');
+    }
+
+    /**
+     * Get the user's activities.
+     */
+    public function activities(): HasMany
+    {
+        return $this->hasMany(UserActivity::class);
     }
 }

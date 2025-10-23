@@ -5,56 +5,150 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>@yield('title', 'Lunaray Beauty Factory')</title>
+    <!-- SEO Tags -->
+    @if(isset($article))
+        {!! seo($article) !!}
+    @elseif(request()->routeIs('home'))
+        {!! seo(new \RalphJSmit\Laravel\SEO\Support\SEOData(
+            title: 'Lunaray Beauty Factory - Solusi Total untuk Kosmetik Berkualitas',
+            description: 'Solusi total untuk kosmetik berkualitas. Membantu brand kosmetik tumbuh melalui inovasi, legalitas resmi, dan layanan menyeluruh dari ide hingga produk siap edar.',
+            url: route('home')
+        )) !!}
+    @elseif(request()->routeIs('articles.index'))
+        {!! seo(new \RalphJSmit\Laravel\SEO\Support\SEOData(
+            title: 'Beauty Articles - Tips & Tutorials',
+            description: 'Discover the latest beauty tips, tutorials, and insights from our experts. Learn about cosmetics manufacturing, beauty trends, and industry best practices.',
+            url: route('articles.index')
+        )) !!}
+    @else
+        {!! seo() !!}
+    @endif
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700|playfair-display:400,500,600,700|jetbrains-mono:400,500,600" rel="stylesheet" />
+    <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700" rel="stylesheet" />
     
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('styles')
 </head>
-<body class="h-full bg-gradient-to-br from-primary/5 via-secondary/5 to-accent/5">
+<body class="h-full bg-white">
     <div class="min-h-full">
         <!-- Navigation -->
-        <nav class="bg-white/80 backdrop-blur-sm shadow-sm border-b border-gray-200">
-            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <div class="flex h-16 justify-between">
-                    <div class="flex">
-                        <!-- Logo -->
-                        <div class="flex flex-shrink-0 items-center">
-                            <a href="{{ route('home') }}" class="flex items-center space-x-2">
-                                <div class="h-8 w-8 rounded-full bg-primary flex items-center justify-center">
-                                    <span class="text-white font-bold text-sm">L</span>
-                                </div>
-                                <span class="text-xl font-serif font-semibold text-primary">Lunaray</span>
-                            </a>
+        <nav class="bg-white border-b border-neutral-200">
+            <div class="mx-auto max-w-4xl px-6">
+                <div class="flex h-16 justify-between items-center">
+                    <!-- Logo -->
+                    <a href="{{ route('home') }}" class="flex items-center space-x-3">
+                        <div class="h-8 w-8 rounded-lg bg-neutral-900 flex items-center justify-center">
+                            <span class="text-white font-bold text-sm">L</span>
                         </div>
-                        
-                        <!-- Navigation Links -->
-                        <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
-                            <a href="{{ route('home') }}" class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700 {{ request()->routeIs('home') ? 'border-primary text-primary' : '' }}">
-                                Home
-                            </a>
-                            <a href="#" class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
-                                Products
-                            </a>
-                            <a href="#" class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
-                                About
-                            </a>
-                            <a href="#" class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
-                                Contact
-                            </a>
-                        </div>
-                    </div>
+                        <span class="text-lg font-medium text-neutral-900">Lunaray</span>
+                    </a>
                     
-                    <!-- CTA Button -->
-                    <div class="flex items-center">
-                        <a href="{{ route('login') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-200">
-                            Get Started
+                    <!-- Navigation Links -->
+                    <div class="hidden md:flex items-center space-x-8">
+                        <a href="{{ route('home') }}" class="text-neutral-600 hover:text-neutral-900 transition-colors {{ request()->routeIs('home') ? 'text-neutral-900 font-medium' : '' }}">
+                            Home
+                        </a>
+                        <a href="{{ route('articles.index') }}" class="text-neutral-600 hover:text-neutral-900 transition-colors {{ request()->routeIs('articles.*') ? 'text-neutral-900 font-medium' : '' }}">
+                            Articles
+                        </a>
+                        @can('access chat')
+                            <a href="{{ route('user.chat') }}" class="text-neutral-600 hover:text-neutral-900 transition-colors">
+                                Chat
+                            </a>
+                        @endcan
+                        <a href="#" class="text-neutral-600 hover:text-neutral-900 transition-colors">
+                            About
                         </a>
                     </div>
+                    
+                    <!-- CTA Button / User Menu -->
+                    @auth
+                        @if(auth()->user()->hasRole(['admin', 'content_manager']))
+                            <!-- Staff User Menu -->
+                            <div class="relative" x-data="{ open: false }">
+                                <button @click="open = !open" class="flex items-center space-x-2 text-sm text-neutral-700 hover:text-neutral-900 focus:outline-none transition-colors duration-200">
+                                    @if(auth()->user()->avatar)
+                                        <img src="{{ Storage::url(auth()->user()->avatar) }}" alt="{{ auth()->user()->name }}" 
+                                             class="h-8 w-8 rounded-full object-cover">
+                                    @else
+                                        <div class="h-8 w-8 rounded-full bg-primary flex items-center justify-center">
+                                            <span class="text-white text-xs font-bold">{{ substr(auth()->user()->name, 0, 1) }}</span>
+                                        </div>
+                                    @endif
+                                    <span class="hidden sm:block">{{ auth()->user()->name }}</span>
+                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                </button>
+                                
+                                <div x-show="open" @click.away="open = false" x-transition class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-neutral-200">
+                                    <div class="px-4 py-2 text-sm text-neutral-700 border-b border-neutral-200">
+                                        <div class="font-medium">{{ auth()->user()->name }}</div>
+                                        <div class="text-neutral-500 text-xs">{{ ucfirst(auth()->user()->roles->first()->name ?? 'user') }}</div>
+                                    </div>
+                                    
+                                    <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100 transition-colors duration-200">
+                                        Dashboard
+                                    </a>
+                                    
+                                    <a href="{{ route('profile.show') }}" class="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100 transition-colors duration-200">
+                                        Profile
+                                    </a>
+                                    
+                                    <form method="POST" action="{{ route('staff.logout') }}" class="block">
+                                        @csrf
+                                        <button type="submit" class="w-full text-left px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100 transition-colors duration-200">
+                                            Sign Out
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        @else
+                            <!-- Regular User Menu -->
+                            <div class="relative" x-data="{ open: false }">
+                                <button @click="open = !open" class="flex items-center space-x-2 text-sm text-neutral-700 hover:text-neutral-900 focus:outline-none transition-colors duration-200">
+                                    @if(auth()->user()->avatar)
+                                        <img src="{{ Storage::url(auth()->user()->avatar) }}" alt="{{ auth()->user()->name }}" 
+                                             class="h-8 w-8 rounded-full object-cover">
+                                    @else
+                                        <div class="h-8 w-8 rounded-full bg-primary flex items-center justify-center">
+                                            <span class="text-white text-xs font-bold">{{ substr(auth()->user()->name, 0, 1) }}</span>
+                                        </div>
+                                    @endif
+                                    <span class="hidden sm:block">{{ auth()->user()->name }}</span>
+                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                </button>
+                                
+                                <div x-show="open" @click.away="open = false" x-transition class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-neutral-200">
+                                    <div class="px-4 py-2 text-sm text-neutral-700 border-b border-neutral-200">
+                                        <div class="font-medium">{{ auth()->user()->name }}</div>
+                                        <div class="text-neutral-500 text-xs">{{ auth()->user()->email }}</div>
+                                    </div>
+                                    
+                                    <a href="{{ route('profile.show') }}" class="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100 transition-colors duration-200">
+                                        Profile
+                                    </a>
+                                    
+                                    <form method="POST" action="{{ route('logout') }}" class="block">
+                                        @csrf
+                                        <button type="submit" class="w-full text-left px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100 transition-colors duration-200">
+                                            Sign Out
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        @endif
+                    @else
+                        <!-- CTA Button for Guests -->
+                    <a href="{{ route('login') }}" class="bg-neutral-900 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-neutral-800 transition-colors">
+                        Get Started
+                    </a>
+                    @endauth
                 </div>
             </div>
         </nav>
@@ -138,63 +232,11 @@
         @endif
 
         <!-- Footer -->
-        <footer class="bg-gray-900 text-white">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                    <div class="col-span-1 md:col-span-2">
-                        <div class="flex items-center space-x-2 mb-4">
-                            <div class="h-8 w-8 rounded-full bg-primary flex items-center justify-center">
-                                <span class="text-white font-bold text-sm">L</span>
-                            </div>
-                            <span class="text-xl font-serif font-semibold">Lunaray Beauty Factory</span>
-                        </div>
-                        <p class="text-gray-300 text-sm mb-4">
-                            Your trusted partner in beauty and cosmetics manufacturing. 
-                            Creating exceptional products for the modern beauty industry.
-                        </p>
-                        <div class="flex space-x-4">
-                            <a href="#" class="text-gray-400 hover:text-white">
-                                <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
-                                </svg>
-                            </a>
-                            <a href="#" class="text-gray-400 hover:text-white">
-                                <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M22.46 6c-.77.35-1.6.58-2.46.69.88-.53 1.56-1.37 1.88-2.38-.83.5-1.75.85-2.72 1.05C18.37 4.5 17.26 4 16 4c-2.35 0-4.27 1.92-4.27 4.29 0 .34.04.67.11.98C8.28 9.09 5.11 7.38 3 4.79c-.37.63-.58 1.37-.58 2.15 0 1.49.75 2.81 1.91 3.56-.71 0-1.37-.2-1.95-.5v.03c0 2.08 1.48 3.82 3.44 4.21a4.22 4.22 0 0 1-1.93.07 4.28 4.28 0 0 0 4 2.98 8.521 8.521 0 0 1-5.33 1.84c-.34 0-.68-.02-1.02-.06C3.44 20.29 5.7 21 8.12 21 16 21 20.33 14.46 20.33 8.79c0-.19 0-.37-.01-.56.84-.6 1.56-1.36 2.14-2.23z"/>
-                                </svg>
-                            </a>
-                            <a href="#" class="text-gray-400 hover:text-white">
-                                <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
-                    
-                    <div>
-                        <h3 class="text-sm font-semibold text-white mb-4">Company</h3>
-                        <ul class="space-y-2">
-                            <li><a href="#" class="text-sm text-gray-300 hover:text-white">About Us</a></li>
-                            <li><a href="#" class="text-sm text-gray-300 hover:text-white">Our Services</a></li>
-                            <li><a href="#" class="text-sm text-gray-300 hover:text-white">Contact</a></li>
-                        </ul>
-                    </div>
-                    
-                    <div>
-                        <h3 class="text-sm font-semibold text-white mb-4">Support</h3>
-                        <ul class="space-y-2">
-                            <li><a href="#" class="text-sm text-gray-300 hover:text-white">Help Center</a></li>
-                            <li><a href="#" class="text-sm text-gray-300 hover:text-white">Privacy Policy</a></li>
-                            <li><a href="#" class="text-sm text-gray-300 hover:text-white">Terms of Service</a></li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="mt-8 pt-8 border-t border-gray-800">
-                    <p class="text-center text-sm text-gray-400">
-                        &copy; {{ date('Y') }} Lunaray Beauty Factory. All rights reserved.
-                    </p>
-                </div>
+        <footer class="bg-neutral-50 border-t border-neutral-200">
+            <div class="mx-auto max-w-4xl px-6 py-8">
+                <p class="text-center text-sm text-neutral-500">
+                    &copy; {{ date('Y') }} Lunaray Beauty Factory. All rights reserved.
+                </p>
             </div>
         </footer>
     </div>

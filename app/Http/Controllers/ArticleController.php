@@ -16,18 +16,14 @@ class ArticleController extends Controller
      */
     public function index(Request $request)
     {
-        // Check if user is admin/content manager
-        if (auth()->check() && auth()->user()->can('edit articles')) {
-            return $this->adminIndex($request);
-        }
-
+        // Always return public articles page regardless of user role
         return $this->publicIndex($request);
     }
 
     /**
      * Admin articles index
      */
-    private function adminIndex(Request $request)
+    public function adminIndex(Request $request)
     {
         $query = Article::with(['author', 'categories']);
 
@@ -149,10 +145,14 @@ class ArticleController extends Controller
             'status' => 'required|in:draft,published',
             'categories' => 'nullable|array',
             'categories.*' => 'exists:categories,id',
+            'author_name' => 'nullable|string|max:255',
         ]);
 
         $data = $request->all();
         $data['author_id'] = Auth::id();
+        
+        // Set author_name
+        $data['author_name'] = $request->author_name ?: Auth::user()->name;
         
         // Generate unique slug
         $baseSlug = Str::slug($request->title);
@@ -190,8 +190,8 @@ class ArticleController extends Controller
      */
     public function show(Article $article)
     {
-        // Increment view count
-        $article->incrementViewCount();
+        // Increment view count with session-based duplicate prevention
+        $article->incrementViewCountWithSession();
 
         return view('articles.show', compact('article'));
     }
@@ -219,9 +219,13 @@ class ArticleController extends Controller
             'status' => 'required|in:draft,published',
             'categories' => 'nullable|array',
             'categories.*' => 'exists:categories,id',
+            'author_name' => 'nullable|string|max:255',
         ]);
 
         $data = $request->all();
+        
+        // Set author_name
+        $data['author_name'] = $request->author_name ?: Auth::user()->name;
 
         // Update slug if title changed
         if ($article->title !== $request->title) {
@@ -283,56 +287,107 @@ class ArticleController extends Controller
      */
     public function bulkAction(Request $request)
     {
-        $request->validate([
-            'action' => 'required|in:publish,unpublish,delete,feature,unfeature',
-            'articles' => 'required|array',
-            'articles.*' => 'exists:articles,id',
-        ]);
+        try {
+            // Validate request
+            $validated = $request->validate([
+                'action' => 'required|in:publish,unpublish,delete,feature,unfeature',
+                'articles' => 'required|array|min:1',
+                'articles.*' => 'exists:articles,id',
+            ]);
 
-        $articles = Article::whereIn('id', $request->articles);
+            $articleIds = $validated['articles'];
+            $action = $validated['action'];
+            
+            // Log the bulk action for debugging
+            \Log::info('Bulk action started', [
+                'action' => $action,
+                'article_ids' => $articleIds,
+                'raw_request' => $request->all(),
+                'user_id' => auth()->id()
+            ]);
 
-        switch ($request->action) {
-            case 'publish':
-                $articles->update([
-                    'status' => 'published',
-                    'published_at' => now()
-                ]);
-                $message = 'Articles published successfully.';
-                break;
+            $articles = Article::whereIn('id', $articleIds);
+            $count = $articles->count();
 
-            case 'unpublish':
-                $articles->update([
-                    'status' => 'draft',
-                    'published_at' => null
-                ]);
-                $message = 'Articles unpublished successfully.';
-                break;
+            if ($count === 0) {
+                return redirect()->route('articles.index')
+                    ->with('error', 'No articles found with the provided IDs.');
+            }
 
-            case 'delete':
-                // Delete featured images first
-                $articlesToDelete = $articles->get();
-                foreach ($articlesToDelete as $article) {
-                    if ($article->featured_image) {
-                        Storage::disk('public')->delete($article->featured_image);
+            switch ($action) {
+                case 'publish':
+                    $updated = $articles->update([
+                        'status' => 'published',
+                        'published_at' => now()
+                    ]);
+                    $message = "{$count} articles published successfully.";
+                    break;
+
+                case 'unpublish':
+                    $updated = $articles->update([
+                        'status' => 'draft',
+                        'published_at' => null
+                    ]);
+                    $message = "{$count} articles unpublished successfully.";
+                    break;
+
+                case 'delete':
+                    // Delete featured images first
+                    $articlesToDelete = $articles->get();
+                    foreach ($articlesToDelete as $article) {
+                        if ($article->featured_image) {
+                            Storage::disk('public')->delete($article->featured_image);
+                        }
                     }
-                }
-                $articles->delete();
-                $message = 'Articles deleted successfully.';
-                break;
+                    $deleted = $articles->delete();
+                    $message = "{$count} articles deleted successfully.";
+                    break;
 
-            case 'feature':
-                $articles->update(['is_featured' => true]);
-                $message = 'Articles marked as featured successfully.';
-                break;
+                case 'feature':
+                    $updated = $articles->update(['is_featured' => true]);
+                    $message = "{$count} articles marked as featured successfully.";
+                    break;
 
-            case 'unfeature':
-                $articles->update(['is_featured' => false]);
-                $message = 'Articles unmarked as featured successfully.';
-                break;
+                case 'unfeature':
+                    $updated = $articles->update(['is_featured' => false]);
+                    $message = "{$count} articles unmarked as featured successfully.";
+                    break;
+
+                default:
+                    return redirect()->route('articles.index')
+                        ->with('error', 'Invalid action specified.');
+            }
+
+            // Log success
+            \Log::info('Bulk action completed', [
+                'action' => $action,
+                'count' => $count,
+                'user_id' => auth()->id()
+            ]);
+
+            return redirect()->route('articles.index')
+                ->with('success', $message);
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            \Log::error('Bulk action validation failed', [
+                'errors' => $e->errors(),
+                'user_id' => auth()->id()
+            ]);
+            
+            return redirect()->route('articles.index')
+                ->withErrors($e->errors())
+                ->with('error', 'Validation failed. Please check your input.');
+                
+        } catch (\Exception $e) {
+            \Log::error('Bulk action failed', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+                'user_id' => auth()->id()
+            ]);
+            
+            return redirect()->route('articles.index')
+                ->with('error', 'An error occurred while processing your request. Please try again.');
         }
-
-        return redirect()->route('articles.index')
-            ->with('success', $message);
     }
 
     /**

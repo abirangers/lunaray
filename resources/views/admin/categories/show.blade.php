@@ -115,7 +115,7 @@
                                 <div class="flex items-center justify-between p-3 bg-neutral-50 dark:bg-neutral-800 rounded-xl hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors duration-200">
                                     <div class="flex-1">
                                         <h3 class="font-medium text-neutral-900 dark:text-neutral-100 text-sm">{{ Str::limit($article->title, 40) }}</h3>
-                                        <p class="text-xs text-neutral-600 dark:text-neutral-400">By {{ $article->author->name }} • {{ $article->created_at->diffForHumans() }}</p>
+                                        <p class="text-xs text-neutral-600 dark:text-neutral-400">By {{ $article->author_name }} • {{ $article->created_at->diffForHumans() }}</p>
                                     </div>
                                     <div class="flex items-center space-x-2">
                                         <span class="px-2 py-1 text-xs font-medium rounded-full {{ $article->status === 'published' ? 'bg-success-100 text-success-800 dark:bg-success-900/20 dark:text-success-200' : 'bg-warning-100 text-warning-800 dark:bg-warning-900/20 dark:text-warning-200' }}">

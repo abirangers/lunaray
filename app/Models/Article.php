@@ -7,13 +7,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Tonysm\RichTextLaravel\Models\Traits\HasRichText;
 use RalphJSmit\Laravel\SEO\Support\SEOData;
+use RalphJSmit\Laravel\SEO\Support\HasSEO;
+use RalphJSmit\Laravel\SEO\SchemaCollection;
 
 class Article extends Model
 {
-    use HasFactory;
+    use HasFactory, HasSEO;
 
     protected $fillable = [
         'title',
@@ -26,6 +29,7 @@ class Article extends Model
         'published_at',
         'view_count',
         'author_id',
+        'author_name',
     ];
 
     protected $casts = [
@@ -106,12 +110,16 @@ class Article extends Model
     {
         return new SEOData(
             title: $this->title,
-            description: $this->excerpt ?: Str::limit(strip_tags($this->content->toPlainText()), 160),
+            description: $this->excerpt ?: Str::limit(strip_tags($this->content ?? ''), 160),
             url: route('articles.show', $this->slug),
             image: $this->featured_image,
             published_time: $this->published_at,
             modified_time: $this->updated_at,
             author: $this->author->name ?? 'Lunaray Beauty Factory',
+            section: $this->categories->first()?->name,
+            tags: $this->categories->pluck('name')->toArray(),
+            schema: SchemaCollection::make()
+                ->addArticle(),
         );
     }
 
@@ -121,6 +129,95 @@ class Article extends Model
     public function incrementViewCount()
     {
         $this->increment('view_count');
+    }
+
+    /**
+     * Increment view count with session-based duplicate prevention and bot protection.
+     */
+    public function incrementViewCountWithSession()
+    {
+        // Check if this is a bot request
+        if ($this->isBotRequest()) {
+            return;
+        }
+
+        // Check if user has already viewed this article in this session
+        $viewedArticles = session('viewed_articles', []);
+        
+        if (in_array($this->id, $viewedArticles)) {
+            return; // Already viewed in this session
+        }
+
+        // Add to viewed articles in session (limit to 50 articles)
+        $viewedArticles[] = $this->id;
+        if (count($viewedArticles) > 50) {
+            $viewedArticles = array_slice($viewedArticles, -50); // Keep only last 50
+        }
+        
+        session(['viewed_articles' => $viewedArticles]);
+
+        // Increment view count through cache-based batch updates
+        $this->incrementViewCountWithCache();
+    }
+
+    /**
+     * Check if the current request is from a bot.
+     */
+    public function isBotRequest()
+    {
+        $userAgent = request()->userAgent();
+        
+        if (!$userAgent) {
+            return true; // No user agent, likely a bot
+        }
+
+        $botPatterns = [
+            'bot', 'crawler', 'spider', 'scraper', 'curl', 'wget',
+            'googlebot', 'bingbot', 'slurp', 'duckduckbot', 'baiduspider',
+            'yandexbot', 'facebookexternalhit', 'twitterbot', 'linkedinbot'
+        ];
+
+        $userAgentLower = strtolower($userAgent);
+        
+        foreach ($botPatterns as $pattern) {
+            if (str_contains($userAgentLower, $pattern)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Increment view count through cache-based batch updates.
+     */
+    private function incrementViewCountWithCache()
+    {
+        $cacheKey = "article_views_{$this->id}";
+        $lastSyncKey = "article_views_sync_{$this->id}";
+        
+        // Get current views from cache or database
+        $views = Cache::get($cacheKey, $this->view_count);
+        $views++;
+        
+        // Store in cache
+        Cache::put($cacheKey, $views, 3600); // 1 hour
+        
+        // Update database every 10 views or if it's been more than an hour since last sync
+        $shouldSync = ($views % 10 === 0) || !Cache::has($lastSyncKey);
+        
+        if ($shouldSync) {
+            $this->update(['view_count' => $views]);
+            Cache::put($lastSyncKey, true, 3600); // 1 hour
+        }
+    }
+
+    /**
+     * Get the author name for display.
+     */
+    public function getAuthorNameAttribute($value)
+    {
+        return $value ?: $this->author->name;
     }
 
     /**

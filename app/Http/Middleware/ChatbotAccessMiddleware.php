@@ -36,7 +36,7 @@ class ChatbotAccessMiddleware
 
         // Check if user has permission to use chatbot
         $user = auth()->user();
-        if (!$user->can('use_chatbot')) {
+        if (!$user->can('access chat')) {
             return response()->json([
                 'error' => 'Access denied',
                 'message' => 'You do not have permission to use the chatbot.',
@@ -65,8 +65,8 @@ class ChatbotAccessMiddleware
             return $now->diffInMinutes($timestamp) < 1;
         });
         
-        // Check if user has exceeded rate limit (10 requests per minute)
-        if (count($requests) >= 10) {
+        // Check if user has exceeded rate limit (30 requests per minute)
+        if (count($requests) >= 30) {
             abort(429, 'Too many chatbot requests. Please wait a moment before trying again.');
         }
         

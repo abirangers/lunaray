@@ -79,7 +79,7 @@ class GoogleAuthController extends Controller
             if ($user->hasRole('admin') || $user->hasRole('content_manager')) {
                 return redirect()->route('admin.dashboard');
             } else {
-                return redirect()->route('user.dashboard');
+                return redirect()->route('user.chat');
             }
 
         } catch (\Laravel\Socialite\Two\InvalidStateException $e) {
