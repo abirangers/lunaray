@@ -13,17 +13,19 @@ use Tonysm\RichTextLaravel\Models\Traits\HasRichText;
 use RalphJSmit\Laravel\SEO\Support\SEOData;
 use RalphJSmit\Laravel\SEO\Support\HasSEO;
 use RalphJSmit\Laravel\SEO\SchemaCollection;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-class Article extends Model
+class Article extends Model implements HasMedia
 {
-    use HasFactory, HasSEO;
+    use HasFactory, HasSEO, InteractsWithMedia;
 
     protected $fillable = [
         'title',
         'slug',
         'excerpt',
         'content',
-        'featured_image',
         'is_featured',
         'status',
         'published_at',
@@ -226,5 +228,40 @@ class Article extends Model
     public function getRouteKeyName()
     {
         return 'slug';
+    }
+
+    /**
+     * Register media collections.
+     */
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('featured')
+            ->singleFile()
+            ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/jpg', 'image/gif', 'image/webp']);
+            
+        $this->addMediaCollection('gallery')
+            ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/jpg', 'image/gif', 'image/webp']);
+    }
+
+    /**
+     * Register media conversions.
+     */
+    public function registerMediaConversions(?Media $media = null): void
+    {
+        $this->addMediaConversion('thumb')
+            ->width(300)
+            ->height(200)
+            ->sharpen(10)
+            ->performOnCollections('featured', 'gallery');
+            
+        $this->addMediaConversion('medium')
+            ->width(800)
+            ->height(600)
+            ->performOnCollections('featured', 'gallery');
+            
+        $this->addMediaConversion('large')
+            ->width(1200)
+            ->height(800)
+            ->performOnCollections('featured', 'gallery');
     }
 }

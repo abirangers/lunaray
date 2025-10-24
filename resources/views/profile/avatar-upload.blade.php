@@ -6,8 +6,8 @@
         <!-- Current Avatar Display -->
         <div class="flex-shrink-0">
             <div class="relative">
-                @if(auth()->user()->avatar)
-                    <img src="{{ Storage::url(auth()->user()->avatar) }}" alt="{{ auth()->user()->name }}" 
+                @if(auth()->user()->hasMedia('avatar'))
+                    <img src="{{ auth()->user()->getFirstMediaUrl('avatar', 'thumb') }}" alt="{{ auth()->user()->name }}" 
                          class="h-24 w-24 rounded-full object-cover border-4 border-white shadow-lg" id="current-avatar">
                 @else
                     <div class="h-24 w-24 rounded-full bg-primary flex items-center justify-center border-4 border-white shadow-lg" id="current-avatar">
@@ -75,7 +75,7 @@
                 </form>
 
                 <!-- Remove Avatar Button -->
-                @if(auth()->user()->avatar)
+                @if(auth()->user()->hasMedia('avatar'))
                     <form action="{{ route('profile.avatar.delete') }}" method="POST" class="inline">
                         @csrf
                         @method('DELETE')

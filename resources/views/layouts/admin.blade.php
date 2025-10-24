@@ -175,8 +175,8 @@
                             <div class="relative" x-data="{ open: false }">
                                 <button @click="open = !open" class="flex items-center space-x-2 text-sm text-neutral-700 hover:text-primary-500 focus:outline-none transition-colors duration-200">
                                     {{-- profile avatar --}}
-                                    @if(auth()->user()->avatar)
-                                        <img src="{{ Storage::url(auth()->user()->avatar) }}" alt="{{ auth()->user()->name }}" 
+                                    @if(auth()->user()->hasMedia('avatar'))
+                                        <img src="{{ auth()->user()->getFirstMediaUrl('avatar', 'thumb') }}" alt="{{ auth()->user()->name }}" 
                                              class="h-8 w-8 rounded-full object-cover">
                                     @else   
                                         <span class="text-primary-500 font-medium">{{ substr(auth()->user()->name, 0, 1) }}</span>

@@ -59,9 +59,9 @@
         @endif
 
         <!-- Featured Image -->
-        @if($article->featured_image)
+        @if($article->hasMedia('featured'))
             <div class="mb-12">
-                <img src="{{ Storage::url($article->featured_image) }}" 
+                <img src="{{ $article->getFirstMediaUrl('featured', 'large') }}" 
                      alt="{{ $article->title }}" 
                      class="w-full h-64 md:h-96 object-cover rounded-lg">
             </div>

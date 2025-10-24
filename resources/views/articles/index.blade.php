@@ -49,8 +49,8 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
                 @foreach($featured_articles as $article)
                     <article class="bg-white border border-neutral-200 rounded-lg overflow-hidden hover:border-neutral-300 transition-colors">
-                        @if($article->featured_image)
-                            <img src="{{ Storage::url($article->featured_image) }}" alt="{{ $article->title }}" 
+                        @if($article->hasMedia('featured'))
+                            <img src="{{ $article->getFirstMediaUrl('featured', 'medium') }}" alt="{{ $article->title }}" 
                                  class="w-full h-48 object-cover">
                         @else
                             <div class="w-full h-48 bg-neutral-100 flex items-center justify-center">
@@ -95,8 +95,8 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             @forelse($articles as $article)
                 <article class="bg-white border border-neutral-200 rounded-lg overflow-hidden hover:border-neutral-300 transition-colors">
-                    @if($article->featured_image)
-                        <img src="{{ Storage::url($article->featured_image) }}" alt="{{ $article->title }}" 
+                    @if($article->hasMedia('featured'))
+                        <img src="{{ $article->getFirstMediaUrl('featured', 'medium') }}" alt="{{ $article->title }}" 
                              class="w-full h-48 object-cover">
                     @else
                         <div class="w-full h-48 bg-neutral-100 flex items-center justify-center">
@@ -166,8 +166,8 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                 @foreach($popular_articles as $article)
                     <div class="flex items-start space-x-4">
-                        @if($article->featured_image)
-                            <img src="{{ Storage::url($article->featured_image) }}" alt="{{ $article->title }}" 
+                        @if($article->hasMedia('featured'))
+                            <img src="{{ $article->getFirstMediaUrl('featured', 'thumb') }}" alt="{{ $article->title }}" 
                                  class="w-16 h-16 object-cover rounded-lg flex-shrink-0">
                         @else
                             <div class="w-16 h-16 bg-neutral-200 rounded-lg flex items-center justify-center flex-shrink-0">

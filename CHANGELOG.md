@@ -8,6 +8,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Spatie MediaLibrary v11 Integration** - Complete migration from Intervention Image to Spatie MediaLibrary
+- **Advanced Media Management** - Automatic image conversions (thumb, medium, large) with queue processing
+- **Responsive Images** - Automatic responsive image generation for optimal loading performance
+- **Image Optimization** - Built-in optimization with multiple format support (JPEG, PNG, WebP, AVIF)
+- **Media Collections** - Organized media storage with collections (featured, gallery, avatar)
+- **Queue Processing** - Background image processing for better performance and user experience
+- **Migration Command** - `php artisan media:migrate` for seamless migration of existing images
+- **Custom Properties** - Rich metadata support for media files
+- **Database Cleanup** - Removed old `featured_image` and `avatar` columns after successful migration
 - Enhanced view count tracking with session-based duplicate prevention
 - Cache-based batch updates for improved performance (no Redis dependency)
 - Bot protection for accurate view count tracking via user agent filtering

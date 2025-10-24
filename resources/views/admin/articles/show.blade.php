@@ -33,9 +33,9 @@
                     <p class="text-sm text-neutral-600 dark:text-neutral-400">Full article content and details</p>
                 </div>
                 <div class="card-modern-body">
-                    @if($article->featured_image)
+                    @if($article->hasMedia('featured'))
                         <div class="mb-6">
-                            <img src="{{ Storage::url($article->featured_image) }}" alt="{{ $article->title }}" 
+                            <img src="{{ $article->getFirstMediaUrl('featured', 'large') }}" alt="{{ $article->title }}" 
                                  class="w-full h-64 object-cover rounded-xl">
                         </div>
                     @else

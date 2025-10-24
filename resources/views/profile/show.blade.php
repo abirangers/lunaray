@@ -12,8 +12,8 @@
                     <!-- Avatar -->
                     <div class="flex-shrink-0">
                         <div class="relative">
-                            @if($user->avatar)
-                                <img src="{{ Storage::url($user->avatar) }}" alt="{{ $user->name }}" 
+                            @if($user->hasMedia('avatar'))
+                                <img src="{{ $user->getFirstMediaUrl('avatar', 'thumb') }}" alt="{{ $user->name }}" 
                                      class="h-24 w-24 rounded-full object-cover border-4 border-white shadow-lg">
                             @else
                                 <div class="h-24 w-24 rounded-full bg-primary flex items-center justify-center border-4 border-white shadow-lg">

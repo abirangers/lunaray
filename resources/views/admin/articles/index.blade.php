@@ -246,8 +246,8 @@
                             </td>
                             <td class="table-modern-cell">
                                 <div class="flex items-center space-x-4">
-                                    @if($article->featured_image)
-                                        <img class="h-12 w-12 rounded-lg object-cover flex-shrink-0" src="{{ Storage::url($article->featured_image) }}" alt="{{ $article->title }}">
+                                    @if($article->hasMedia('featured'))
+                                        <img class="h-12 w-12 rounded-lg object-cover flex-shrink-0" src="{{ $article->getFirstMediaUrl('featured', 'thumb') }}" alt="{{ $article->title }}">
                                     @else
                                         <div class="h-12 w-12 rounded-lg bg-gradient-to-br from-primary-100 to-secondary-100 dark:from-primary-900/20 dark:to-secondary-900/20 flex items-center justify-center flex-shrink-0">
                                             <svg class="w-6 h-6 text-primary-500 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

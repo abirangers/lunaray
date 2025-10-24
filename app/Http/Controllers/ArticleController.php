@@ -166,7 +166,7 @@ class ArticleController extends Controller
 
         // Handle featured image upload
         if ($request->hasFile('featured_image')) {
-            $data['featured_image'] = $request->file('featured_image')->store('articles', 'public');
+            // Will be handled after article creation
         }
 
         // Set published_at if status is published
@@ -175,6 +175,12 @@ class ArticleController extends Controller
         }
 
         $article = Article::create($data);
+
+        // Handle featured image upload with MediaLibrary
+        if ($request->hasFile('featured_image')) {
+            $article->addMediaFromRequest('featured_image')
+                ->toMediaCollection('featured');
+        }
 
         // Attach categories
         if ($request->has('categories')) {
@@ -241,11 +247,9 @@ class ArticleController extends Controller
 
         // Handle featured image upload
         if ($request->hasFile('featured_image')) {
-            // Delete old image
-            if ($article->featured_image) {
-                Storage::disk('public')->delete($article->featured_image);
-            }
-            $data['featured_image'] = $request->file('featured_image')->store('articles', 'public');
+            $article->clearMediaCollection('featured');
+            $article->addMediaFromRequest('featured_image')
+                ->toMediaCollection('featured');
         }
 
         // Set published_at if status changed to published
@@ -271,11 +275,7 @@ class ArticleController extends Controller
      */
     public function destroy(Article $article)
     {
-        // Delete featured image
-        if ($article->featured_image) {
-            Storage::disk('public')->delete($article->featured_image);
-        }
-
+        // MediaLibrary handles media deletion automatically via model events
         $article->delete();
 
         return redirect()->route('articles.index')
@@ -332,13 +332,7 @@ class ArticleController extends Controller
                     break;
 
                 case 'delete':
-                    // Delete featured images first
-                    $articlesToDelete = $articles->get();
-                    foreach ($articlesToDelete as $article) {
-                        if ($article->featured_image) {
-                            Storage::disk('public')->delete($article->featured_image);
-                        }
-                    }
+                    // MediaLibrary handles media deletion automatically via model events
                     $deleted = $articles->delete();
                     $message = "{$count} articles deleted successfully.";
                     break;

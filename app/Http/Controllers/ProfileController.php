@@ -8,8 +8,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Intervention\Image\ImageManager;
-use Intervention\Image\Drivers\Gd\Driver;
 
 class ProfileController extends Controller
 {
@@ -80,37 +78,10 @@ class ProfileController extends Controller
             'avatar' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
 
-        // Delete old avatar if exists
-        if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {
-            Storage::disk('public')->delete($user->avatar);
-        }
+        $user->clearMediaCollection('avatar');
+        $user->addMediaFromRequest('avatar')
+            ->toMediaCollection('avatar');
 
-        // Store and process new avatar
-        $file = $request->file('avatar');
-        $filename = 'avatars/' . $user->id . '_' . time() . '.' . $file->getClientOriginalExtension();
-        
-        // Resize and save image using Intervention Image v3
-        $manager = new ImageManager(new Driver());
-        $image = $manager->read($file);
-        $image->resize(150, 150);
-        
-        // Get the file extension and encode accordingly
-        $extension = $file->getClientOriginalExtension();
-        if ($extension === 'jpg' || $extension === 'jpeg') {
-            $encodedImage = $image->toJpeg(90);
-        } elseif ($extension === 'png') {
-            $encodedImage = $image->toPng();
-        } elseif ($extension === 'webp') {
-            $encodedImage = $image->toWebp(90);
-        } else {
-            $encodedImage = $image->toJpeg(90); // Default to JPEG
-        }
-        
-        Storage::disk('public')->put($filename, $encodedImage);
-        
-        $user->update(['avatar' => $filename]);
-
-        // Log activity
         $this->logActivity($user, 'avatar_changed', 'Profile avatar updated');
 
         return redirect()->route('profile.show')
@@ -124,13 +95,8 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
         
-        if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {
-            Storage::disk('public')->delete($user->avatar);
-        }
-        
-        $user->update(['avatar' => null]);
+        $user->clearMediaCollection('avatar');
 
-        // Log activity
         $this->logActivity($user, 'avatar_deleted', 'Profile avatar removed');
 
         return redirect()->route('profile.show')
