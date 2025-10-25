@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.guest')
 
 @section('title', 'AI Chatbot')
 @section('pageTitle', 'AI Chatbot')
@@ -68,7 +68,7 @@
                                 <div class="h-8 w-8 rounded-full flex items-center justify-center" 
                                      :class="message.type === 'user' ? 'bg-neutral-900' : 'bg-neutral-100'">
                                     <span x-show="message.type === 'user'" class="text-white font-medium text-sm">
-                                        {{ substr(auth()->user()->name, 0, 1) }}
+                                        {{ auth()->user() ? substr(auth()->user()->name, 0, 1) : 'G' }}
                                     </span>
                                     <svg x-show="message.type !== 'user'" class="h-4 w-4 text-neutral-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
@@ -229,8 +229,8 @@
                 },
 
                 async init() {
-                    // Try to get session ID from sessionStorage first
-                    this.sessionId = sessionStorage.getItem('chatbot_session_id');
+                    // Try to get session ID from localStorage first (for guest persistence)
+                    this.sessionId = localStorage.getItem('guest_chat_session_id');
                     
                     await this.checkStatus();
                     if (this.status.active) {
@@ -255,14 +255,26 @@
                     if (this.sessionId) return; // Don't get session if we already have one
                     
                     try {
-                        const response = await fetch('/api/chatbot/session');
+                        const url = this.sessionId ? `/api/chatbot/session?session_id=${this.sessionId}` : '/api/chatbot/session';
+                        const response = await fetch(url, {
+                            method: 'GET',
+                            headers: {
+                                'Accept': 'application/json'
+                            }
+                        });
                         if (!response.ok) {
                             throw new Error(`HTTP error! status: ${response.status}`);
                         }
                         const data = await response.json();
                         this.sessionId = data.session_id;
-                        // Store session ID in sessionStorage
-                        sessionStorage.setItem('chatbot_session_id', this.sessionId);
+                        
+                        // Store session ID in localStorage for guest persistence
+                        if (data.is_guest) {
+                            localStorage.setItem('guest_chat_session_id', this.sessionId);
+                        } else {
+                            // For authenticated users, use sessionStorage
+                            sessionStorage.setItem('chatbot_session_id', this.sessionId);
+                        }
                     } catch (error) {
                         console.error('Failed to get session:', error);
                     }
@@ -420,7 +432,13 @@
                         
                         // Update session ID
                         this.sessionId = data.new_session_id;
-                        sessionStorage.setItem('chatbot_session_id', this.sessionId);
+                        
+                        // Clear old session storage
+                        localStorage.removeItem('guest_chat_session_id');
+                        sessionStorage.removeItem('chatbot_session_id');
+                        
+                        // Store new session ID (will be determined by backend response)
+                        // The getSession method will handle the appropriate storage
                         
                         // Clear messages
                         this.messages = [];

@@ -17,11 +17,15 @@ class ChatSession extends Model
         'status',
         'last_activity_at',
         'metadata',
+        'is_guest',
+        'ip_address',
+        'expires_at',
     ];
 
     protected $casts = [
         'last_activity_at' => 'datetime',
         'metadata' => 'array',
+        'expires_at' => 'datetime',
     ];
 
     /**
@@ -70,5 +74,25 @@ class ChatSession extends Model
     public function updateActivity(): void
     {
         $this->update(['last_activity_at' => now()]);
+    }
+
+    /**
+     * Check if the session is expired.
+     */
+    public function isExpired(): bool
+    {
+        if (!$this->expires_at) {
+            return false;
+        }
+        
+        return $this->expires_at->isPast();
+    }
+
+    /**
+     * Check if this is a guest session.
+     */
+    public function isGuest(): bool
+    {
+        return $this->is_guest;
     }
 }

@@ -8,6 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Guest Chat Access** - Complete implementation allowing guest users to access chat without authentication
+- **Guest Session Management** - localStorage-based session persistence with 7-day expiry
+- **Guest Database Tracking** - IP address tracking and session expiry management for guest users
+- **Guest Rate Limiting** - IP-based rate limiting (60 requests/minute) for guest users
+- **Guest Navigation** - Chat link added to guest layout navigation
+- **Guest Cleanup System** - Automated cleanup of expired guest sessions with daily scheduled command
+- **Guest Security** - CSRF protection exclusion for chatbot API routes, IP tracking for abuse prevention
 - **Spatie MediaLibrary v11 Integration** - Complete migration from Intervention Image to Spatie MediaLibrary
 - **Advanced Media Management** - Automatic image conversions (thumb, medium, large) with queue processing
 - **Responsive Images** - Automatic responsive image generation for optimal loading performance
@@ -49,6 +56,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Database optimization with proper indexing and cleanup policies**
 - **Security measures: authentication, validation, and data protection**
 - **Performance monitoring and logging system**
+
+### Guest Chat Access Implementation
+- **Database Schema Updates** - Added guest support to chat tables with nullable user_id, is_guest flag, IP tracking, and session expiry
+- **Model Enhancements** - Updated ChatSession and ChatMessage models with guest-specific methods (isExpired, isGuest)
+- **Route Configuration** - Removed authentication middleware from chat routes while maintaining rate limiting
+- **Controller Updates** - Enhanced ChatbotController to handle both authenticated and guest users with session management
+- **Middleware Updates** - Updated chatbot middleware to allow guest access with IP-based rate limiting
+- **Frontend Integration** - Implemented localStorage management for guest session persistence across page refreshes
+- **Security Enhancements** - Added CSRF protection exclusion for chatbot API routes and IP tracking for abuse prevention
+- **Cleanup System** - Created automated cleanup command for expired guest sessions with daily scheduling
+- **Navigation Updates** - Added chat link to guest layout navigation for seamless access
 
 ### Changed
 - View count behavior now prevents duplicate counts within same user session

@@ -17,9 +17,10 @@ class ChatbotWebhookService
 
     public function __construct()
     {
-        $this->webhookUrl = ChatbotConfiguration::getValue('webhook_url', '');
-        $this->timeout = (int) ChatbotConfiguration::getValue('webhook_timeout', 30);
-        $this->retryAttempts = (int) ChatbotConfiguration::getValue('webhook_retry_attempts', 3);
+        // Try environment variables first, fallback to database configuration
+        $this->webhookUrl = env('CHATBOT_WEBHOOK_URL', ChatbotConfiguration::getValue('webhook_url', ''));
+        $this->timeout = (int) env('CHATBOT_TIMEOUT', ChatbotConfiguration::getValue('webhook_timeout', 30));
+        $this->retryAttempts = (int) env('CHATBOT_RETRY_ATTEMPTS', ChatbotConfiguration::getValue('webhook_retry_attempts', 3));
     }
 
     /**
@@ -51,9 +52,8 @@ class ChatbotWebhookService
         }
 
         $testPayload = [
-            'type' => 'test',
-            'message' => 'Test connection from Lunaray Beauty Factory',
-            'timestamp' => now()->toISOString(),
+            'session_id' => 'test-session-' . uniqid(),
+            'chatInput' => 'Test connection from Lunaray Beauty Factory',
         ];
 
         try {
@@ -93,19 +93,8 @@ class ChatbotWebhookService
             ->toArray();
 
         return [
-            'type' => 'chat_message',
             'session_id' => $session->session_id,
-            'user_id' => $session->user_id,
-            'user_name' => $session->user->name ?? 'User',
-            'user_email' => $session->user->email ?? '',
-            'message' => $userMessage->content,
-            'conversation_history' => $recentMessages,
-            'timestamp' => $userMessage->sent_at->toISOString(),
-            'metadata' => [
-                'session_status' => $session->status,
-                'last_activity' => $session->last_activity_at?->toISOString(),
-                'user_role' => $session->user->roles->pluck('name')->first() ?? 'user',
-            ],
+            'chatInput' => $userMessage->content,
         ];
     }
 
@@ -169,13 +158,13 @@ class ChatbotWebhookService
             throw new \Exception('Invalid JSON response from webhook');
         }
 
-        // Validate required fields
-        if (!isset($data['content'])) {
-            throw new \Exception('Webhook response missing required "content" field');
+        // Validate required fields - n8n returns 'output' field
+        if (!isset($data['output'])) {
+            throw new \Exception('Webhook response missing required "output" field');
         }
 
         return [
-            'content' => $data['content'],
+            'content' => $data['output'],
             'metadata' => $data['metadata'] ?? null,
         ];
     }

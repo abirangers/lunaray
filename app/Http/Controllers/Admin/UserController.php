@@ -47,6 +47,7 @@ class UserController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
             'role' => 'required|string|in:user,content_manager,admin',
+            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
 
         $user = User::create([
@@ -57,6 +58,12 @@ class UserController extends Controller
 
         // Assign role
         $user->assignRole($request->role);
+
+        // Handle avatar upload
+        if ($request->hasFile('avatar')) {
+            $user->addMediaFromRequest('avatar')
+                ->toMediaCollection('avatar');
+        }
 
         return redirect()->route('admin.users')
             ->with('success', 'User created successfully.');
@@ -128,5 +135,36 @@ class UserController extends Controller
 
         return redirect()->route('admin.users')
             ->with('success', 'User deleted successfully.');
+    }
+
+    /**
+     * Update user avatar.
+     */
+    public function updateAvatar(Request $request, User $user)
+    {
+        $request->validate([
+            'avatar' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+        ]);
+
+        // Clear existing avatar
+        $user->clearMediaCollection('avatar');
+        
+        // Add new avatar
+        $user->addMediaFromRequest('avatar')
+            ->toMediaCollection('avatar');
+
+        return redirect()->back()
+            ->with('success', 'Avatar updated successfully!');
+    }
+
+    /**
+     * Delete user avatar.
+     */
+    public function deleteAvatar(User $user)
+    {
+        $user->clearMediaCollection('avatar');
+
+        return redirect()->back()
+            ->with('success', 'Avatar removed successfully!');
     }
 }

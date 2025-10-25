@@ -52,6 +52,76 @@
             </div>
         </div>
 
+        <!-- Avatar Upload -->
+        <div class="card-modern">
+            <div class="card-modern-header">
+                <h2 class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">Profile Picture</h2>
+                <p class="text-sm text-neutral-600 dark:text-neutral-400">Upload or update user's profile picture</p>
+            </div>
+            <div class="card-modern-body">
+                <div class="flex items-start space-x-6">
+                    <!-- Current Avatar Display -->
+                    <div class="flex-shrink-0">
+                        <div class="relative">
+                            @if($user->hasMedia('avatar'))
+                                <img src="{{ $user->getFirstMediaUrl('avatar', 'thumb') }}" alt="{{ $user->name }}" 
+                                     class="h-24 w-24 rounded-full object-cover border-4 border-white shadow-lg" id="current-avatar">
+                            @else
+                                <div class="h-24 w-24 rounded-full bg-gradient-to-r from-primary-500 to-secondary-500 flex items-center justify-center border-4 border-white shadow-lg" id="current-avatar">
+                                    <span class="text-white text-2xl font-bold">{{ substr($user->name, 0, 1) }}</span>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+
+                    <!-- Upload Controls -->
+                    <div class="flex-1">
+                        <div class="space-y-4">
+                                
+                            <!-- Upload Button -->
+                            <div>
+                                <button type="button" onclick="document.getElementById('avatar-input').click()" 
+                                        class="btn-modern btn-modern-primary">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                                    </svg>
+                                    Upload New Picture
+                                </button>
+                            </div>
+
+                            <!-- Drag & Drop Zone -->
+                            <div id="drop-zone" class="border-2 border-dashed border-neutral-300 rounded-lg p-6 text-center hover:border-primary hover:bg-primary hover:bg-opacity-5 transition-colors cursor-pointer"
+                                 onclick="document.getElementById('avatar-input').click()">
+                                <svg class="mx-auto h-12 w-12 text-neutral-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                                <div class="mt-2">
+                                    <p class="text-sm text-neutral-600">
+                                        <span class="font-medium text-primary hover:text-primary-600">Click to upload</span>
+                                        or drag and drop
+                                    </p>
+                                    <p class="text-xs text-neutral-500">PNG, JPG, GIF up to 2MB</p>
+                                </div>
+                            </div>
+
+                            <!-- Remove Avatar Button -->
+                            @if($user->hasMedia('avatar'))
+                                <div class="pt-2">
+                                    <button type="button" onclick="removeAvatar()" 
+                                            class="text-sm text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300">
+                                        <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                        </svg>
+                                        Remove current picture
+                                    </button>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Security Settings -->
         <div class="card-modern">
             <div class="card-modern-header">
@@ -162,4 +232,45 @@
             </div>
         </div>
     </form>
+
+    <!-- Avatar Upload Form (Separate) -->
+    <form id="avatar-upload-form" action="{{ route('admin.users.avatar.update', $user) }}" method="POST" enctype="multipart/form-data" style="display: none;">
+        @csrf
+        <input type="file" id="avatar-input" name="avatar" accept="image/*" onchange="handleFileSelect(event)">
+    </form>
+
+    <!-- Avatar Upload JavaScript -->
+    <script>
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+                // Auto-submit the avatar form
+                document.getElementById('avatar-upload-form').submit();
+            }
+        }
+
+        function removeAvatar() {
+            if (confirm('Are you sure you want to remove this user\'s profile picture?')) {
+                // Create a form to delete avatar
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '{{ route("admin.users.avatar.delete", $user) }}';
+                
+                const csrfToken = document.createElement('input');
+                csrfToken.type = 'hidden';
+                csrfToken.name = '_token';
+                csrfToken.value = '{{ csrf_token() }}';
+                
+                const methodField = document.createElement('input');
+                methodField.type = 'hidden';
+                methodField.name = '_method';
+                methodField.value = 'DELETE';
+                
+                form.appendChild(csrfToken);
+                form.appendChild(methodField);
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+    </script>
 @endsection

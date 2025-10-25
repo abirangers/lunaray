@@ -34,9 +34,14 @@
                 </div>
                 <div class="card-modern-body">
                     <div class="flex items-center space-x-6 mb-8">
-                        <div class="h-20 w-20 rounded-full bg-gradient-to-r from-primary-500 to-secondary-500 flex items-center justify-center">
-                            <span class="text-white text-2xl font-bold">{{ substr($user->name, 0, 1) }}</span>
-                        </div>
+                        @if($user->hasMedia('avatar'))
+                            <img src="{{ $user->getFirstMediaUrl('avatar', 'thumb') }}" alt="{{ $user->name }}" 
+                                 class="h-20 w-20 rounded-full object-cover border-4 border-white shadow-lg">
+                        @else
+                            <div class="h-20 w-20 rounded-full bg-gradient-to-r from-primary-500 to-secondary-500 flex items-center justify-center border-4 border-white shadow-lg">
+                                <span class="text-white text-2xl font-bold">{{ substr($user->name, 0, 1) }}</span>
+                            </div>
+                        @endif
                         <div class="flex-1">
                             <h3 class="text-2xl font-bold text-neutral-900 dark:text-neutral-100">{{ $user->name }}</h3>
                             <p class="text-neutral-600 dark:text-neutral-400 mb-2">{{ $user->email }}</p>

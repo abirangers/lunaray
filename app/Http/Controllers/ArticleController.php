@@ -187,7 +187,7 @@ class ArticleController extends Controller
             $article->categories()->attach($request->categories);
         }
 
-        return redirect()->route('articles.index')
+        return redirect()->route('admin.articles.index')
             ->with('success', 'Article created successfully.');
     }
 
@@ -266,7 +266,7 @@ class ArticleController extends Controller
             $article->categories()->detach();
         }
 
-        return redirect()->route('articles.index')
+        return redirect()->route('admin.articles.index')
             ->with('success', 'Article updated successfully.');
     }
 
@@ -278,7 +278,7 @@ class ArticleController extends Controller
         // MediaLibrary handles media deletion automatically via model events
         $article->delete();
 
-        return redirect()->route('articles.index')
+        return redirect()->route('admin.articles.index')
             ->with('success', 'Article deleted successfully.');
     }
 
@@ -310,7 +310,7 @@ class ArticleController extends Controller
             $count = $articles->count();
 
             if ($count === 0) {
-                return redirect()->route('articles.index')
+                return redirect()->route('admin.articles.index')
                     ->with('error', 'No articles found with the provided IDs.');
             }
 
@@ -348,7 +348,7 @@ class ArticleController extends Controller
                     break;
 
                 default:
-                    return redirect()->route('articles.index')
+                    return redirect()->route('admin.articles.index')
                         ->with('error', 'Invalid action specified.');
             }
 
@@ -359,7 +359,7 @@ class ArticleController extends Controller
                 'user_id' => auth()->id()
             ]);
 
-            return redirect()->route('articles.index')
+            return redirect()->route('admin.articles.index')
                 ->with('success', $message);
 
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -368,7 +368,7 @@ class ArticleController extends Controller
                 'user_id' => auth()->id()
             ]);
             
-            return redirect()->route('articles.index')
+            return redirect()->route('admin.articles.index')
                 ->withErrors($e->errors())
                 ->with('error', 'Validation failed. Please check your input.');
                 
@@ -379,7 +379,7 @@ class ArticleController extends Controller
                 'user_id' => auth()->id()
             ]);
             
-            return redirect()->route('articles.index')
+            return redirect()->route('admin.articles.index')
                 ->with('error', 'An error occurred while processing your request. Please try again.');
         }
     }
@@ -493,7 +493,7 @@ class ArticleController extends Controller
         // Copy categories
         $newArticle->categories()->attach($article->categories->pluck('id'));
 
-        return redirect()->route('articles.edit', $newArticle)
+        return redirect()->route('admin.articles.edit', $newArticle)
             ->with('success', 'Article duplicated successfully.');
     }
 

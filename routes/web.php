@@ -14,6 +14,7 @@ Route::get('/', function () {
     return view('home');
 })->name('home');
 
+
 // Public Login Route
 Route::get('/login', function () {
     return view('auth.google-login');
@@ -35,12 +36,10 @@ Route::post('/staff/logout', [StaffAuthController::class, 'logout'])->name('staf
 Route::get('/staff/register', [StaffAuthController::class, 'showRegisterForm'])->name('staff.register');
 Route::post('/staff/register', [StaffAuthController::class, 'register']);
 
-// Public User Routes - using permissions
-Route::middleware(['auth', 'permission:access chat'])->group(function () {
-    Route::get('/chat', function () {
-        return view('user.chat');
-    })->name('user.chat');
-});
+// Chat Route - accessible to both authenticated and guest users
+Route::get('/chat', function () {
+    return view('user.chat');
+})->name('user.chat');
 
 // Profile Routes - accessible to all authenticated users
 Route::middleware(['auth'])->group(function () {
@@ -53,8 +52,8 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
 });
 
-// Chatbot API Routes
-Route::middleware(['auth', 'permission:access chat', 'chatbot.access', 'chatbot.rate_limit'])->prefix('api/chatbot')->group(function () {
+// Chatbot API Routes - accessible to both authenticated and guest users
+Route::middleware(['chatbot.access', 'chatbot.rate_limit'])->prefix('api/chatbot')->group(function () {
     Route::get('/session', [ChatbotController::class, 'getSession'])->name('chatbot.session');
     Route::get('/history', [ChatbotController::class, 'getHistory'])->name('chatbot.history');
     Route::post('/send', [ChatbotController::class, 'sendMessage'])->name('chatbot.send');
@@ -101,6 +100,10 @@ Route::middleware(['auth', 'permission:manage users'])->group(function () {
     Route::get('/admin/users/{user}/edit', [\App\Http\Controllers\Admin\UserController::class, 'edit'])->name('admin.users.edit');
     Route::put('/admin/users/{user}', [\App\Http\Controllers\Admin\UserController::class, 'update'])->name('admin.users.update');
     Route::delete('/admin/users/{user}', [\App\Http\Controllers\Admin\UserController::class, 'destroy'])->name('admin.users.destroy');
+    
+    // Avatar upload routes
+    Route::post('/admin/users/{user}/avatar', [\App\Http\Controllers\Admin\UserController::class, 'updateAvatar'])->name('admin.users.avatar.update');
+    Route::delete('/admin/users/{user}/avatar', [\App\Http\Controllers\Admin\UserController::class, 'deleteAvatar'])->name('admin.users.avatar.delete');
 });
 
 Route::middleware(['auth', 'permission:manage system settings'])->group(function () {

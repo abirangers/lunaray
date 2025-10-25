@@ -78,11 +78,11 @@
             </div>
             <div class="card-modern-body">
                 <div class="space-y-4">
-            @if($article->featured_image)
+            @if($article->hasMedia('featured'))
                 <div class="mb-4">
                             <label class="form-modern-label">Current Image</label>
                             <div class="flex items-center space-x-4 p-4 bg-neutral-50 dark:bg-neutral-800 rounded-xl">
-                        <img src="{{ Storage::url($article->featured_image) }}" alt="{{ $article->title }}" 
+                        <img src="{{ $article->getFirstMediaUrl('featured', 'thumb') }}" alt="{{ $article->title }}" 
                              class="w-32 h-20 object-cover rounded-lg">
                         <div>
                                     <p class="text-sm text-neutral-600 dark:text-neutral-400">Current featured image</p>
@@ -92,9 +92,55 @@
                 </div>
             @endif
             
-                    <div x-data="imageUpload()">
+                    <div x-data="{
+                        previewUrl: null,
+                        isDragging: false,
+                        
+                        handleFileSelect(event) {
+                            const file = event.target.files[0];
+                            if (file && file.type.startsWith('image/')) {
+                                this.createPreview(file);
+                            } else {
+                                alert('Please select a valid image file.');
+                            }
+                        },
+                        
+                        handleDrop(event) {
+                            this.isDragging = false;
+                            event.preventDefault();
+                            
+                            const files = event.dataTransfer.files;
+                            if (files.length > 0) {
+                                const file = files[0];
+                                if (file.type.startsWith('image/')) {
+                                    this.createPreview(file);
+                                    // Update the file input
+                                    const dataTransfer = new DataTransfer();
+                                    dataTransfer.items.add(file);
+                                    this.$refs.fileInput.files = dataTransfer.files;
+                                } else {
+                                    alert('Please drop a valid image file.');
+                                }
+                            }
+                        },
+                        
+                        createPreview(file) {
+                            if (file && file.type.startsWith('image/')) {
+                                const reader = new FileReader();
+                                reader.onload = (e) => {
+                                    this.previewUrl = e.target.result;
+                                };
+                                reader.readAsDataURL(file);
+                            }
+                        },
+                        
+                        removeImage() {
+                            this.previewUrl = null;
+                            this.$refs.fileInput.value = '';
+                        }
+                    }">
                         <label for="featured_image" class="form-modern-label">
-                            {{ $article->featured_image ? 'Replace Image' : 'Upload Featured Image' }}
+                            {{ $article->hasMedia('featured') ? 'Replace Image' : 'Upload Featured Image' }}
                 </label>
                         <div 
                             @dragover.prevent="isDragging = true"
@@ -125,17 +171,18 @@
                                 </div>
                                 
                                 <!-- Upload Icon -->
-                                <svg x-show="!previewUrl && !isDragging" class="mx-auto h-12 w-12 text-neutral-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                                <svg x-show="!previewUrl" class="mx-auto h-12 w-12 text-neutral-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
                                     <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                                 </svg>
                                 
-                                <div x-show="!isDragging" class="flex text-sm text-neutral-600 dark:text-neutral-400">
+                                <div class="flex text-sm text-neutral-600 dark:text-neutral-400">
                                     <span x-text="previewUrl ? 'Change image' : 'Upload a file'"></span>
                                     <p class="pl-1">or drag and drop</p>
                                 </div>
-                                <p x-show="!isDragging" class="text-xs text-neutral-500 dark:text-neutral-400">
+                                <p class="text-xs text-neutral-500 dark:text-neutral-400">
                                     PNG, JPG, GIF up to 2MB. Recommended: 1200x630px
                                 </p>
+                                
                                 
                                 <!-- Remove Image Button -->
                                 <button x-show="previewUrl && !isDragging" @click.stop="removeImage()" type="button" class="mt-2 text-sm text-error-600 hover:text-error-700 dark:text-error-400 dark:hover:text-error-300">
@@ -412,65 +459,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Image upload functionality
-    Alpine.data('imageUpload', () => ({
-        previewUrl: null,
-        isDragging: false,
-        
-        init() {
-            console.log('Image upload component initialized');
-        },
-        
-        handleFileSelect(event) {
-            console.log('File selected:', event.target.files[0]);
-            const file = event.target.files[0];
-            if (file && file.type.startsWith('image/')) {
-                this.createPreview(file);
-            } else {
-                alert('Please select a valid image file.');
-            }
-        },
-        
-        handleDrop(event) {
-            console.log('File dropped');
-            this.isDragging = false;
-            event.preventDefault();
-            
-            if (!event.dataTransfer.items) return;
-            
-            const files = event.dataTransfer.files;
-            if (files.length > 0) {
-                const file = files[0];
-                if (file.type.startsWith('image/')) {
-                    this.createPreview(file);
-                    // Update the file input
-                    const dataTransfer = new DataTransfer();
-                    dataTransfer.items.add(file);
-                    this.$refs.fileInput.files = dataTransfer.files;
-                } else {
-                    alert('Please drop a valid image file.');
-                }
-            }
-        },
-        
-        createPreview(file) {
-            console.log('Creating preview for:', file.name);
-            if (file && file.type.startsWith('image/')) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    this.previewUrl = e.target.result;
-                    console.log('Preview created:', this.previewUrl);
-                };
-                reader.readAsDataURL(file);
-            }
-        },
-        
-        removeImage() {
-            console.log('Removing image');
-            this.previewUrl = null;
-            this.$refs.fileInput.value = '';
-        }
-    }));
 
     // Auto-save toggle functionality
     document.addEventListener('alpine:init', () => {

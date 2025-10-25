@@ -54,11 +54,9 @@
                         <a href="{{ route('articles.index') }}" class="text-neutral-600 hover:text-neutral-900 transition-colors {{ request()->routeIs('articles.*') ? 'text-neutral-900 font-medium' : '' }}">
                             Articles
                         </a>
-                        @can('access chat')
-                            <a href="{{ route('user.chat') }}" class="text-neutral-600 hover:text-neutral-900 transition-colors">
-                                Chat
-                            </a>
-                        @endcan
+                        <a href="{{ route('user.chat') }}" class="text-neutral-600 hover:text-neutral-900 transition-colors {{ request()->routeIs('user.chat') ? 'text-neutral-900 font-medium' : '' }}">
+                            Chat
+                        </a>
                         <a href="#" class="text-neutral-600 hover:text-neutral-900 transition-colors">
                             About
                         </a>

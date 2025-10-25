@@ -18,6 +18,11 @@ return Application::configure(basePath: dirname(__DIR__))
             'chatbot.access' => \App\Http\Middleware\ChatbotAccessMiddleware::class,
             'chatbot.rate_limit' => \App\Http\Middleware\ChatbotRateLimitMiddleware::class,
         ]);
+        
+        // Exclude chatbot API routes from CSRF protection
+        $middleware->validateCsrfTokens(except: [
+            'api/chatbot/*',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

@@ -69,30 +69,62 @@ class ChatbotController extends Controller
     }
 
     /**
-     * Get or create a chat session for the authenticated user.
+     * Get or create a chat session for the user (authenticated or guest).
      */
-    public function getSession(): JsonResponse
+    public function getSession(Request $request): JsonResponse
     {
         $user = Auth::user();
+        $sessionId = $request->input('session_id') ?? $request->query('session_id');
         
-        // Get or create active session
-        $session = ChatSession::where('user_id', $user->id)
-            ->where('status', 'active')
-            ->first();
+        if ($user) {
+            // Authenticated user
+            $session = ChatSession::where('user_id', $user->id)
+                ->where('status', 'active')
+                ->first();
 
-        if (!$session) {
-            $session = ChatSession::create([
-                'user_id' => $user->id,
-                'session_id' => Str::uuid(),
-                'status' => 'active',
-                'last_activity_at' => now(),
-            ]);
+            if (!$session) {
+                $session = ChatSession::create([
+                    'user_id' => $user->id,
+                    'session_id' => Str::uuid(),
+                    'status' => 'active',
+                    'last_activity_at' => now(),
+                    'is_guest' => false,
+                ]);
+            }
+        } else {
+            // Guest user
+            $session = null;
+            if ($sessionId) {
+                // Check if session exists and is not expired
+                $session = ChatSession::where('session_id', $sessionId)
+                    ->where('is_guest', true)
+                    ->where('status', 'active')
+                    ->first();
+                
+                if ($session && $session->isExpired()) {
+                    $session = null; // Session expired
+                }
+            }
+            
+            if (!$session) {
+                // Create new guest session
+                $session = ChatSession::create([
+                    'user_id' => null,
+                    'session_id' => 'guest_' . uniqid() . '_' . time(),
+                    'status' => 'active',
+                    'last_activity_at' => now(),
+                    'is_guest' => true,
+                    'ip_address' => $request->ip(),
+                    'expires_at' => now()->addDays(7),
+                ]);
+            }
         }
 
         return response()->json([
             'session_id' => $session->session_id,
             'status' => $session->status,
             'last_activity' => $session->last_activity_at,
+            'is_guest' => $session->is_guest,
         ]);
     }
 
@@ -104,9 +136,21 @@ class ChatbotController extends Controller
         $sessionId = $request->input('session_id');
         $user = Auth::user();
 
-        $session = ChatSession::where('session_id', $sessionId)
-            ->where('user_id', $user->id)
-            ->first();
+        if ($user) {
+            // Authenticated user
+            $session = ChatSession::where('session_id', $sessionId)
+                ->where('user_id', $user->id)
+                ->first();
+        } else {
+            // Guest user
+            $session = ChatSession::where('session_id', $sessionId)
+                ->where('is_guest', true)
+                ->first();
+            
+            if ($session && $session->isExpired()) {
+                return response()->json(['error' => 'Session expired'], 410);
+            }
+        }
 
         if (!$session) {
             return response()->json(['error' => 'Session not found'], 404);
@@ -164,10 +208,22 @@ class ChatbotController extends Controller
         $sessionId = $request->input('session_id');
         $message = trim($request->input('message'));
 
-        // Get or create session
-        $session = ChatSession::where('session_id', $sessionId)
-            ->where('user_id', $user->id)
-            ->first();
+        // Get session
+        if ($user) {
+            // Authenticated user
+            $session = ChatSession::where('session_id', $sessionId)
+                ->where('user_id', $user->id)
+                ->first();
+        } else {
+            // Guest user
+            $session = ChatSession::where('session_id', $sessionId)
+                ->where('is_guest', true)
+                ->first();
+            
+            if ($session && $session->isExpired()) {
+                return response()->json(['error' => 'Session expired'], 410);
+            }
+        }
 
         if (!$session) {
             return response()->json(['error' => 'Session not found'], 404);
@@ -176,7 +232,7 @@ class ChatbotController extends Controller
         // Create user message with optimistic UI support
         $userMessage = ChatMessage::create([
             'chat_session_id' => $session->id,
-            'user_id' => $user->id,
+            'user_id' => $user ? $user->id : null,
             'type' => 'user',
             'content' => $message,
             'sent_at' => now(),
@@ -187,9 +243,10 @@ class ChatbotController extends Controller
 
         // Log user message for analytics
         Log::info('User message sent', [
-            'user_id' => $user->id,
+            'user_id' => $user ? $user->id : null,
             'session_id' => $sessionId,
             'message_length' => strlen($message),
+            'is_guest' => !$user,
         ]);
 
         try {
@@ -199,7 +256,7 @@ class ChatbotController extends Controller
             // Create bot message
             $botMessage = ChatMessage::create([
                 'chat_session_id' => $session->id,
-                'user_id' => $user->id,
+                'user_id' => $user ? $user->id : null,
                 'type' => 'bot',
                 'content' => $botResponse['content'],
                 'metadata' => $botResponse['metadata'] ?? null,
@@ -208,9 +265,10 @@ class ChatbotController extends Controller
 
             // Log successful bot response
             Log::info('Bot response received', [
-                'user_id' => $user->id,
+                'user_id' => $user ? $user->id : null,
                 'session_id' => $sessionId,
                 'response_length' => strlen($botResponse['content']),
+                'is_guest' => !$user,
             ]);
 
             return response()->json([
@@ -276,9 +334,17 @@ class ChatbotController extends Controller
         $sessionId = $request->input('session_id');
         $user = Auth::user();
 
-        $session = ChatSession::where('session_id', $sessionId)
-            ->where('user_id', $user->id)
-            ->first();
+        if ($user) {
+            // Authenticated user
+            $session = ChatSession::where('session_id', $sessionId)
+                ->where('user_id', $user->id)
+                ->first();
+        } else {
+            // Guest user
+            $session = ChatSession::where('session_id', $sessionId)
+                ->where('is_guest', true)
+                ->first();
+        }
 
         if (!$session) {
             return response()->json(['error' => 'Session not found'], 404);
@@ -297,9 +363,17 @@ class ChatbotController extends Controller
         $sessionId = $request->input('session_id');
         $user = Auth::user();
 
-        $session = ChatSession::where('session_id', $sessionId)
-            ->where('user_id', $user->id)
-            ->first();
+        if ($user) {
+            // Authenticated user
+            $session = ChatSession::where('session_id', $sessionId)
+                ->where('user_id', $user->id)
+                ->first();
+        } else {
+            // Guest user
+            $session = ChatSession::where('session_id', $sessionId)
+                ->where('is_guest', true)
+                ->first();
+        }
 
         if (!$session) {
             return response()->json(['error' => 'Session not found'], 404);
@@ -309,17 +383,31 @@ class ChatbotController extends Controller
         $session->close();
 
         // Create new session
-        $newSession = ChatSession::create([
-            'user_id' => $user->id,
-            'session_id' => Str::uuid(),
-            'status' => 'active',
-            'last_activity_at' => now(),
-        ]);
+        if ($user) {
+            $newSession = ChatSession::create([
+                'user_id' => $user->id,
+                'session_id' => Str::uuid(),
+                'status' => 'active',
+                'last_activity_at' => now(),
+                'is_guest' => false,
+            ]);
+        } else {
+            $newSession = ChatSession::create([
+                'user_id' => null,
+                'session_id' => 'guest_' . uniqid() . '_' . time(),
+                'status' => 'active',
+                'last_activity_at' => now(),
+                'is_guest' => true,
+                'ip_address' => $request->ip(),
+                'expires_at' => now()->addDays(7),
+            ]);
+        }
 
         Log::info('Chat session reset', [
-            'user_id' => $user->id,
+            'user_id' => $user ? $user->id : null,
             'old_session_id' => $sessionId,
             'new_session_id' => $newSession->session_id,
+            'is_guest' => !$user,
         ]);
 
         return response()->json([
@@ -333,8 +421,9 @@ class ChatbotController extends Controller
      */
     public function getStatus(): JsonResponse
     {
-        $webhookUrl = ChatbotConfiguration::where('key', 'webhook_url')->first()?->value;
-        $isActive = ChatbotConfiguration::where('key', 'chatbot_active')->first()?->value === 'true';
+        // Try environment variables first, fallback to database configuration
+        $webhookUrl = env('CHATBOT_WEBHOOK_URL', ChatbotConfiguration::where('key', 'webhook_url')->first()?->value);
+        $isActive = filter_var(env('CHATBOT_ACTIVE', ChatbotConfiguration::where('key', 'chatbot_active')->first()?->value), FILTER_VALIDATE_BOOLEAN);
 
         return response()->json([
             'active' => $isActive,
