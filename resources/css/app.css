@@ -414,5 +414,255 @@
             transform: scale(1); 
         }
     }
+    
+    /* ========================================
+       LANDING PAGE CUSTOM FONTS & STYLES
+       ======================================== */
+    
+    /* Custom Fonts for Landing Page */
+    @font-face {
+        font-family: 'MissRhinetta';
+        src: url('/assets/fonts/MISS-RHINETTA.woff') format('woff');
+        font-weight: normal;
+        font-style: normal;
+        font-display: swap;
+    }
+
+    @font-face {
+        font-family: 'MilliardBold';
+        src: url('/assets/fonts/RENE-BIEDER-MILLIARD-BOLD.woff2') format('woff2');
+        font-weight: bold;
+        font-style: normal;
+        font-display: swap;
+    }
+
+    @font-face {
+        font-family: 'Adolphus';
+        src: url('/assets/fonts/ADOLPHUS.woff2') format('woff2');
+        font-weight: bold;
+        font-style: italic;
+        font-display: swap;
+    }
+
+    /* Landing Page Font Classes */
+    .font-rhinetta {
+        font-family: 'MissRhinetta', cursive !important;
+        font-size: 3.5rem;
+        font-weight: 400;
+        letter-spacing: 0.05em;
+    }
+
+    .font-rhinetta-global {
+        font-family: 'MissRhinetta', cursive !important;
+        font-size: 2.5rem;
+        font-weight: 400;
+    }
+
+    .font-milliard {
+        font-family: 'MilliardBold', sans-serif !important;
+        font-size: 1.7rem;
+        font-weight: 700;
+        letter-spacing: 0.2rem;
+    }
+
+    .font-milliard-global {
+        font-family: 'MilliardBold', sans-serif !important;
+    }
+
+    .font-adolphus {
+        font-family: 'Adolphus', sans-serif;
+        font-weight: normal;
+        letter-spacing: 0.05em;
+    }
+
+
+    /* Landing Page Animations */
+    @keyframes clickEffect {
+        0%, 100% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(0.95);
+        }
+    }
+
+    .animate-click {
+        animation: clickEffect 1.5s ease-in-out infinite;
+    }
+
+    /* Landing Page Utility Classes */
+    .text-highlight {
+        color: #22d3ee;
+    }
+
+    /* Mobile Responsive Styles for Landing Page */
+    @media (max-width: 768px) {
+        .font-rhinetta {
+            font-size: 2rem;
+        }
+
+        .font-milliard {
+            font-size: 1.2rem;
+            letter-spacing: 0.1rem;
+        }
+
+        .font-adolphus {
+            font-size: 1.5rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .font-rhinetta {
+            font-size: 1.5rem;
+        }
+
+        .font-milliard {
+            font-size: 1rem;
+        }
+    }
+
+    /* ========================================
+       SPLIDE SLIDER CUSTOM STYLES
+       ======================================== */
+    
+    /* Splide Arrows - Custom Lunaray Theme */
+    .splide__arrow {
+        @apply bg-white/90 backdrop-blur-sm shadow-lg border-2 border-cyan-400 transition-all duration-300;
+        width: 3rem;
+        height: 3rem;
+        opacity: 1;
+    }
+    
+    .splide__arrow:hover:not(:disabled) {
+        @apply bg-cyan-400 border-cyan-500 scale-110;
+    }
+    
+    .splide__arrow svg {
+        @apply fill-cyan-600;
+    }
+    
+    .splide__arrow:hover:not(:disabled) svg {
+        @apply fill-white;
+    }
+    
+    .splide__arrow:disabled {
+        @apply opacity-30 cursor-not-allowed;
+    }
+    
+    .splide__arrow--prev {
+        left: -4rem;
+    }
+    
+    .splide__arrow--next {
+        right: -4rem;
+    }
+    
+    /* Splide Pagination - Custom Lunaray Theme */
+    .splide__pagination {
+        @apply bottom-[-2.5rem];
+    }
+    
+    .splide__pagination__page {
+        @apply bg-gray-300 transition-all duration-300;
+        width: 0.75rem;
+        height: 0.75rem;
+    }
+    
+    .splide__pagination__page.is-active {
+        @apply bg-cyan-400 scale-125;
+        transform: scale(1.25);
+    }
+    
+    .splide__pagination__page:hover {
+        @apply bg-cyan-300 scale-110;
+    }
+    
+    /* Splide Track */
+    .splide__track {
+        @apply overflow-visible;
+    }
+    
+    /* Splide Slide */
+    .splide__slide {
+        @apply transition-all duration-300;
+    }
+    
+    .splide__slide:hover {
+        @apply scale-105;
+        z-index: 10;
+    }
+    
+    /* Product Slider Container */
+    .product-slider-container {
+        @apply relative px-20 py-8;
+    }
+    
+    /* Hero Slider Container - Full Width */
+    .hero-slider-container {
+        @apply w-full overflow-hidden;
+    }
+    
+    .hero-slider-container .splide {
+        @apply w-full;
+    }
+    
+    .hero-slider-container .splide__track {
+        @apply w-full;
+    }
+    
+    .hero-slider-container .splide__list {
+        @apply w-full;
+    }
+    
+    .hero-slider-container .splide__slide {
+        @apply w-full;
+    }
+    
+    .hero-slider-container .splide__slide img {
+        @apply w-full object-cover;
+    }
+    
+    .hero-slider-container .splide__slide:hover {
+        @apply scale-100;
+    }
+    
+    /* Mobile Responsive for Splide */
+    @media (max-width: 1024px) {
+        .splide__arrow--prev {
+            left: -2rem;
+        }
+        
+        .splide__arrow--next {
+            right: -2rem;
+        }
+        
+        .splide__arrow {
+            width: 2.5rem;
+            height: 2.5rem;
+        }
+        
+        .product-slider-container {
+            @apply px-12;
+        }
+    }
+    
+    @media (max-width: 640px) {
+        .splide__arrow--prev {
+            left: 0;
+        }
+        
+        .splide__arrow--next {
+            right: 0;
+        }
+        
+        .splide__arrow {
+            width: 2rem;
+            height: 2rem;
+        }
+        
+        .product-slider-container {
+            @apply px-8;
+        }
+    }
 }
 

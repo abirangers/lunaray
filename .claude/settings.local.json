@@ -1,0 +1,9 @@
+{
+  "enabledMcpjsonServers": [
+    "context7",
+    "jina-tools",
+    "figma-remote-mcp",
+    "skill-seeker"
+  ],
+  "enableAllProjectMcpServers": false
+}

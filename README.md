@@ -27,13 +27,17 @@ Lunaray Beauty Factory adalah platform comprehensive untuk industri kosmetik yan
 - **👥 Role-Based Access Control** - 3 level roles (user, content_manager, admin)
 - **🎨 Modern UI/UX** - Responsive design dengan custom TailwindCSS theme
 - **📱 Mobile-First Design** - Optimized untuk semua devices
-- **🤖 AI Chatbot Integration** - Production-ready chatbot dengan n8n webhook
+- **💬 Floating AI Chatbot** - Global chat accessible dari semua halaman dengan Luna avatar trigger
+- **🤖 Guest Chat Access** - Chat tanpa login dengan session persistence (7 hari)
 - **📝 Content Management** - Complete article & category management system
 - **👤 User Profile System** - Comprehensive profile management dengan avatar upload
 - **📊 Advanced Analytics** - View count tracking dengan bot protection
 - **⚡ Bulk Operations** - Advanced bulk actions untuk content management
+- **🛍️ Product Management** - Complete CRUD untuk product categories dan products dengan image handling
+- **🎪 Product Slider** - Splide.js slider dengan per-category filtering dan autoplay
 - **🔒 Security First** - Implementasi security best practices
-- **📊 Comprehensive Testing** - Complete test coverage dengan credentials
+- **🧪 PHPUnit Testing** - Standard Laravel testing dengan PHPUnit ^12.4 dan enhanced TestCase
+- **📊 Comprehensive Testing** - Complete test coverage dengan credentials dan helper methods
 - **🖼️ Advanced Media Management** - Spatie MediaLibrary dengan automatic image conversions, responsive images, dan optimization
 
 ## 🖼️ Media Management
@@ -190,7 +194,9 @@ php artisan db:seed                 # Seed database
 php artisan migrate:fresh --seed    # Fresh migration with seeding
 
 # Testing
-php artisan test                    # Run PHP tests
+php artisan test                    # Run PHPUnit tests
+php artisan test --filter=ProductTest  # Run specific test
+vendor/bin/phpunit                   # Direct PHPUnit execution
 ```
 
 ### 🎯 Completed Features
@@ -209,10 +215,12 @@ php artisan test                    # Run PHP tests
 - ✅ **Content Management System** - Complete article & category CRUD
 - ✅ **Rich Text Editor** - tonysm/rich-text-laravel integration
 - ✅ **SEO Optimization** - ralphjsmit/laravel-seo package
+- ✅ **Floating Chat Component** - Global chat dengan Luna avatar trigger, accessible dari semua halaman
 - ✅ **AI Chatbot Integration** - Production-ready dengan n8n webhook
+- ✅ **Guest Chat Access** - Chat tanpa login dengan localStorage persistence (7 hari)
 - ✅ **Chat History Management** - Database persistence dan session management
-- ✅ **Rate Limiting** - 30 requests/minute per user
-- ✅ **Advanced Chat UI** - Message copy, auto-resize, status indicators
+- ✅ **Rate Limiting** - 60 requests/minute untuk guests (IP-based), 30 requests/minute untuk users
+- ✅ **Advanced Chat UI** - Lazy initialization, adaptive layout, message copy, auto-resize, status indicators
 
 #### **Phase 4-5: Modern UI/UX Redesign**
 - ✅ **Admin Interface Redesign** - Modern minimalist dengan dark/light mode
@@ -229,26 +237,46 @@ php artisan test                    # Run PHP tests
 - ✅ **Bulk Actions** - Advanced bulk operations untuk content management
 - ✅ **Performance Optimization** - Cache-based batch updates
 
+#### **Phase 7-8: Landing Page & Product Management**
+- ✅ **Landing Page Hero Redesign** - Image-based hero dengan custom fonts (MissRhinetta, MilliardBold, Adolphus)
+- ✅ **Product Management System** - Complete CRUD untuk categories dan products
+- ✅ **Product Order System 2.0** - Drag & drop reordering dengan Sortable.js
+- ✅ **Product Slider** - Splide.js slider dengan per-category filtering dan autoplay
+- ✅ **Dynamic Product Showcase** - Alpine.js tabs dengan cached data loading
+- ✅ **Testing Framework Migration** - Pest ke PHPUnit dengan enhanced TestCase
+- ✅ **Image Upload System** - Spatie MediaLibrary dengan automatic conversions
+- ✅ **Style Guide Documentation** - Complete "Beauty High Tech" design system dengan 13 sections
+
 ## 📚 Documentation
 
 - **[Project Context](./CONTEXT.md)** - Current focus, status, and project overview
 - **[Changelog](./CHANGELOG.md)** - Detailed change history and version tracking
+- **[Style Guide](./docs/STYLE_GUIDE.md)** - Complete "Beauty High Tech" design system documentation
 - **[OpenSpec Documentation](./openspec/AGENTS.md)** - Spec-driven development workflow
 - **[Project Specifications](./openspec/specs/)** - Current requirements and capabilities
+- **[Admin Dashboard Guide](./docs/openspec-implementation-guide.md)** - Comprehensive CRUD implementation roadmap
 - **[Testing Credentials](./TESTING_CREDENTIALS.md)** - Complete test user credentials
 
 ## 🎨 Design System
 
-### **Modern Minimalist Aesthetic**
-- **Color Palette**: OKLCH color space dengan Deep Blue primary, Light Blue secondary
-- **Typography**: Inter (sans-serif), Playfair Display (serif), JetBrains Mono (monospace)
-- **Components**: Modern cards, buttons, forms dengan hover effects dan animations
-- **Dark Mode**: Complete dark/light mode support dengan Alpine.js integration
+### **"Beauty High Tech" Aesthetic**
+- **Color Palette**: Deep navy (#000d1a) dengan cyan accents (#22d3ee), golden CTAs (#FDB913)
+- **Typography**: MissRhinetta (cursive), MilliardBold (sans-serif), Adolphus (serif), system fonts
+- **Components**: Hero sections, cards, buttons, forms, sliders dengan futuristic graphics
+- **Visual Effects**: Glass morphism, backdrop blur, molecular overlays, hexagonal patterns
+- **Layout Patterns**: Full-width sections, responsive grids, flexbox patterns
+
+### **Comprehensive Style Guide**
+- **13 Detailed Sections**: Color palette, typography, spacing, components, shadows, animations, layouts
+- **Component Reference Library**: 10+ complete examples with HTML/Tailwind code
+- **Typography System**: Font usage guide dengan size scales, weights, letter-spacing patterns
+- **Spacing Guidelines**: Padding, margin, gap patterns dengan responsive strategies
+- **Common Patterns**: Most frequent Tailwind combinations and best practices
 
 ### **Responsive Design**
-- **Mobile-First**: Optimized untuk semua screen sizes
-- **Touch-Friendly**: Appropriate sizing untuk mobile interactions
-- **Performance**: Optimized loading times dan asset delivery
+- **Mobile-First**: Optimized untuk semua screen sizes dengan breakpoint-specific behaviors
+- **Touch-Friendly**: Drag & drop support, appropriate sizing untuk mobile interactions
+- **Performance**: Lazy loading images, optimized sliders, cache-based updates
 
 ## 🤝 Contributing
 
@@ -283,9 +311,9 @@ This project is open-sourced software licensed under the [MIT license](https://o
 - **Testing**: Comprehensive test coverage dengan complete credentials
 
 ### **📊 System Capabilities**
-- **4 Complete Specifications**: user-management, content-management, chatbot-integration, web-platform
-- **7 Completed Phases**: From Laravel migration to advanced features
-- **Modern Tech Stack**: Laravel 11.x, TailwindCSS 4, Alpine.js, OpenSpec
+- **4 Complete Specifications**: user-management (11), content-management (13), chatbot-integration (7), web-platform (13)
+- **10 Completed Phases**: From Laravel migration to product management and testing framework
+- **Modern Tech Stack**: Laravel 11.x, TailwindCSS 4, Alpine.js, PHPUnit, OpenSpec
 - **Production-Ready**: All features tested dan optimized untuk production deployment
 
 ## 🙏 Acknowledgments
@@ -297,6 +325,8 @@ This project is open-sourced software licensed under the [MIT license](https://o
 - Rich text editing with [tonysm/rich-text-laravel](https://github.com/tonysm/rich-text-laravel)
 - SEO optimization with [ralphjsmit/laravel-seo](https://github.com/ralphjsmit/laravel-seo)
 - Permissions with [Spatie Laravel Permission](https://spatie.be/docs/laravel-permission)
+- Media Management with [Spatie Laravel MediaLibrary](https://spatie.be/docs/laravel-medialibrary)
+- Testing with [PHPUnit](https://phpunit.de/)
 
 ---
 

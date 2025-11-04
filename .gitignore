@@ -28,3 +28,8 @@ TESTING_CREDENTIALS.md
 research/
 *.test.md
 *.debug.md
+
+# Ngrok
+ngrok.yml
+ngrok.exe
+.ngrok

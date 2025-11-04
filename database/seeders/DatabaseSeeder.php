@@ -30,6 +30,13 @@ class DatabaseSeeder extends Seeder
         // Seed articles and categories
         $this->call(ArticleSeeder::class);
 
+        // Seed product categories and products
+        $this->call(ProductCategorySeeder::class);
+        $this->call(ProductSeeder::class);
+
+        // Seed heroes
+        $this->call(HeroSeeder::class);
+
         // Create additional test users if needed
         User::factory()->create([
             'name' => 'Test User',

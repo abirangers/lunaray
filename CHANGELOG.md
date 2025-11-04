@@ -8,6 +8,113 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Video Introduction Modal** - Luna AI introduction video plays before first chat interaction
+- **Smart First-Time Experience** - Video modal shown only on first Luna avatar click, tracked via localStorage
+- **Video Autoplay with Sound** - Introduction video plays automatically with audio enabled by default
+- **Intelligent Loading State** - Loading indicator hides when video starts playing, not on fixed delay
+- **Skip Button with Delay** - Skip intro button appears after 2 seconds to ensure key message delivery
+- **Video Control Interface** - Unmute/mute toggle button with icon states and responsive design
+- **Close Modal Options** - Multiple exit paths: close button (X), skip button, or click backdrop
+- **Dual Video Format Support** - MP4 (H.264) for universal compatibility + WebM (VP9) for modern browsers
+- **Graceful Autoplay Fallback** - Handles browser autoplay restrictions with fallback to user-initiated unmute
+- **Video State Management** - Independent tracking for loading, muted, skip availability, and modal visibility
+- **Smooth Transitions** - Fade in/out animations for modal, loading overlay, and skip button appearance
+- **Responsive Video Modal** - Optimized for mobile (max-w-xs) through desktop (max-w-2xl) with touch-friendly controls
+- **Video Event Handling** - Listeners for 'playing', 'ended', and 'loadedmetadata' events for accurate state management
+- **localStorage Video Tracking** - `luna_intro_watched` flag prevents repetitive video playback for returning users
+- **Video Directory Structure** - Created `/public/videos/` with comprehensive README for video specifications
+- **Video Optimization Guide** - Documentation for compression, conversion, and browser compatibility requirements
+- **Comprehensive Style Guide** - Complete "Beauty High Tech" design system documentation with 13 detailed sections
+- **Design System Documentation** - Color palette, typography, spacing, components, shadows, animations, and layout patterns
+- **Component Reference Library** - 10+ complete component examples with HTML/Tailwind code for hero, sections, cards, and forms
+- **Typography System** - Detailed font usage guide for MissRhinetta, MilliardBold, Adolphus with size scales and weight patterns
+- **Color System Documentation** - Complete color hierarchy with hex codes, Tailwind classes, and usage contexts
+- **Spacing Guidelines** - Comprehensive padding, margin, gap, and max-width patterns with common combinations
+- **Layout Patterns** - Full-width sections, grid layouts, flexbox patterns, and responsive strategies
+- **Visual Effects Guide** - Glass morphism, backdrop blur, overlays, shadows, and z-index hierarchy
+- **Tailwind Usage Patterns** - Most frequent utility combinations, responsive breakpoints, and best practices
+- **Decorative Elements** - Futuristic graphics, hexagonal patterns, molecular diagrams documentation
+- **Floating Chat Component** - Global chat component accessible from all pages with Luna avatar trigger
+- **Lazy Chat Initialization** - Chat session only initialized on first open for improved performance
+- **Adaptive Chat Layout** - Responsive chat panel with flexible message area and fixed input (max-w-xs, 500px height)
+- **Global Chat Availability** - Floating chat integrated into all layouts (app, guest, admin)
+- **Visual Status Indicator** - Online/offline status badge on Luna avatar trigger
+- **Product Slider Integration** - Splide.js slider untuk produk di halaman home dengan per-category filtering
+- **Dynamic Product Showcase** - Interactive product slider dengan autoplay, arrows, dan pagination
+- **Responsive Product Display** - Breakpoints untuk desktop (4), tablet (2), mobile (1) produk per slide
+- **Category-Aware Slider** - One slider per kategori dengan destroy & reinit saat switch kategori
+- **Splide.js Integration** - Library slider modern dengan lazy loading dan touch swipe support
+- **Custom Splide Styling** - Cyan theme Lunaray dengan hover effects dan responsive arrows
+- **Product Order System 2.0** - Drag & drop product reordering with Sortable.js integration
+- **Visual Product Reordering** - Intuitive drag & drop modal interface for per-category product ordering
+- **Quick Move Buttons** - Up/down arrow buttons for single-position product moves in admin table
+- **Sortable.js Integration** - Installed via npm and integrated with Alpine.js for smooth drag & drop
+- **Auto-Order Assignment** - New products automatically assigned to last position in their category
+- **Per-Category Ordering** - Independent ordering system for each product category (1, 2, 3, 4...)
+- **Reorder Modal Interface** - Category selector dropdown with draggable product list and visual feedback
+- **Real-time Order Updates** - AJAX-powered auto-save functionality without page reload
+- **Product Order Routes** - New routes: `/admin/products/reorder`, `/admin/products/{product}/move-up`, `/admin/products/{product}/move-down`
+- **Product Reorder Controller Methods** - `reorder()`, `moveUp()`, and `moveDown()` methods with DB transactions
+- **Order Field Removal** - Removed manual order input from product create/edit forms for better UX
+- **Order Information Display** - Informative blue boxes in forms explaining auto-ordering system
+
+### Changed
+- **Floating Chat Responsive Design** - Enhanced mobile responsiveness with tighter spacing and better breakpoints
+- **Chat Avatar Sizing** - Progressive scaling: 20x20 (base) → 24x24 (sm) → 36x36 (md) for optimal mobile experience
+- **Chat Status Indicator** - Refined sizing: 2.5x2.5 (base) → 3x3 (sm) → 4x4 (md) with better positioning
+- **Chat Panel Height** - Improved max-height calculation using dvh (dynamic viewport height) for mobile browsers
+- **Chat Message Area Padding** - Reduced from p-3 to p-2 (sm:p-3) for more content space on small screens
+- **Chat Input Controls** - Optimized button sizes with min-w/h-[44px] for touch-friendly mobile interface
+- **Chat Welcome Message** - Responsive icon and text sizing for better mobile readability
+- **Video Modal Default Audio** - Changed from muted to unmuted by default for immediate sound playback
+- **Loading Indicator Behavior** - Now tied to actual video playback start instead of fixed 2-second delay
+- **Video Loading State** - Separated loading state from skip button availability for independent control
+- **Loading Overlay Timing** - Fades out when video starts playing (0.5-1s) instead of after 2 seconds
+- **Chat Route Behavior** - `/chat` route now redirects to home page (floating chat replaces standalone page)
+- **Chat UI Location** - Migrated from standalone page to floating component with Luna avatar trigger
+- **Chat Panel Sizing** - Optimized from max-w-md (448px) to max-w-xs (320px) for better screen real estate
+- **Chat Messages Layout** - Changed from fixed height (h-96) to flexible layout (flex-1) for adaptive sizing
+- **Product Display** - Replaced static grid dengan Splide.js slider untuk better UX dan responsive design
+- **Product Limit** - Removed 4 products limit, menampilkan semua produk per kategori di slider
+- **HomeController** - Updated untuk load semua active products tanpa limit per category
+- **Product Order Management** - Replaced manual number input with visual drag & drop interface
+- **Product Create/Edit Forms** - Removed order field input, replaced with informational display
+- **Product Order Logic** - Changed from global ordering to per-category ordering system
+- **Product Store Method** - Auto-assigns new products to last position (max order + 1) in category
+- **Product Update Method** - Preserves existing order during product updates (no reset)
+
+### Removed
+- **Standalone Chat Page** - Removed duplicate Luna avatar from home.blade.php (now handled by global component)
+- **Direct Chat Navigation** - Chat link navigation updated to use floating component instead of dedicated page
+
+### Fixed
+- **Video Loading UX Issue** - Fixed loading screen remaining visible while video plays in background
+- **Video State Management** - Separated loading indicator from skip button delay for accurate loading representation
+- **Video Playback Detection** - Added 'playing' event listener to detect actual video start, not just metadata load
+- **Autoplay Fallback** - Improved error handling for browser autoplay restrictions with graceful loading state cleanup
+- **Chat Input Visibility** - Fixed chat input being hidden when panel height reduced by using flexible layout
+- **Chat Panel Responsiveness** - Fixed message area taking fixed height causing input overflow
+- **Product Drag & Drop** - Fixed issue where product names didn't sync with order numbers after reordering
+- **Product Order Sync** - Fixed Alpine.js reactivity by destroying and re-initializing Sortable after array updates
+- **Sortable.js Class Names** - Fixed InvalidCharacterError by using single class names instead of multiple classes with spaces
+- **Alpine.js Form Submission** - Fixed expression error in bulk actions form by using `@submit.prevent` with conditional submit
+- **Sortable Visual Feedback** - Added proper CSS classes for drag states (ghost, chosen, drag) with dark mode support
+
+- **Product Management System** - Complete CRUD system for product categories and products with admin interface
+- **Product Categories CRUD** - Create, read, update, delete product categories with slug generation, ordering, and bulk actions
+- **Products CRUD** - Complete product management with image upload (Spatie MediaLibrary), features (JSON), featured flag, and bulk operations
+- **Dynamic Product Showcase** - Frontend integration with Alpine.js tab switching and cached data loading
+- **Product Permissions** - 'manage products' permission assigned to content_manager and admin roles
+- **Product Admin Navigation** - Added "Products" section in admin sidebar with submenu for categories and products
+- **PHPUnit Testing Framework** - Migrated from Pest to PHPUnit for better IDE support and standard Laravel testing
+- **Enhanced TestCase** - Added RefreshDatabase trait, role/permission seeding, and helper methods (createAdmin, createContentManager, createUser)
+- **Test Infrastructure** - Complete PHPUnit setup with SQLite in-memory database for fast testing
+- **Hero Section as Image** - Converted hero section from text content to full background image for future slider implementation
+- **Landing Page Custom Fonts** - Integrated MissRhinetta, MilliardBold, and Adolphus custom fonts with responsive sizing
+- **OpenSpec Implementation Guide** - Comprehensive documentation for all planned admin dashboard proposals and features (`docs/openspec-implementation-guide.md`)
+- **Documentation System** - Created `docs/` folder with README and detailed implementation roadmap (5 major proposals planned)
+- **Ngrok Support** - Added ngrok configuration to .gitignore and trust proxies middleware for development tunneling
+- **Product Showcase Updates** - Added Facial Mask and Facial Scrub products to showcase section
 - **Guest Chat Access** - Complete implementation allowing guest users to access chat without authentication
 - **Guest Session Management** - localStorage-based session persistence with 7-day expiry
 - **Guest Database Tracking** - IP address tracking and session expiry management for guest users
@@ -57,6 +164,43 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Security measures: authentication, validation, and data protection**
 - **Performance monitoring and logging system**
 
+### Product Management Implementation
+- **Database Schema** - Created product_categories and products tables with proper indexes and foreign keys
+- **ProductCategory Model** - Eloquent model with HasMedia trait, auto-slug generation, and scoped queries
+- **Product Model** - Eloquent model with HasMedia, image conversions (thumb/medium/large), JSON features, and relationships
+- **Product Seeders** - 9 default categories (Skincare, Bodycare, Haircare, etc.) and 3 sample products
+- **ProductCategoryController** - Full CRUD with search, sorting, pagination, and bulk actions (activate, deactivate, delete)
+- **ProductController** - Full CRUD with image upload, category filter, search, bulk actions, and MediaLibrary integration
+- **Admin Views** - Modern card-based layouts for categories, table layout for products with thumbnails
+- **Frontend Integration** - Dynamic product tabs with Alpine.js, cached data loading via HomeController
+- **Route Protection** - All product routes protected with 'permission:manage products' middleware
+- **Image Handling** - Automatic conversions (300x200 thumb, 800x600 medium, 1200x800 large) with responsive display
+
+### Testing Framework Migration
+- **Pest Removal** - Removed pestphp/pest and pestphp/pest-plugin-laravel dependencies
+- **PHPUnit Installation** - Added phpunit/phpunit ^12.4 with all Sebastian Bergmann packages
+- **Test Conversion** - Converted all Pest-style tests to PHPUnit class-based tests
+- **TestCase Enhancement** - Added RefreshDatabase, auto-seeding, and user creation helpers
+- **Configuration** - Updated phpunit.xml with SQLite in-memory database for fast testing
+- **Verification** - All tests passing (2 passed, 2 assertions) with proper setup/teardown
+
+### Landing Page Redesign Implementation
+- **Hero Section Conversion** - Replaced text-based hero with dynamic image implementation ready for future slider feature
+- **Image Tag Implementation** - Using HTML `<img>` tag instead of CSS background for better SEO and programmatic control
+- **Responsive Hero Strategy** - Tailwind breakpoints: mobile/tablet (h-auto, no crop) vs desktop (h-screen, object-cover)
+- **Fixed Ask Me Avatar** - Positioned avatar with fixed positioning (bottom-right, z-50) for persistent visibility
+- **Custom Font Integration** - Added @font-face declarations for MissRhinetta (cursive), MilliardBold (sans-serif), Adolphus (serif)
+- **Font Utility Classes** - Created responsive font classes (.font-rhinetta, .font-milliard, .font-adolphus) with mobile breakpoints
+- **Animation Support** - Added clickEffect keyframe animation for Ask Me avatar
+- **Product Updates** - Updated product showcase from Hair Conditioner/Shampoo to Facial Mask/Scrub
+
+### Documentation System Implementation
+- **Implementation Guide** - Created comprehensive 627-line guide covering 5 major proposals with database schemas, tasks, and priorities
+- **Proposal Planning** - Documented Hero Slider, Product Management, Content Blocks, Settings, and Testimonials proposals
+- **Priority Matrix** - Effort estimation and dependency mapping for all planned features
+- **Technical Notes** - Integration guides for Spatie packages (MediaLibrary, Permission) and existing systems
+- **Success Criteria** - Clear deliverables and testing checklist for each implementation phase
+
 ### Guest Chat Access Implementation
 - **Database Schema Updates** - Added guest support to chat tables with nullable user_id, is_guest flag, IP tracking, and session expiry
 - **Model Enhancements** - Updated ChatSession and ChatMessage models with guest-specific methods (isExpired, isGuest)
@@ -69,6 +213,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Navigation Updates** - Added chat link to guest layout navigation for seamless access
 
 ### Changed
+- **Hero Section Implementation** - Hero now uses `<img>` tag instead of CSS background for better SEO and easier management
+- **Ask Me Avatar** - Changed from absolute to fixed positioning for persistent visibility during scroll
+- **Hero Responsive Behavior** - Desktop uses full-screen height with object-cover, mobile/tablet shows full image without cropping
+- **Product Categories Font Size** - Increased font size to 21px for better readability
+- **Removed GA4 Configuration** - Cleaned up unused Google Analytics 4 config from services.php
 - View count behavior now prevents duplicate counts within same user session
 - View count updates now use cache-based batch processing for better performance
 - Bot traffic is now filtered out for more accurate view count statistics

@@ -9,10 +9,9 @@ use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ContentManagerController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\HomeController;
 
-Route::get('/', function () {
-    return view('home');
-})->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 
 // Public Login Route
@@ -36,9 +35,9 @@ Route::post('/staff/logout', [StaffAuthController::class, 'logout'])->name('staf
 Route::get('/staff/register', [StaffAuthController::class, 'showRegisterForm'])->name('staff.register');
 Route::post('/staff/register', [StaffAuthController::class, 'register']);
 
-// Chat Route - accessible to both authenticated and guest users
+// Chat Route - redirect to home (now using floating chat)
 Route::get('/chat', function () {
-    return view('user.chat');
+    return redirect()->route('home');
 })->name('user.chat');
 
 // Profile Routes - accessible to all authenticated users
@@ -90,6 +89,30 @@ Route::middleware(['auth', 'permission:edit articles'])->group(function () {
 Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index');
 Route::get('/articles/{article}', [ArticleController::class, 'show'])->name('articles.show');
 Route::get('/categories/{category}', [CategoryController::class, 'show'])->name('categories.show');
+
+// Product Management Routes - Content Managers & Admins
+Route::middleware(['auth', 'permission:manage products'])->prefix('admin')->name('admin.')->group(function () {
+    // Product Categories
+    Route::resource('product-categories', \App\Http\Controllers\Admin\ProductCategoryController::class);
+    Route::post('product-categories/bulk-action', [\App\Http\Controllers\Admin\ProductCategoryController::class, 'bulkAction'])
+        ->name('product-categories.bulk-action');
+    
+    // Products
+    Route::resource('products', \App\Http\Controllers\Admin\ProductController::class);
+    Route::post('products/bulk-action', [\App\Http\Controllers\Admin\ProductController::class, 'bulkAction'])
+        ->name('products.bulk-action');
+    Route::post('products/reorder', [\App\Http\Controllers\Admin\ProductController::class, 'reorder'])
+        ->name('products.reorder');
+    Route::post('products/{product}/move-up', [\App\Http\Controllers\Admin\ProductController::class, 'moveUp'])
+        ->name('products.move-up');
+    Route::post('products/{product}/move-down', [\App\Http\Controllers\Admin\ProductController::class, 'moveDown'])
+        ->name('products.move-down');
+});
+
+// Hero Management Routes - Content Managers & Admins
+Route::middleware(['auth', 'permission:manage heroes'])->prefix('admin')->name('admin.')->group(function () {
+    Route::resource('heroes', \App\Http\Controllers\Admin\HeroController::class);
+});
 
 // Admin Only Routes - using permissions
 Route::middleware(['auth', 'permission:manage users'])->group(function () {

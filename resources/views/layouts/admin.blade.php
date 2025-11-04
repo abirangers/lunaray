@@ -59,6 +59,36 @@
                             Categories
                         </a>
                         
+                        @can('manage products')
+                        <!-- Product Management Section -->
+                        <div class="pt-2 pb-2">
+                            <p class="px-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Products</p>
+                        </div>
+                        
+                        <a href="{{ route('admin.product-categories.index') }}" class="{{ request()->routeIs('admin.product-categories.*') ? 'sidebar-modern-item-active' : 'sidebar-modern-item' }}">
+                            <svg class="mr-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path>
+                            </svg>
+                            Product Categories
+                        </a>
+                        
+                        <a href="{{ route('admin.products.index') }}" class="{{ request()->routeIs('admin.products.*') ? 'sidebar-modern-item-active' : 'sidebar-modern-item' }}">
+                            <svg class="mr-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                            </svg>
+                            Products
+                        </a>
+                        @endcan
+                        
+                        @can('manage heroes')
+                        <a href="{{ route('admin.heroes.index') }}" class="{{ request()->routeIs('admin.heroes.*') ? 'sidebar-modern-item-active' : 'sidebar-modern-item' }}">
+                            <svg class="mr-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                            Hero Slider
+                        </a>
+                        @endcan
+                        
                         <a href="{{ route('profile.show') }}" class="{{ request()->routeIs('profile.*') ? 'sidebar-modern-item-active' : 'sidebar-modern-item' }}">
                             <svg class="mr-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
@@ -127,6 +157,17 @@
                             <a href="{{ route('categories.index') }}" class="group flex items-center px-2 py-2 text-base font-medium rounded-md {{ request()->routeIs('categories.*') ? 'bg-primary text-white' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
                                 Categories
                             </a>
+                            @can('manage products')
+                            <div class="pt-2 pb-2 px-2">
+                                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Products</p>
+                            </div>
+                            <a href="{{ route('admin.product-categories.index') }}" class="group flex items-center px-2 py-2 text-base font-medium rounded-md {{ request()->routeIs('admin.product-categories.*') ? 'bg-primary text-white' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
+                                Product Categories
+                            </a>
+                            <a href="{{ route('admin.products.index') }}" class="group flex items-center px-2 py-2 text-base font-medium rounded-md {{ request()->routeIs('admin.products.*') ? 'bg-primary text-white' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
+                                Products
+                            </a>
+                            @endcan
                             <a href="{{ route('profile.show') }}" class="group flex items-center px-2 py-2 text-base font-medium rounded-md {{ request()->routeIs('profile.*') ? 'bg-primary text-white' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
                                 Profile
                             </a>
@@ -239,6 +280,9 @@
             </main>
         </div>
     </div>
+
+    <!-- Floating Chat Component -->
+    @include('components.floating-chat')
 
     @stack('scripts')
 </body>

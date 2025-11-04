@@ -30,6 +30,8 @@ class PermissionSeeder extends Seeder
             'delete articles',
             'publish articles',
             'unpublish articles',
+            'manage products',
+            'manage heroes',
             
             // Admin permissions
             'manage users',
@@ -68,6 +70,8 @@ class PermissionSeeder extends Seeder
             $permissionObjects['delete articles'],
             $permissionObjects['publish articles'],
             $permissionObjects['unpublish articles'],
+            $permissionObjects['manage products'],
+            $permissionObjects['manage heroes'],
             $permissionObjects['view admin dashboard'],
         ]);
 
@@ -81,6 +85,8 @@ class PermissionSeeder extends Seeder
             $permissionObjects['delete articles'],
             $permissionObjects['publish articles'],
             $permissionObjects['unpublish articles'],
+            $permissionObjects['manage products'],
+            $permissionObjects['manage heroes'],
             $permissionObjects['manage users'],
             $permissionObjects['manage roles'],
             $permissionObjects['manage permissions'],

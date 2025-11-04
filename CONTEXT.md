@@ -2,27 +2,41 @@
 
 ## 🎯 Current Focus
 
-**Status**: All Core Phases Completed + Modern UI Redesign + Guest Chat Access
-**Last Updated**: 2025-10-24
+**Status**: Style Guide Documentation Complete
+**Last Updated**: 2025-11-03
 
 ### Active Work
-- **None** - All major phases completed and archived
-- **Ready** for production deployment with modern UI/UX
-- **Guest Chat Access** - Recently completed allowing guest users to access chat without authentication
-- **Bulk Actions Feature** - Recently completed and fully functional
-- **Enhanced View Count Tracking** - Recently completed with session-based duplicate prevention and bot protection
-- **User Profile Management System** - Recently completed with comprehensive profile features for all user types
-- **Chatbot MVP Implementation** - Recently completed with production-ready features including database persistence, session management, rate limiting, and advanced UI features
+- **Style Guide Documentation** - ✅ Comprehensive "Beauty High Tech" design system with 13 detailed sections
+- **Floating Chat Component** - ✅ Global chat with Luna avatar trigger, lazy initialization, and adaptive layout
+- **Product Slider Integration** - ✅ Splide.js slider dengan per-category filtering, autoplay, dan responsive breakpoints
+- **Product Management System** - ✅ Complete CRUD implementation with admin interface and frontend integration
+- **Product Order System 2.0** - ✅ Drag & drop reordering with Sortable.js, quick move buttons, and per-category ordering
+- **Testing Framework Migration** - ✅ Successfully migrated from Pest to PHPUnit with enhanced TestCase
+- **Landing Page Redesign** - ✅ Hero section converted to image-based implementation ready for future slider
+- **Custom Fonts Integration** - ✅ MissRhinetta, MilliardBold, and Adolphus fonts integrated with responsive sizing
+- **Documentation System** - ✅ Comprehensive implementation guide + style guide (`docs/openspec-implementation-guide.md`, `docs/STYLE_GUIDE.md`)
 
 ### Next Priorities
-1. **Production Deployment** - Deploy to production environment
-2. **Performance Optimization** - ✅ Enhanced view count tracking completed
-3. **Accessibility Improvements** - ARIA labels, keyboard navigation (pending)
-4. **Additional Features** - Implement new capabilities as needed
+1. **Product Management Tests** - Create comprehensive unit and feature tests for products and categories (High - 1-2 days)
+2. **Hero Slider Management** - Implement dynamic hero slider with database backend (Critical - 4-5 days)
+3. **Content Blocks Management** - Dynamic content sections with rich text (High - 3-4 days)
+4. **Settings Management** - Site-wide configuration and customization (High - 2-3 days)
+5. **Testimonials Feature** - Customer testimonials showcase (Medium - 2-3 days)
 
 ### Recent Achievements
-- **✅ Guest Chat Access** - Complete implementation allowing guest users to access chat without authentication, with localStorage persistence, 7-day session expiry, and automated cleanup
-- **✅ Chatbot MVP Implementation** - Complete production-ready chatbot with database persistence, session management, rate limiting, and advanced UI features
+- **✅ Style Guide Documentation** - Complete "Beauty High Tech" design system with color palette, typography, spacing, components, and 10+ reference examples (2025-11-03)
+- **✅ Floating Chat Component** - Migrated chat to global floating component with Luna avatar trigger and adaptive layout (2025-01-04)
+- **✅ Product Slider Integration** - Splide.js slider dengan per-category filtering, autoplay, responsive breakpoints, dan cyan theme (2025-01-04)
+- **✅ Product Order System 2.0** - Drag & drop reordering with Sortable.js, per-category ordering, quick move buttons, and auto-order assignment (2025-01-02)
+- **✅ Product Management System** - Complete CRUD for categories and products with image handling and bulk actions
+- **✅ PHPUnit Migration** - Successfully migrated from Pest to PHPUnit with enhanced test infrastructure
+- **✅ Landing Page Hero Redesign** - Image-based hero with responsive behavior and fixed Ask Me avatar
+- **✅ Custom Fonts System** - Three custom fonts with utility classes and mobile breakpoints
+- **✅ Implementation Guide** - 627-line comprehensive guide with 5 major proposals and database schemas
+- **✅ Ngrok Support** - Development tunneling support with trust proxies middleware
+- **✅ Product Showcase Update** - Dynamic product showcase dengan Splide.js slider, all products per category, responsive & autoplay
+- **✅ Guest Chat Access** - Complete implementation allowing guest users to access chat without authentication
+- **✅ Chatbot MVP Implementation** - Production-ready chatbot with database persistence and advanced UI
 - **✅ Enhanced View Count Tracking** - Session-based duplicate prevention and bot protection
 - **✅ User Profile Management** - Comprehensive profile system for all user types
 - **✅ Modern UI/UX Redesign** - Admin interface and public pages with modern design
@@ -42,15 +56,19 @@
 - **Phase 4**: Admin Interface Redesign (2025-10-23) ✅
 - **Phase 5**: Public Pages Redesign (2025-10-23) ✅
 - **Phase 6**: Chatbot MVP Implementation (2025-10-23) ✅
+- **Phase 7**: Landing Page Hero Redesign (2025-10-30) ✅
+- **Phase 8A**: Product Management Implementation (2025-10-30) ✅
+- **Phase 8B**: Testing Framework Migration (2025-10-30) ✅
+- **Phase 8C**: Product Order System 2.0 (2025-01-02) ✅
 
 ### 🔄 Current Phase
-- **Phase 7**: Production Ready - All core features + modern UI + chatbot MVP completed
+- **Phase 8D**: Product Management Tests - Creating comprehensive test coverage
 
 ### 📋 Available Capabilities
 - **user-management**: 11 requirements ✅
-- **content-management**: 7 requirements ✅ (Enhanced with bulk actions)
+- **content-management**: 13 requirements ✅ (Enhanced with bulk actions + Product Management)
 - **chatbot-integration**: 7 requirements ✅ (Enhanced with MVP implementation + Guest Access)
-- **web-platform**: 12 requirements ✅ (Enhanced with modern UI/UX)
+- **web-platform**: 13 requirements ✅ (Enhanced with modern UI/UX + Dynamic Product Showcase)
 - **guest-chat-access**: 8 requirements ✅ (Complete guest chat implementation)
 
 ## 🏗️ Technical Stack
@@ -62,17 +80,21 @@
 - **Permissions**: Spatie Laravel Permission
 
 ### Frontend
-- **Styling**: TailwindCSS 4
-- **Interactivity**: Alpine.js (Enhanced with bulk actions components)
+- **Styling**: TailwindCSS 4 (with custom fonts: MissRhinetta, MilliardBold, Adolphus)
+- **Interactivity**: Alpine.js (Enhanced with bulk actions components and drag & drop)
+- **Drag & Drop**: Sortable.js (npm package) for product reordering
 - **Templates**: Template Inheritance (@extends/@section)
 - **Build Tool**: Vite
-- **UI Components**: Modern bulk actions, toast notifications, loading states
-- **Performance**: Cache-based view count tracking, session management
+- **UI Components**: Modern bulk actions, toast notifications, loading states, drag & drop modals, quick move buttons, fixed Ask Me avatar
+- **Performance**: Cache-based view count tracking, session management, AJAX-powered updates
+- **Responsive Design**: Mobile-first with breakpoint-specific behaviors (h-auto on mobile, h-screen on desktop)
 
 ### Development
 - **Spec Management**: OpenSpec
 - **Version Control**: Git
-- **Documentation**: Markdown
+- **Testing**: PHPUnit ^12.4 with SQLite in-memory database
+- **Documentation**: Markdown (includes `docs/openspec-implementation-guide.md` for admin dashboard planning)
+- **Tunneling**: Ngrok support for development and testing
 
 ## 🎨 Brand Identity
 
@@ -83,8 +105,9 @@
 - **Neutral**: White/Light Gray (oklch(0.95 0.02 0))
 
 ### Typography
-- **Sans-serif**: Inter
-- **Serif**: Playfair Display
+- **Sans-serif**: Inter (global), MilliardBold (landing page headers)
+- **Serif**: Playfair Display (global), Adolphus (landing page)
+- **Cursive**: MissRhinetta (landing page hero)
 - **Monospace**: JetBrains Mono
 
 ## 🔐 Authentication System
@@ -96,8 +119,8 @@
 ### Permissions
 - **Guest**: access chat (without authentication), view articles
 - **User**: access chat, view articles
-- **Content Manager**: All user permissions + content management + view admin dashboard
-- **Admin**: All permissions + user management + system settings
+- **Content Manager**: All user permissions + content management + product management + view admin dashboard
+- **Admin**: All permissions + user management + product management + system settings
 
 ### Guest Chat Access
 - **Session Management**: localStorage-based persistence with 7-day expiry
@@ -114,11 +137,15 @@ lunaray/
 ├── app/                    # Laravel application
 ├── resources/
 │   ├── views/             # Blade templates
-│   ├── css/               # TailwindCSS styles
+│   ├── css/               # TailwindCSS styles (with custom fonts)
 │   └── js/                # Alpine.js scripts
 ├── database/
 │   ├── migrations/        # Database schema
 │   └── seeders/          # Test data
+├── docs/                  # Project documentation
+│   ├── README.md          # Documentation overview
+│   ├── STYLE_GUIDE.md     # Complete "Beauty High Tech" design system
+│   └── openspec-implementation-guide.md  # Admin dashboard proposals
 ├── openspec/             # Specification management
 │   ├── specs/            # Current specifications
 │   ├── changes/          # Active changes
@@ -140,6 +167,58 @@ lunaray/
 - **Review Process**: Pull request reviews
 
 ## 📈 Recent Achievements
+
+### Product Order System 2.0 Completed (2025-01-02) - Drag & Drop Reordering
+- ✅ Sortable.js integration via npm for smooth drag & drop functionality
+- ✅ Visual reorder modal with category selector and draggable product list
+- ✅ Quick move up/down buttons in product table for single-position changes
+- ✅ Per-category ordering system (independent order: 1, 2, 3, 4... per category)
+- ✅ Auto-order assignment for new products (automatically added to last position)
+- ✅ AJAX-powered real-time updates without page reload
+- ✅ Removed manual order input fields from create/edit forms
+- ✅ Informative displays explaining auto-ordering in forms
+- ✅ DB transaction support for data consistency in reorder operations
+- ✅ Alpine.js reactivity fixes for proper DOM sync after drag & drop
+- ✅ Visual feedback with CSS classes (ghost, chosen, drag states)
+- ✅ Dark mode support for drag & drop visual states
+- ✅ Touch device support for mobile drag & drop
+
+### Product Management System Completed (2025-10-30) - Full CRUD Implementation
+- ✅ Complete database schema with product_categories and products tables
+- ✅ ProductCategory and Product models with Spatie MediaLibrary integration
+- ✅ Admin CRUD interfaces with modern card/table layouts
+- ✅ Image upload with automatic conversions (thumb, medium, large)
+- ✅ Search, filter, sort, pagination, and bulk actions
+- ✅ Dynamic frontend integration with Alpine.js tabs
+- ✅ Cached data loading for performance optimization
+- ✅ Permission-based access control (manage products)
+- ✅ Admin navigation with Products submenu
+- ✅ Comprehensive seeders with 9 categories and sample products
+- ✅ Product Order System 2.0 with drag & drop reordering (2025-01-02)
+
+### Testing Framework Migration Completed (2025-10-30) - Pest to PHPUnit
+- ✅ Removed Pest dependencies and configuration
+- ✅ Installed PHPUnit ^12.4 with all required packages
+- ✅ Converted all test files to PHPUnit class-based syntax
+- ✅ Enhanced TestCase with RefreshDatabase and helper methods
+- ✅ Auto-seeding roles and permissions in test setup
+- ✅ User creation helpers (createAdmin, createContentManager, createUser)
+- ✅ SQLite in-memory database for fast testing
+- ✅ All tests passing (2 passed, 2 assertions)
+
+### Landing Page Hero Redesign Completed (2025-10-30) - Image-Based Implementation
+- ✅ Converted hero section from text content to dynamic image implementation
+- ✅ Using HTML `<img>` tag instead of CSS background for better SEO and programmatic control
+- ✅ Responsive hero strategy: mobile/tablet (h-auto, no crop) vs desktop (h-screen, object-cover)
+- ✅ Fixed Ask Me avatar with persistent visibility (fixed position, bottom-right, z-50)
+- ✅ Custom font integration: MissRhinetta (cursive), MilliardBold (sans-serif), Adolphus (serif)
+- ✅ Font utility classes with responsive breakpoints (.font-rhinetta, .font-milliard, .font-adolphus)
+- ✅ Animation support: clickEffect keyframe for Ask Me avatar interaction
+- ✅ Product showcase updates: Facial Mask and Facial Scrub products
+- ✅ Documentation system: comprehensive 627-line implementation guide
+- ✅ Admin dashboard planning: 5 major proposals with database schemas and task breakdown
+- ✅ Ngrok support: trust proxies middleware for development tunneling
+- ✅ Removed unused GA4 configuration from services
 
 ### Enhanced View Count Tracking Completed (2025-10-23) - Performance & Accuracy Improvements
 - ✅ Session-based duplicate prevention to avoid counting page refreshes
@@ -245,10 +324,36 @@ lunaray/
 
 ## 🎯 Next Steps
 
-### Immediate Actions
-1. **Production Deployment** - Deploy to production environment
-2. **Performance Testing** - Conduct load testing and optimization
-3. **Security Audit** - Review and enhance security measures
+### Immediate Actions (Phase 8 - Admin Dashboard Implementation)
+1. **Product Management Tests** - Create comprehensive unit and feature tests (High - 1-2 days)
+   - Unit tests for ProductCategory and Product models
+   - Feature tests for CRUD operations, permissions, validation
+   - Image upload and MediaLibrary integration tests
+   - Bulk actions and frontend integration tests
+
+2. **Hero Slider Management** - Implement dynamic hero slider with database backend (Critical - 4-5 days)
+   - Create `heroes` table migration with order, status, and media fields
+   - Build admin CRUD interface with drag-and-drop reordering
+   - Integrate Spatie MediaLibrary for image management
+   - Implement frontend slider with Alpine.js and auto-play
+
+3. **Content Blocks Management** - Dynamic content sections with rich text (High - 3-4 days)
+   - Create `content_blocks` table with identifier, type, and content fields
+   - Build admin interface with rich text editor (TipTap/Trix)
+   - Implement conditional rendering on frontend
+   - Add block visibility and scheduling options
+
+4. **Settings Management** - Site-wide configuration and customization (High - 2-3 days)
+   - Create `settings` table with key-value pairs and types
+   - Build settings interface grouped by category
+   - Implement cache-based settings retrieval
+   - Add validation and default values
+
+5. **Testimonials Feature** - Customer testimonials showcase (Medium - 2-3 days)
+   - Create `testimonials` table with ratings and featured flag
+   - Build admin CRUD interface
+   - Implement frontend carousel/grid display
+   - Add filtering and featured testimonials section
 
 ### Long-term Goals
 - ✅ Complete all 4 capability specifications
@@ -257,7 +362,9 @@ lunaray/
 - ✅ Enhance web platform features
 - ✅ Modern UI/UX redesign for admin and public pages
 - ✅ Mobile optimization and SEO enhancement
-- **Next**: Production deployment and monitoring
+- ✅ Landing page hero redesign with custom fonts
+- **In Progress**: Admin dashboard implementation (5 major proposals)
+- **Next**: Production deployment and monitoring after admin dashboard completion
 
 ## 📞 Team Information
 
@@ -276,12 +383,15 @@ lunaray/
 ## Quick Links
 
 - [Changelog](./CHANGELOG.md) - Detailed change history
+- [Style Guide](./docs/STYLE_GUIDE.md) - Complete "Beauty High Tech" design system documentation
 - [OpenSpec Documentation](./openspec/AGENTS.md) - Development workflow
 - [Project Specifications](./openspec/specs/) - Current requirements
 - [Archived Changes](./openspec/changes/archive/) - Completed work
+- [Admin Dashboard Implementation Guide](./docs/openspec-implementation-guide.md) - Comprehensive roadmap for CRUD implementations
+- [Documentation](./docs/README.md) - Project documentation overview
 
 ---
 
-*Last updated: 2025-10-23*
-*Next review: 2025-10-24*
-*Status: All core phases + modern UI completed - Production ready*
+*Last updated: 2025-11-03*
+*Next review: 2025-11-06*
+*Status: Style Guide Documentation Complete - Comprehensive design system with 13 sections + component reference library - Ready for Phase 8D (Product Management Tests)*
