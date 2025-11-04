@@ -311,6 +311,20 @@ Routes organized by permission level:
 - Toast notifications for user feedback
 - Loading states for async operations
 
+### Responsive Design Conventions
+- **Mobile-First Approach** - Start with mobile base styles, scale up with breakpoints
+- **Progressive Enhancement** - Base functionality on mobile, enhanced features on desktop
+- **Breakpoint Strategy** - sm (640px), md (768px), lg (1024px), xl (1280px), 2xl (1536px)
+- **Typography Scaling** - Progressive text sizing: `text-sm → sm:text-base → md:text-lg → lg:text-xl`
+- **Spacing Scale** - Consistent spacing progression: `p-4 → sm:p-6 → md:p-8 → lg:p-12`
+- **Touch Targets** - Minimum 44x44px for interactive elements on mobile (`min-w-[44px] min-h-[44px]`)
+- **Touch Manipulation** - Add `touch-manipulation` class for better mobile tap response
+- **Adaptive Layouts** - Use flexbox/grid with responsive breakpoints for layout shifts
+- **Image Responsiveness** - Progressive height scaling: `h-48 → sm:h-56 → md:h-64 → lg:h-72`
+- **Viewport Units** - Use `dvh` (dynamic viewport height) for mobile browser compatibility
+- **Conditional Display** - Use `hidden lg:block` or `lg:hidden` for responsive visibility
+- **Breakpoint-Specific Alignment** - Example: `text-center sm:text-right` for mobile-centered, desktop-right
+
 ### Testing Conventions
 - Test file naming: `{Feature}Test.php` or `{Model}Test.php`
 - Use factory methods when possible
@@ -468,6 +482,7 @@ This project follows spec-driven development:
 ## Current Development Status
 
 **Recently Completed:**
+- Home Page Responsive Optimization (Tagline & Products sections, mobile-first design)
 - Video Introduction Modal for Luna AI chatbot (first-time experience)
 - Floating Chat Component responsive optimization (mobile-first design)
 - Intelligent video loading state management (playback-based, not time-based)

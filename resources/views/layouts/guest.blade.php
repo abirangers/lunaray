@@ -14,12 +14,12 @@
             description: 'Solusi total untuk kosmetik berkualitas. Membantu brand kosmetik tumbuh melalui inovasi, legalitas resmi, dan layanan menyeluruh dari ide hingga produk siap edar.',
             url: route('home')
         )) !!}
-    @elseif(request()->routeIs('articles.index'))
+    {{-- @elseif(request()->routeIs('articles.index'))
         {!! seo(new \RalphJSmit\Laravel\SEO\Support\SEOData(
             title: 'Beauty Articles - Tips & Tutorials',
             description: 'Discover the latest beauty tips, tutorials, and insights from our experts. Learn about cosmetics manufacturing, beauty trends, and industry best practices.',
             url: route('articles.index')
-        )) !!}
+        )) !!} --}}
     @else
         {!! seo() !!}
     @endif
@@ -36,96 +36,244 @@
     <div class="min-h-full">
         <!-- Navigation -->
         @if(!View::hasSection('hideDefaultNavigation'))
-        <nav class="bg-white border-b border-neutral-200">
-            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <div class="flex h-16 justify-between items-center">
-                    <!-- Logo -->
-                    <a href="{{ route('home') }}" class="flex items-center space-x-3">
-                        <div class="h-8 w-8 rounded-lg bg-neutral-900 flex items-center justify-center">
-                            <span class="text-white font-bold text-sm">L</span>
-                        </div>
-                        <span class="text-lg font-medium text-neutral-900">Lunaray</span>
-                    </a>
-                    
-                    <!-- Desktop Navigation Links -->
-                    <div class="hidden md:flex items-center space-x-8">
-                        <a href="{{ route('home') }}" class="text-neutral-700 hover:text-primary transition {{ request()->routeIs('home') ? 'text-primary font-medium' : '' }}">
-                            Home
+        <div class="relative w-full" x-data="{ mobileMenuOpen: false }">
+            {{-- Navigation Header --}}
+            <header class="absolute top-0 left-0 right-0 p-4 md:px-12 md:py-12 z-30">
+                <nav class="flex items-center justify-between max-w-7xl mx-auto">
+                    {{-- Mobile Menu Button & Logo Container --}}
+                    <div class="flex items-center gap-4 lg:hidden">
+                        {{-- Hamburger Button --}}
+                        <button @click="mobileMenuOpen = !mobileMenuOpen"
+                                class="w-11 h-11 flex items-center justify-center text-white hover:text-cyan-400 transition-colors touch-manipulation"
+                                aria-label="Toggle Menu">
+                            <svg x-show="!mobileMenuOpen" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                            </svg>
+                            <svg x-show="mobileMenuOpen" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" x-cloak>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                        </button>
+
+                        {{-- Mobile Logo --}}
+                        <a href="{{ route('home') }}" class="flex items-center gap-2">
+                            <div class="w-8 h-8 rounded-lg bg-white/10 backdrop-blur-sm flex items-center justify-center border border-white/20">
+                                <span class="text-white font-bold text-sm">L</span>
+                            </div>
+                            <span class="text-white font-semibold text-lg">Lunaray</span>
                         </a>
-                        <a href="{{ route('articles.index') }}" class="text-neutral-700 hover:text-primary transition {{ request()->routeIs('articles.*') ? 'text-primary font-medium' : '' }}">
-                            Articles
+                    </div>
+
+                    {{-- Desktop Navigation --}}
+                    <div class="hidden lg:flex items-center space-x-6 text-sm mx-auto">
+                        {{-- Main Navigation Links --}}
+                        <a href="{{ route('home') }}" class="text-cyan-400 hover:text-white transition duration-300">
+                            HOME
                         </a>
+                        <a href="#" class="text-white hover:text-cyan-400 transition duration-300">
+                            ABOUT
+                        </a>
+                        <a href="#" class="text-white hover:text-cyan-400 transition duration-300">
+                            SERVICES
+                        </a>
+                        <a href="#" class="text-white hover:text-cyan-400 transition duration-300">
+                            PRODUCT
+                        </a>
+                        <a href="#" class="text-white hover:text-cyan-400 transition duration-300">
+                            INNOVATION
+                        </a>
+                        <a href="#" class="text-white hover:text-cyan-400 transition duration-300">
+                            SIMULATION
+                        </a>
+                        <a href="#" class="text-white hover:text-cyan-400 transition duration-300">
+                            BEAUTYVERSITY
+                        </a>
+
+                        <span class="text-gray-500">|</span>
+
+                        <a href="#" class="text-white hover:text-cyan-400 transition duration-300">
+                            FAQ
+                        </a>
+
+                        {{-- User Authentication Section --}}
                         @auth
-                            <a href="{{ route('user.chat') }}" class="text-neutral-700 hover:text-primary transition {{ request()->routeIs('user.chat') ? 'text-primary font-medium' : '' }}">
-                                Chat
+                            @if (auth()->user()->hasRole(['admin', 'content_manager']))
+                                {{-- Admin/Content Manager Dropdown --}}
+                                <div class="relative" x-data="{ open: false }">
+                                    <button @click="open = !open" class="text-white hover:text-cyan-400 transition duration-300">
+                                        {{ auth()->user()->name }}
+                                    </button>
+                                    <div x-show="open" @click.away="open = false" x-transition
+                                        class="absolute right-0 mt-2 w-48 bg-neutral-900 rounded-md shadow-lg py-1 z-50 border border-neutral-700">
+                                        <a href="{{ route('admin.dashboard') }}"
+                                            class="block px-4 py-2 text-sm text-white hover:bg-neutral-800">
+                                            Dashboard
+                                        </a>
+                                        <a href="{{ route('profile.show') }}"
+                                            class="block px-4 py-2 text-sm text-white hover:bg-neutral-800">
+                                            Profile
+                                        </a>
+                                        <form method="POST" action="{{ route('staff.logout') }}" class="block">
+                                            @csrf
+                                            <button type="submit"
+                                                class="w-full text-left px-4 py-2 text-sm text-white hover:bg-neutral-800">
+                                                Sign Out
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            @else
+                                {{-- Regular User Dropdown --}}
+                                <div class="relative" x-data="{ open: false }">
+                                    <button @click="open = !open" class="text-white hover:text-cyan-400 transition duration-300">
+                                        {{ auth()->user()->name }}
+                                    </button>
+                                    <div x-show="open" @click.away="open = false" x-transition
+                                        class="absolute right-0 mt-2 w-48 bg-neutral-900 rounded-md shadow-lg py-1 z-50 border border-neutral-700">
+                                        <a href="{{ route('profile.show') }}"
+                                            class="block px-4 py-2 text-sm text-white hover:bg-neutral-800">
+                                            Profile
+                                        </a>
+                                        <form method="POST" action="{{ route('logout') }}" class="block">
+                                            @csrf
+                                            <button type="submit"
+                                                class="w-full text-left px-4 py-2 text-sm text-white hover:bg-neutral-800">
+                                                Sign Out
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            @endif
+                        @else
+                            {{-- Login Link for Guests --}}
+                            <a href="{{ route('login') }}" class="text-white hover:text-cyan-400 transition duration-300">
+                                LOGIN
                             </a>
                         @endauth
                     </div>
 
-                    <!-- User Menu / Auth Links -->
-                    <div class="flex items-center space-x-4">
+                    {{-- Mobile Auth Button --}}
+                    <div class="lg:hidden">
                         @auth
                             <div class="relative" x-data="{ open: false }">
-                                <button @click="open = !open" class="flex items-center space-x-2 text-neutral-700 hover:text-primary transition">
-                                    <span class="text-sm font-medium">{{ auth()->user()->name }}</span>
-                                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                <button @click="open = !open"
+                                        class="w-11 h-11 flex items-center justify-center text-white hover:text-cyan-400 transition-colors touch-manipulation">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                                     </svg>
                                 </button>
-                                <div x-show="open" @click.away="open = false" x-transition class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-neutral-200">
-                                    @if(auth()->user()->hasRole(['admin', 'content_manager']))
-                                        <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50">Dashboard</a>
-                                    @endif
-                                    <a href="{{ route('profile.show') }}" class="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50">Profile</a>
-                                    @if(auth()->user()->hasRole(['admin', 'content_manager']))
+                                <div x-show="open" @click.away="open = false" x-transition
+                                    class="absolute right-0 mt-2 w-48 bg-neutral-900/95 backdrop-blur-sm rounded-md shadow-lg py-1 z-50 border border-neutral-700">
+                                    <div class="px-4 py-2 text-sm text-white border-b border-neutral-700">
+                                        <div class="font-medium">{{ auth()->user()->name }}</div>
+                                    </div>
+                                    @can('view admin dashboard')
+                                        <a href="{{ route('admin.dashboard') }}"
+                                            class="block px-4 py-2 text-sm text-white hover:bg-neutral-800">
+                                            Dashboard
+                                        </a>
+                                    @endcan
+                                    <a href="{{ route('profile.show') }}"
+                                        class="block px-4 py-2 text-sm text-white hover:bg-neutral-800">
+                                        Profile
+                                    </a>
+                                    @can('view admin dashboard')
                                         <form method="POST" action="{{ route('staff.logout') }}" class="block">
                                             @csrf
-                                            <button type="submit" class="w-full text-left px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50">Sign Out</button>
+                                            <button type="submit"
+                                                class="w-full text-left px-4 py-2 text-sm text-white hover:bg-neutral-800">
+                                                Sign Out
+                                            </button>
                                         </form>
                                     @else
                                         <form method="POST" action="{{ route('logout') }}" class="block">
                                             @csrf
-                                            <button type="submit" class="w-full text-left px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50">Sign Out</button>
+                                            <button type="submit"
+                                                class="w-full text-left px-4 py-2 text-sm text-white hover:bg-neutral-800">
+                                                Sign Out
+                                            </button>
                                         </form>
-                                    @endif
+                                    @endcan
                                 </div>
                             </div>
                         @else
-                            <a href="{{ route('login') }}" class="text-sm text-neutral-700 hover:text-primary transition">
-                                Sign In
+                            <a href="{{ route('login') }}"
+                               class="w-11 h-11 flex items-center justify-center text-white hover:text-cyan-400 transition-colors touch-manipulation">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+                                </svg>
                             </a>
                         @endauth
                     </div>
+                </nav>
+            </header>
 
-                    <!-- Mobile Menu Button -->
-                    <div class="md:hidden" x-data="{ mobileOpen: false }">
-                        <button @click="mobileOpen = !mobileOpen" class="text-neutral-700 hover:text-primary">
-                            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path x-show="!mobileOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                                <path x-show="mobileOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        </button>
-                        
-                        <!-- Mobile Menu -->
-                        <div x-show="mobileOpen" @click.away="mobileOpen = false" x-transition class="absolute top-16 left-0 right-0 bg-white border-b border-neutral-200 shadow-lg z-50">
-                            <div class="px-4 py-3 space-y-3">
-                                <a href="{{ route('home') }}" class="block text-neutral-700 hover:text-primary transition {{ request()->routeIs('home') ? 'text-primary font-medium' : '' }}">
-                                    Home
-                                </a>
-                                <a href="{{ route('articles.index') }}" class="block text-neutral-700 hover:text-primary transition {{ request()->routeIs('articles.*') ? 'text-primary font-medium' : '' }}">
-                                    Articles
-                                </a>
-                                @auth
-                                    <a href="{{ route('user.chat') }}" class="block text-neutral-700 hover:text-primary transition {{ request()->routeIs('user.chat') ? 'text-primary font-medium' : '' }}">
-                                        Chat
-                                    </a>
-                                @endauth
-                            </div>
-                        </div>
-                    </div>
+            {{-- Mobile Full-Screen Menu Overlay --}}
+            <div x-show="mobileMenuOpen"
+                 x-transition:enter="transition ease-out duration-300"
+                 x-transition:enter-start="opacity-0"
+                 x-transition:enter-end="opacity-100"
+                 x-transition:leave="transition ease-in duration-200"
+                 x-transition:leave-start="opacity-100"
+                 x-transition:leave-end="opacity-0"
+                 @click="mobileMenuOpen = false"
+                 class="fixed inset-0 bg-[#000d1a]/95 backdrop-blur-md z-50 lg:hidden"
+                 x-cloak>
+
+                {{-- Close Button --}}
+                <button @click="mobileMenuOpen = false"
+                        class="absolute top-6 right-6 w-12 h-12 flex items-center justify-center text-white hover:text-cyan-400 transition-colors rounded-lg hover:bg-white/10 touch-manipulation"
+                        aria-label="Close Menu">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+
+                <div @click.stop class="flex flex-col items-center justify-center h-full space-y-6 px-6">
+                    <a href="{{ route('home') }}"
+                       class="text-cyan-400 text-2xl font-medium hover:text-white transition duration-300 touch-manipulation py-3">
+                        HOME
+                    </a>
+                    <a href="#"
+                       class="text-white text-2xl font-medium hover:text-cyan-400 transition duration-300 touch-manipulation py-3">
+                        ABOUT
+                    </a>
+                    <a href="#"
+                       class="text-white text-2xl font-medium hover:text-cyan-400 transition duration-300 touch-manipulation py-3">
+                        SERVICES
+                    </a>
+                    <a href="#"
+                       class="text-white text-2xl font-medium hover:text-cyan-400 transition duration-300 touch-manipulation py-3">
+                        PRODUCT
+                    </a>
+                    <a href="#"
+                       class="text-white text-2xl font-medium hover:text-cyan-400 transition duration-300 touch-manipulation py-3">
+                        INNOVATION
+                    </a>
+                    <a href="#"
+                       class="text-white text-2xl font-medium hover:text-cyan-400 transition duration-300 touch-manipulation py-3">
+                        SIMULATION
+                    </a>
+                    <a href="#"
+                       class="text-white text-2xl font-medium hover:text-cyan-400 transition duration-300 touch-manipulation py-3">
+                        BEAUTYVERSITY
+                    </a>
+
+                    <div class="h-px w-24 bg-gray-500 my-4"></div>
+
+                    <a href="#"
+                       class="text-white text-2xl font-medium hover:text-cyan-400 transition duration-300 touch-manipulation py-3">
+                        FAQ
+                    </a>
+
+                    @guest
+                        <a href="{{ route('login') }}"
+                           class="bg-cyan-400 text-white px-8 py-3 rounded-lg text-xl font-semibold hover:bg-cyan-500 transition duration-300 touch-manipulation mt-4">
+                            LOGIN
+                        </a>
+                    @endguest
                 </div>
             </div>
-        </nav>
+        </div>
         @endif
 
         <!-- Hero Section -->
@@ -215,11 +363,11 @@
                     {{-- Column 1: About Company --}}
                     <div class="space-y-4">
                         <h3 class="text-xl font-bold mb-4">
-                            Title Here
+                            Lunaray Beauty Factory
                         </h3>
                         <p class="text-sm leading-relaxed text-gray-300">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam at dignissim nunc,
-                            id maximus ex. Etiam nec dignissim elit, at dignissim enim.
+                            Solusi total maklon kosmetik berkualitas dengan fasilitas CPKB Grade A. Dari riset formulasi
+                            hingga legalitas BPOM dan Halal, kami mewujudkan impian brand Anda menjadi produk berkelas global.
                         </p>
 
                         {{-- Social Media Icons --}}

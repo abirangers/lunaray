@@ -197,9 +197,10 @@ class ArticleController extends Controller
     public function show(Article $article)
     {
         // Increment view count with session-based duplicate prevention
-        $article->incrementViewCountWithSession();
+        // $article->incrementViewCountWithSession();
 
-        return view('articles.show', compact('article'));
+        // return view('articles.show', compact('article'));
+        return redirect()->route('home');
     }
 
     /**

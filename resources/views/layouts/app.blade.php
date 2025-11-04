@@ -39,7 +39,7 @@
                             class="text-neutral-600 hover:text-neutral-900 transition-colors {{ request()->routeIs('home') ? 'text-neutral-900 font-medium' : '' }}">
                             Home
                         </a>
-                        <a href="{{ route('articles.index') }}"
+                        <a href="#"
                             class="text-neutral-600 hover:text-neutral-900 transition-colors {{ request()->routeIs('articles.*') ? 'text-neutral-900 font-medium' : '' }}">
                             Articles
                         </a>
@@ -141,11 +141,11 @@
                     {{-- Column 1: About Company --}}
                     <div class="space-y-4">
                         <h3 class="text-xl font-bold mb-4">
-                            Title Here
+                            Lunaray Beauty Factory
                         </h3>
                         <p class="text-sm leading-relaxed text-gray-300">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam at dignissim nunc,
-                            id maximus ex. Etiam nec dignissim elit, at dignissim enim.
+                            Solusi total maklon kosmetik berkualitas dengan fasilitas CPKB Grade A. Dari riset formulasi
+                            hingga legalitas BPOM dan Halal, kami mewujudkan impian brand Anda menjadi produk berkelas global.
                         </p>
 
                         {{-- Social Media Icons --}}

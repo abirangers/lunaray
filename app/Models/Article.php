@@ -113,7 +113,7 @@ class Article extends Model implements HasMedia
         return new SEOData(
             title: $this->title,
             description: $this->excerpt ?: Str::limit(strip_tags($this->content ?? ''), 160),
-            url: route('articles.show', $this->slug),
+            url: '#',
             image: $this->featured_image,
             published_time: $this->published_at,
             modified_time: $this->updated_at,

@@ -92,7 +92,7 @@
                         @endforeach
                     </div>
                     <div class="mt-4">
-                        <a href="{{ route('articles.index') }}" class="text-primary-500 hover:text-primary-600 font-medium transition-colors duration-200">View all articles →</a>
+                        <a href="#" class="text-primary-500 hover:text-primary-600 font-medium transition-colors duration-200">View all articles →</a>
                     </div>
                 @else
                     <p class="text-neutral-500 text-center py-8">No articles yet. <a href="{{ route('admin.articles.index') }}" class="text-primary-500 hover:text-primary-600 transition-colors duration-200">Manage Articles</a></p>
@@ -145,7 +145,7 @@
                             </div>
                             <div class="flex items-center space-x-2">
                                 <span class="text-sm text-neutral-600">{{ $article->view_count }} views</span>
-                                <a href="{{ route('articles.show', $article) }}" class="text-primary-500 hover:text-primary-600 dark:text-primary-400 dark:hover:text-primary-300 text-sm font-medium transition-colors duration-200">View</a>
+                                <a href="#" class="text-primary-500 hover:text-primary-600 dark:text-primary-400 dark:hover:text-primary-300 text-sm font-medium transition-colors duration-200">View</a>
                             </div>
                         </div>
                     @endforeach

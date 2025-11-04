@@ -8,7 +8,7 @@
     <!-- Action Buttons -->
     <div class="mb-8">
         <div class="flex items-center justify-end space-x-3">
-            <a href="{{ route('articles.index') }}" class="btn-modern btn-modern-secondary">
+            <a href="#" class="btn-modern btn-modern-secondary">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                 </svg>

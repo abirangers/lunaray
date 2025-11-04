@@ -129,7 +129,7 @@
                                         <span class="px-2 py-1 text-xs font-medium rounded-full {{ $article->status === 'published' ? 'bg-success-100 text-success-800 dark:bg-success-900/20 dark:text-success-200' : 'bg-warning-100 text-warning-800 dark:bg-warning-900/20 dark:text-warning-200' }}">
                                             {{ ucfirst($article->status) }}
                                         </span>
-                                        <a href="{{ route('articles.show', $article) }}" class="text-primary-500 hover:text-primary-600 dark:text-primary-400 dark:hover:text-primary-300 text-xs">
+                                        <a href="#" class="text-primary-500 hover:text-primary-600 dark:text-primary-400 dark:hover:text-primary-300 text-xs">
                                             View
                                         </a>
                                     </div>
@@ -137,7 +137,7 @@
                             @endforeach
                         </div>
                         <div class="mt-4">
-                            <a href="{{ route('articles.index', ['author' => $user->id]) }}" 
+                            <a href="#" 
                                class="text-primary-500 hover:text-primary-600 dark:text-primary-400 dark:hover:text-primary-300 font-medium text-sm">View all articles →</a>
                         </div>
                     @else

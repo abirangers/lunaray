@@ -11,7 +11,7 @@
         <ol class="flex items-center space-x-2 text-sm text-neutral-500">
             <li><a href="{{ route('home') }}" class="hover:text-neutral-700 transition-colors">Home</a></li>
             <li><span>/</span></li>
-            <li><a href="{{ route('articles.index') }}" class="hover:text-neutral-700 transition-colors">Articles</a></li>
+            <li><a href="#" class="hover:text-neutral-700 transition-colors">Articles</a></li>
             <li><span>/</span></li>
             <li class="text-neutral-900">{{ $category->name }}</li>
         </ol>
@@ -61,7 +61,7 @@
                         @endforeach
                     </div>
                     <h3 class="text-lg font-semibold text-neutral-900 mb-3 line-clamp-2">
-                        <a href="{{ route('articles.show', $article) }}" class="hover:text-neutral-600 transition-colors">
+                        <a href="#" class="hover:text-neutral-600 transition-colors">
                             {{ $article->title }}
                         </a>
                     </h3>
@@ -107,7 +107,7 @@
 
     <!-- Back to Articles -->
     <div class="text-center">
-        <a href="{{ route('articles.index') }}" class="inline-flex items-center space-x-2 text-neutral-600 hover:text-neutral-800 transition-colors">
+        <a href="#" class="inline-flex items-center space-x-2 text-neutral-600 hover:text-neutral-800 transition-colors">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
             </svg>

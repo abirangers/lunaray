@@ -35,11 +35,6 @@ Route::post('/staff/logout', [StaffAuthController::class, 'logout'])->name('staf
 Route::get('/staff/register', [StaffAuthController::class, 'showRegisterForm'])->name('staff.register');
 Route::post('/staff/register', [StaffAuthController::class, 'register']);
 
-// Chat Route - redirect to home (now using floating chat)
-Route::get('/chat', function () {
-    return redirect()->route('home');
-})->name('user.chat');
-
 // Profile Routes - accessible to all authenticated users
 Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
@@ -84,11 +79,6 @@ Route::middleware(['auth', 'permission:edit articles'])->group(function () {
     Route::post('/articles/{article}/duplicate', [ArticleController::class, 'duplicate'])->name('articles.duplicate');
     Route::get('/articles/export', [ArticleController::class, 'export'])->name('articles.export');
 });
-
-// Public Article Routes
-Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index');
-Route::get('/articles/{article}', [ArticleController::class, 'show'])->name('articles.show');
-Route::get('/categories/{category}', [CategoryController::class, 'show'])->name('categories.show');
 
 // Product Management Routes - Content Managers & Admins
 Route::middleware(['auth', 'permission:manage products'])->prefix('admin')->name('admin.')->group(function () {
