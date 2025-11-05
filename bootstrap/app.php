@@ -23,9 +23,6 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->validateCsrfTokens(except: [
             'api/chatbot/*',
         ]);
-        
-        // Trust proxies for ngrok and other reverse proxies
-        $middleware->trustProxies(at: '*');
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
