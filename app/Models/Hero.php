@@ -94,20 +94,20 @@ class Hero extends Model implements HasMedia
             ->width(300)
             ->height(200)
             ->format('webp')
-            ->nonQueued();
+            ->queued();
         
         // Medium conversion - always WebP
         $this->addMediaConversion('medium')
             ->width(800)
             ->height(600)
             ->format('webp')
-            ->nonQueued();
+            ->queued();
         
         // Large conversion - always WebP
         $this->addMediaConversion('large')
             ->width(1920)
             ->height(1080)
             ->format('webp')
-            ->nonQueued();
+            ->queued();
     }
 }

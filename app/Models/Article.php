@@ -252,16 +252,19 @@ class Article extends Model implements HasMedia
             ->width(300)
             ->height(200)
             ->sharpen(10)
-            ->performOnCollections('featured', 'gallery');
+            ->performOnCollections('featured', 'gallery')
+            ->queued();
             
         $this->addMediaConversion('medium')
             ->width(800)
             ->height(600)
-            ->performOnCollections('featured', 'gallery');
+            ->performOnCollections('featured', 'gallery')
+            ->queued();
             
         $this->addMediaConversion('large')
             ->width(1200)
             ->height(800)
-            ->performOnCollections('featured', 'gallery');
+            ->performOnCollections('featured', 'gallery')
+            ->queued();
     }
 }
