@@ -88,4 +88,34 @@ class ProductCategory extends Model implements HasMedia
             ->singleFile()
             ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/webp', 'image/svg+xml']);
     }
+
+    /**
+     * Register media conversions.
+     *
+     * All conversions will be in WebP format:
+     * - WebP originals: preserved as WebP
+     * - Other formats (JPG, PNG): converted to WebP
+     * - SVG: no conversion (vectors don't need resizing)
+     */
+    public function registerMediaConversions(?Media $media = null): void
+    {
+        // Only convert raster images (skip SVG)
+        if ($media && $media->mime_type === 'image/svg+xml') {
+            return;
+        }
+
+        // Thumb conversion - always WebP
+        $this->addMediaConversion('thumb')
+            ->width(150)
+            ->height(150)
+            ->format('webp')
+            ->queued();
+
+        // Medium conversion - always WebP
+        $this->addMediaConversion('medium')
+            ->width(300)
+            ->height(300)
+            ->format('webp')
+            ->queued();
+    }
 }
