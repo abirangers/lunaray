@@ -7,7 +7,7 @@
     {{-- ============================================
          HERO SECTION
          ============================================ --}}
-    <div class="relative w-full overflow-hidden">
+    <div id="section-hero" class="relative w-full overflow-hidden">
         {{-- Hero Background Slider --}}
         @if($heroes->count() > 0)
             <div class="hero-slider-container relative">
@@ -49,7 +49,7 @@
     {{-- ============================================
          TAGLINE SECTION
          ============================================ --}}
-    <div class="bg-[#000d1a] py-8 sm:py-10 md:py-12 lg:py-16 px-4 sm:px-6 md:px-12 text-center font-adolphus" style="z-index: 9999 !important;">
+    <div id="section-tagline" class="bg-[#000d1a] py-8 sm:py-10 md:py-12 lg:py-16 px-4 sm:px-6 md:px-12 text-center font-adolphus" style="z-index: 9999 !important;">
         <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-script text-white italic tracking-wide sm:tracking-wider leading-tight">
             Beauty Manufacturing Made Simple
         </h2>
@@ -58,7 +58,7 @@
     {{-- ============================================
          PRODUCTS SECTION WITH CATEGORIES
          ============================================ --}}
-         <div class="min-h-screen bg-[url('/images/lunaray-landing/bg-section2.webp')] bg-cover bg-center overflow-hidden px-8">
+         <div id="section-products" class="min-h-screen bg-[url('/images/lunaray-landing/bg-section2.webp')] bg-cover bg-center overflow-hidden px-8">
 
             {{-- Section Header --}}
             <div class="pt-16 pb-10 space-y-4 max-w-6xl mx-auto">
@@ -242,7 +242,7 @@
             {{-- ============================================
                  QUOTE & DISCOVER SECTION
                  ============================================ --}}
-                 <section class="relative py-10 sm:py-12 md:py-16 lg:py-20 px-4 sm:px-6 md:px-8 lg:px-12 text-center">
+                 <section id="section-quote" class="relative py-10 sm:py-12 md:py-16 lg:py-20 px-4 sm:px-6 md:px-8 lg:px-12 text-center">
                     <div class="max-w-4xl mx-auto relative z-10">
                         {{-- Quote --}}
                         <div class="mb-6 sm:mb-8 md:mb-12">
@@ -294,7 +294,7 @@
     {{-- ============================================
          THE SCIENTIST'S CHOICE SECTION
          ============================================ --}}
-    <section class="relative w-full min-h-screen overflow-hidden">
+    <section id="section-scientists-choice" class="relative w-full min-h-screen overflow-hidden">
         {{-- Background Image --}}
         <div class="absolute inset-0">
             <img src="{{ asset('images/lunaray-landing/bg-innovation.png') }}" class="w-full h-full object-cover"
@@ -332,7 +332,7 @@
     {{-- ============================================
          INNOVATION SECTION
          ============================================ --}}
-    <section class="relative w-full min-h-screen overflow-hidden">
+    <section id="section-innovation" class="relative w-full min-h-screen overflow-hidden">
         {{-- Background Container --}}
         <div class="absolute inset-0">
             <img src="{{ asset('images/lunaray-landing/innovation-background.png') }}"
@@ -412,7 +412,7 @@
     {{-- ============================================
      CREATE YOUR JOURNEY SECTION
      ============================================ --}}
-    <section class="relative w-full min-h-screen overflow-hidden">
+    <section id="section-create-journey" class="relative w-full min-h-screen overflow-hidden">
         {{-- Background Container --}}
         <div class="absolute inset-0">
             <img src="{{ asset('images/lunaray-landing/journey-background.webp') }}" alt="Create Your Journey Background"
@@ -505,7 +505,7 @@
     {{-- ============================================
      BEAUTYVERSITY SECTION
      ============================================ --}}
-    <section class="relative w-full min-h-screen overflow-hidden bg-blue-300 py-16 md:py-20">
+    <section id="section-beautyversity" class="relative w-full min-h-screen overflow-hidden bg-blue-300 py-16 md:py-20">
 
         {{-- Content Container --}}
         <div class="relative z-10 px-6 md:px-12 lg:px-16">
@@ -612,7 +612,7 @@
     {{-- ============================================
      CTA SECTION - Ready to Build the Future
      ============================================ --}}
-    <section class="relative w-full min-h-screen overflow-hidden">
+    <section id="section-cta" class="relative w-full min-h-screen overflow-hidden">
 
         {{-- Background Image --}}
         <div class="absolute inset-0">
@@ -656,7 +656,7 @@
     {{-- ============================================
      CONTACT US SECTION
      ============================================ --}}
-    <section class="relative w-full min-h-screen overflow-hidden">
+    <section id="section-contact" class="relative w-full min-h-screen overflow-hidden">
 
         {{-- Background Image --}}
         <div class="absolute inset-0">

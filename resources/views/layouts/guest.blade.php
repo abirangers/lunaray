@@ -504,7 +504,101 @@
     <!-- Floating Chat Component -->
     @include('components.floating-chat')
 
+    <!-- Keyboard Navigation Component (Desktop only for presentations) -->
+    <div x-data="keyboardNav()" x-init="init()" class="hidden"></div>
+
     @stack('scripts')
+
+    <script>
+        function keyboardNav() {
+            return {
+                sections: [
+                    'section-hero',
+                    'section-tagline',
+                    'section-products',
+                    'section-quote',
+                    'section-scientists-choice',
+                    'section-innovation',
+                    'section-create-journey',
+                    'section-beautyversity',
+                    'section-cta',
+                    'section-contact'
+                ],
+                currentIndex: 0,
+
+                init() {
+                    // Desktop only - check screen width
+                    if (window.innerWidth < 1024) return;
+
+                    document.addEventListener('keydown', (e) => {
+                        // Ctrl + Arrow Down: Next section
+                        if (e.ctrlKey && e.key === 'ArrowDown') {
+                            e.preventDefault();
+                            this.navigateNext();
+                        }
+
+                        // Ctrl + Arrow Up: Previous section
+                        if (e.ctrlKey && e.key === 'ArrowUp') {
+                            e.preventDefault();
+                            this.navigatePrev();
+                        }
+
+                        // Number keys 1-9: Direct jump to section
+                        if (e.key >= '1' && e.key <= '9') {
+                            const index = parseInt(e.key) - 1;
+                            if (index < this.sections.length) {
+                                e.preventDefault();
+                                this.jumpToSection(index);
+                            }
+                        }
+
+                        // Home key: Jump to top
+                        if (e.key === 'Home') {
+                            e.preventDefault();
+                            this.jumpToSection(0);
+                        }
+
+                        // End key: Jump to bottom (last section)
+                        if (e.key === 'End') {
+                            e.preventDefault();
+                            this.jumpToSection(this.sections.length - 1);
+                        }
+                    });
+                },
+
+                navigateNext() {
+                    if (this.currentIndex < this.sections.length - 1) {
+                        this.currentIndex++;
+                        this.scrollToSection(this.currentIndex);
+                    }
+                },
+
+                navigatePrev() {
+                    if (this.currentIndex > 0) {
+                        this.currentIndex--;
+                        this.scrollToSection(this.currentIndex);
+                    }
+                },
+
+                jumpToSection(index) {
+                    this.currentIndex = index;
+                    this.scrollToSection(index);
+                },
+
+                scrollToSection(index) {
+                    const sectionId = this.sections[index];
+                    const element = document.getElementById(sectionId);
+
+                    if (element) {
+                        element.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                }
+            }
+        }
+    </script>
 </body>
 </html>
 
