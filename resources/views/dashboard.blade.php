@@ -48,11 +48,7 @@
                     </h1>
                     <p class="text-lg text-gray-600 mb-6">
                         You have successfully logged in using 
-                        @if(Auth::user()->google_id)
-                            <span class="font-semibold text-red-600">Google OAuth</span>
-                        @else
-                            <span class="font-semibold text-purple-600">Email/Password</span>
-                        @endif
+                        <span class="font-semibold text-purple-600">Email/Password</span>
                         authentication.
                     </p>
                     
@@ -74,13 +70,7 @@
                             </div>
                             <div>
                                 <p class="text-sm font-medium text-gray-500">Login Method</p>
-                                <p class="text-lg text-gray-900">
-                                    @if(Auth::user()->google_id)
-                                        Google OAuth
-                                    @else
-                                        Email/Password
-                                    @endif
-                                </p>
+                                <p class="text-lg text-gray-900">Email/Password</p>
                             </div>
                         </div>
                     </div>

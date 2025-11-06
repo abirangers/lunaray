@@ -28,8 +28,6 @@ class ContentManagerController extends Controller
         if (auth()->user()->hasRole('admin')) {
             $stats = array_merge($stats, [
                 'total_users' => \App\Models\User::count(),
-                'google_users' => \App\Models\User::whereNotNull('google_id')->count(),
-                'staff_users' => \App\Models\User::whereNull('google_id')->count(),
                 'active_sessions' => \App\Models\ChatSession::where('status', 'active')->count(),
                 'total_sessions' => \App\Models\ChatSession::count(),
                 'system_health' => $this->getSystemHealthMetrics(),
