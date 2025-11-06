@@ -1,8 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\GoogleAuthController;
-use App\Http\Controllers\Auth\StaffAuthController;
 use App\Http\Controllers\ChatbotController;
 use App\Http\Controllers\Admin\ChatbotConfigurationController;
 use App\Http\Controllers\ArticleController;
@@ -13,27 +11,14 @@ use App\Http\Controllers\HomeController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
+// Unified Login Route
+Route::get('/login', [App\Http\Controllers\Auth\AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [App\Http\Controllers\Auth\AuthController::class, 'login']);
+Route::post('/logout', [App\Http\Controllers\Auth\AuthController::class, 'logout'])->name('logout');
 
-// Public Login Route
-Route::get('/login', function () {
-    return view('auth.google-login');
-})->name('login');
-
-
-
-// Google OAuth Routes
-Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect']);
-Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback']);
-Route::post('/auth/logout', [GoogleAuthController::class, 'logout'])->name('logout');
-
-// Staff Authentication Routes
-Route::get('/staff/login', [StaffAuthController::class, 'showLoginForm'])->name('staff.login');
-Route::post('/staff/login', [StaffAuthController::class, 'login']);
-Route::post('/staff/logout', [StaffAuthController::class, 'logout'])->name('staff.logout');
-
-// Staff Registration Routes (Admin only)
-Route::get('/staff/register', [StaffAuthController::class, 'showRegisterForm'])->name('staff.register');
-Route::post('/staff/register', [StaffAuthController::class, 'register']);
+// User Registration Routes (Admin only)
+Route::get('/register', [App\Http\Controllers\Auth\AuthController::class, 'showRegisterForm'])->name('register');
+Route::post('/register', [App\Http\Controllers\Auth\AuthController::class, 'register']);
 
 // Profile Routes - accessible to all authenticated users
 Route::middleware(['auth'])->group(function () {
