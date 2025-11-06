@@ -35,7 +35,7 @@ class ChatbotConfiguration extends Model
     /**
      * Set configuration value by key.
      */
-    public static function setValue(string $key, $value, string $description = null): void
+    public static function setValue(string $key, $value, ?string $description = null): void
     {
         static::updateOrCreate(
             ['key' => $key],
