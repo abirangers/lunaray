@@ -108,28 +108,22 @@ class AdvancedStaffSeeder extends Seeder
                 $createdUsers[] = $user;
             }
 
-            // Create test public users (Google OAuth users)
+            // Create test public users
             $publicUsers = [
                 [
                     'email' => 'user1@example.com',
                     'name' => 'Test Public User 1',
-                    'google_id' => '111111111',
-                    'google_token' => 'test_google_token_1',
-                    'google_refresh_token' => 'test_refresh_token_1',
+                    'password' => 'password123',
                 ],
                 [
                     'email' => 'user2@example.com',
                     'name' => 'Test Public User 2',
-                    'google_id' => '222222222',
-                    'google_token' => 'test_google_token_2',
-                    'google_refresh_token' => 'test_refresh_token_2',
+                    'password' => 'password123',
                 ],
                 [
                     'email' => 'user3@example.com',
                     'name' => 'Test Public User 3',
-                    'google_id' => '333333333',
-                    'google_token' => 'test_google_token_3',
-                    'google_refresh_token' => 'test_refresh_token_3',
+                    'password' => 'password123',
                 ],
             ];
 
@@ -138,9 +132,7 @@ class AdvancedStaffSeeder extends Seeder
                     ['email' => $publicUserData['email']], // Unique identifier
                     [
                         'name' => $publicUserData['name'],
-                        'google_id' => $publicUserData['google_id'],
-                        'google_token' => $publicUserData['google_token'],
-                        'google_refresh_token' => $publicUserData['google_refresh_token'],
+                        'password' => Hash::make($publicUserData['password']),
                         'email_verified_at' => now(),
                         'created_at' => now(),
                         'updated_at' => now(),
@@ -170,9 +162,7 @@ class AdvancedStaffSeeder extends Seeder
                 [
                     'email' => 'demo.user@example.com',
                     'name' => 'Demo Public User',
-                    'google_id' => 'demo_google_id',
-                    'google_token' => 'demo_google_token',
-                    'google_refresh_token' => 'demo_refresh_token',
+                    'password' => 'demo123456',
                     'role' => 'user',
                 ],
             ];
@@ -186,16 +176,9 @@ class AdvancedStaffSeeder extends Seeder
                     'updated_at' => now(),
                 ];
 
-                // Add password for staff users
+                // Add password for all users
                 if (isset($demoUserData['password'])) {
                     $userData['password'] = Hash::make($demoUserData['password']);
-                }
-
-                // Add Google OAuth data for public users
-                if (isset($demoUserData['google_id'])) {
-                    $userData['google_id'] = $demoUserData['google_id'];
-                    $userData['google_token'] = $demoUserData['google_token'];
-                    $userData['google_refresh_token'] = $demoUserData['google_refresh_token'];
                 }
 
                 $user = User::updateOrCreate(
@@ -237,10 +220,10 @@ class AdvancedStaffSeeder extends Seeder
         $this->command->info('Demo Admin: demo.admin@lunaray.com (password: demo123456)');
         $this->command->info('Demo Content Manager: demo.content@lunaray.com (password: demo123456)');
         $this->command->info('=====================================');
-        $this->command->info('Public Users (Google OAuth):');
-        $this->command->info('Test Public User 1: user1@example.com');
-        $this->command->info('Test Public User 2: user2@example.com');
-        $this->command->info('Test Public User 3: user3@example.com');
-        $this->command->info('Demo Public User: demo.user@example.com');
+        $this->command->info('Public Users:');
+        $this->command->info('Test Public User 1: user1@example.com (password: password123)');
+        $this->command->info('Test Public User 2: user2@example.com (password: password123)');
+        $this->command->info('Test Public User 3: user3@example.com (password: password123)');
+        $this->command->info('Demo Public User: demo.user@example.com (password: demo123456)');
     }
 }

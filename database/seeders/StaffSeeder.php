@@ -82,14 +82,12 @@ class StaffSeeder extends Seeder
             }
         }
 
-        // Create a test public user (Google OAuth user)
+        // Create a test public user
         $publicUser = User::updateOrCreate(
             ['email' => 'user@example.com'], // Unique identifier
             [
                 'name' => 'Test Public User',
-                'google_id' => '123456789', // Simulate Google OAuth ID
-                'google_token' => 'test_google_token',
-                'google_refresh_token' => 'test_refresh_token',
+                'password' => Hash::make('password123'),
                 'email_verified_at' => now(),
             ]
         );
@@ -106,6 +104,6 @@ class StaffSeeder extends Seeder
         $this->command->info('Marketing Manager: marketing@lunaray.com (password: marketing123456)');
         $this->command->info('Product Manager: product@lunaray.com (password: product123456)');
         $this->command->info('Super Admin: superadmin@lunaray.com (password: superadmin123456)');
-        $this->command->info('Test Public User: user@example.com (Google OAuth)');
+        $this->command->info('Test Public User: user@example.com (password: password123)');
     }
 }
