@@ -26,9 +26,6 @@ class User extends Authenticatable implements HasMedia
         'name',
         'email',
         'password',
-        'google_id',
-        'google_token',
-        'google_refresh_token',
         'bio',
         'phone',
         'location',
@@ -44,8 +41,6 @@ class User extends Authenticatable implements HasMedia
     protected $hidden = [
         'password',
         'remember_token',
-        'google_token',
-        'google_refresh_token',
     ];
 
     /**
@@ -58,9 +53,6 @@ class User extends Authenticatable implements HasMedia
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            // Encrypt sensitive OAuth tokens at rest
-            'google_token' => 'encrypted',
-            'google_refresh_token' => 'encrypted',
             'social_links' => 'array',
         ];
     }
