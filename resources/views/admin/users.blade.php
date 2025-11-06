@@ -68,13 +68,9 @@
                                     </td>
                                 <td class="table-modern-cell">
                                     <div class="text-sm text-neutral-900 dark:text-neutral-100">
-                                            @if($user->google_id)
-                                            <span class="text-error-600 dark:text-error-400">Google OAuth</span>
-                                            @else
-                                            <span class="text-primary-600 dark:text-primary-400">Email/Password</span>
-                                            @endif
-                                        </div>
-                                    </td>
+                                        <span class="text-primary-600 dark:text-primary-400">Email/Password</span>
+                                    </div>
+                                </td>
                                 <td class="table-modern-cell">
                                     <div class="text-sm text-neutral-500 dark:text-neutral-400">{{ $user->created_at->format('M d, Y') }}</div>
                                     </td>

@@ -194,8 +194,8 @@
                     </div>
                     <div class="flex items-center justify-between p-4 bg-neutral-50 dark:bg-neutral-800 rounded-xl">
                         <span class="text-sm font-medium text-neutral-600 dark:text-neutral-400">Login Method</span>
-                        <span class="text-sm {{ $user->google_id ? 'text-error-600 dark:text-error-400' : 'text-primary-600 dark:text-primary-400' }}">
-                            {{ $user->google_id ? 'Google OAuth' : 'Email/Password' }}
+                        <span class="text-sm text-primary-600 dark:text-primary-400">
+                            Email/Password
                         </span>
                     </div>
                     <div class="flex items-center justify-between p-4 bg-neutral-50 dark:bg-neutral-800 rounded-xl">

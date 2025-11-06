@@ -19,8 +19,6 @@ class UserController extends Controller
 
         $userStats = [
             'total_users' => User::count(),
-            'google_users' => User::whereNotNull('google_id')->count(),
-            'staff_users' => User::whereNull('google_id')->count(),
             'admin_users' => User::role('admin')->count(),
             'content_managers' => User::role('content_manager')->count(),
             'public_users' => User::role('user')->count(),
