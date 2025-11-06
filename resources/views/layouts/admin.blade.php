@@ -282,7 +282,7 @@
     </div>
 
     <!-- Floating Chat Component -->
-    @include('components.floating-chat')
+    {{-- @include('components.floating-chat') --}}
 
     @stack('scripts')
 </body>
