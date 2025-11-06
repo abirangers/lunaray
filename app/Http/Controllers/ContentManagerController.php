@@ -54,22 +54,37 @@ class ContentManagerController extends Controller
             ->limit(5)
             ->get();
 
-        // Get articles by category
+        // Get articles by category (SQLite compatible)
         $articles_by_category = Category::withCount('articles')
-            ->having('articles_count', '>', 0)
+            ->whereHas('articles')
             ->orderBy('articles_count', 'desc')
             ->limit(10)
             ->get();
 
-        // Get monthly article statistics
-        $monthly_stats = Article::select(
-                DB::raw('DATE_FORMAT(created_at, "%Y-%m") as month'),
-                DB::raw('COUNT(*) as count')
-            )
-            ->where('created_at', '>=', now()->subMonths(6))
-            ->groupBy('month')
-            ->orderBy('month')
-            ->get();
+        // Get monthly article statistics (compatible with both SQLite and MySQL)
+        $connection = DB::connection();
+        $driver = $connection->getDriverName();
+        
+        if ($driver === 'sqlite') {
+            $monthly_stats = Article::select(
+                    DB::raw('strftime("%Y-%m", created_at) as month'),
+                    DB::raw('COUNT(*) as count')
+                )
+                ->where('created_at', '>=', now()->subMonths(6))
+                ->groupBy('month')
+                ->orderBy('month')
+                ->get();
+        } else {
+            // MySQL/MariaDB/PostgreSQL
+            $monthly_stats = Article::select(
+                    DB::raw('DATE_FORMAT(created_at, "%Y-%m") as month'),
+                    DB::raw('COUNT(*) as count')
+                )
+                ->where('created_at', '>=', now()->subMonths(6))
+                ->groupBy('month')
+                ->orderBy('month')
+                ->get();
+        }
 
         // Get admin-specific data if user is admin
         $admin_data = [];
