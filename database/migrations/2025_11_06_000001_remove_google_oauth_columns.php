@@ -16,8 +16,28 @@ return new class extends Migration
             ->whereNull('password')
             ->update(['password' => \Hash::make(\Str::random(32))]);
 
+        $connection = Schema::getConnection();
+        $driver = $connection->getDriverName();
+
+        // Handle SQLite separately as it has limitations with dropping columns
+        if ($driver === 'sqlite') {
+            // For SQLite, drop the unique index first
+            try {
+                $connection->statement('DROP INDEX IF EXISTS users_google_id_unique');
+            } catch (\Exception $e) {
+                // Index might not exist or have different name, continue
+            }
+        }
+
+        Schema::table('users', function (Blueprint $table) use ($driver) {
+            // Drop unique index first for non-SQLite databases
+            if ($driver !== 'sqlite' && Schema::hasColumn('users', 'google_id')) {
+                $table->dropUnique(['google_id']);
+            }
+        });
+
+        // Drop columns
         Schema::table('users', function (Blueprint $table) {
-            // Check if columns exist before dropping
             if (Schema::hasColumn('users', 'google_id')) {
                 $table->dropColumn('google_id');
             }
@@ -27,9 +47,13 @@ return new class extends Migration
             if (Schema::hasColumn('users', 'google_refresh_token')) {
                 $table->dropColumn('google_refresh_token');
             }
+        });
 
-            // Make password required (was nullable for Google OAuth users)
-            $table->string('password')->nullable(false)->change();
+        // Make password required (was nullable for Google OAuth users)
+        Schema::table('users', function (Blueprint $table) {
+            if (Schema::hasColumn('users', 'password')) {
+                $table->string('password')->nullable(false)->change();
+            }
         });
     }
 
