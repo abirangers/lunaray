@@ -399,7 +399,7 @@
                     </div>
 
                     {{-- Card 4: AI Product Concept --}}
-                    <a href="https://product-concept.lunaray.id" class="w-32 md:w-36 lg:w-52 -mt-10 block focus:outline-none focus:ring-2 focus:ring-accent rounded-lg transition-shadow hover:shadow-lg" title="AI Product Concept">
+                    <a href="https://product-concept.lunaray.id" class="w-32 md:w-36 lg:w-52 -mt-10 block" title="AI Product Concept">
                         <img src="{{ asset('images/lunaray-landing/cards/ai-product-concept.webp') }}"
                             alt="AI Product Concept" class="w-full h-auto object-cover">
                     </a>
