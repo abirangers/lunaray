@@ -5,7 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Project Overview
 
 Lunaray Beauty Factory is a comprehensive Laravel 11.x platform for the cosmetics industry. The application features:
-- Hybrid authentication (Google OAuth + email/password for staff)
+- Unified email/password authentication for all users
 - Role-based access control with granular permissions
 - Content management system with articles and categories
 - AI chatbot integration with guest access support
@@ -68,22 +68,23 @@ openspec archive <change-id> --yes # Archive completed changes
 ## Architecture Overview
 
 ### Authentication System
-The application uses a **hybrid authentication system**:
+The application uses **email/password authentication** for all users:
 
-1. **Public Users** (`role:user`)
-   - Google OAuth via Laravel Socialite
-   - Stored tokens: `google_id`, `google_token`, `google_refresh_token` (encrypted)
-   - No password required
-
-2. **Staff Users** (`role:content_manager`, `role:admin`)
+1. **All Users** (public, staff, admins)
    - Email/password authentication
    - Standard Laravel authentication
-   - Separate login route at `/staff/login`
+   - Single unified login at `/login`
+   - Password hashing with bcrypt
 
-3. **Guest Users**
+2. **Guest Users**
    - Can access chatbot without authentication
    - Session tracked via localStorage with IP address
    - 7-day session expiry with automated cleanup
+
+**Role-based Access:**
+- `role:user` - Public users with basic access
+- `role:content_manager` - Content editing and management
+- `role:admin` - Full system administration
 
 ### Permission System
 Uses Spatie Laravel Permission with granular permissions:
@@ -357,23 +358,7 @@ $article->featured_image // Removed in migration
 $article->getFirstMediaUrl('featured', 'large')
 ```
 
-### 3. Authentication Guards
-❌ Don't mix authentication types:
-```php
-// Public users don't have passwords
-User::where('email', $email)->first()->password
-```
-
-✅ Check authentication type:
-```php
-if ($user->google_id) {
-    // OAuth user
-} else {
-    // Email/password user
-}
-```
-
-### 4. Permission Checks
+### 3. Permission Checks
 ❌ Don't use role checks directly in controllers:
 ```php
 if (auth()->user()->hasRole('admin'))
@@ -384,7 +369,7 @@ if (auth()->user()->hasRole('admin'))
 Route::middleware(['permission:manage users'])
 ```
 
-### 5. Queue Processing for Media
+### 4. Queue Processing for Media
 ❌ Don't expect immediate media conversions:
 ```php
 $article->addMedia($file)->toMediaCollection('featured');
@@ -396,7 +381,7 @@ $url = $article->getFirstMediaUrl('featured', 'large'); // May not exist yet
 php artisan queue:work
 ```
 
-### 6. Floating Chat Component
+### 5. Floating Chat Component
 ❌ Don't create separate chat pages:
 ```php
 Route::get('/new-chat', ...); // Don't do this
@@ -422,7 +407,7 @@ Route::get('/new-chat', ...); // Don't do this
 <!-- No manual integration needed -->
 ```
 
-### 7. Video Introduction
+### 6. Video Introduction
 ❌ Don't manually check video watched status:
 ```javascript
 // Don't check localStorage directly in other components
@@ -505,7 +490,7 @@ This project follows spec-driven development:
 
 **Configuration:**
 - `bootstrap/app.php` - Application bootstrap, middleware registration, proxy settings
-- `config/services.php` - Third-party services (Google OAuth, n8n webhook)
+- `config/services.php` - Third-party services (n8n webhook)
 - `routes/web.php` - All web routes with permission-based grouping
 
 **Core Models:**

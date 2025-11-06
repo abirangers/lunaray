@@ -23,7 +23,7 @@ Lunaray Beauty Factory adalah platform comprehensive untuk industri kosmetik yan
 
 ### 🌟 Key Features
 
-- **🔐 Hybrid Authentication System** - Google OAuth untuk public users, email/password untuk staff
+- **🔐 Unified Authentication System** - Email/password authentication untuk semua users
 - **👥 Role-Based Access Control** - 3 level roles (user, content_manager, admin)
 - **🎨 Modern UI/UX** - Responsive design dengan custom TailwindCSS theme
 - **📱 Mobile-First Design** - Optimized untuk semua devices
@@ -84,7 +84,6 @@ php artisan queue:work --queue=media-conversions
 - **Composer** - PHP dependency manager
 - **Node.js >= 20.19.0** - For frontend assets
 - **MySQL/PostgreSQL** - Database
-- **Google OAuth** - For authentication (optional)
 
 ### Installation
 
@@ -130,8 +129,8 @@ php artisan queue:work --queue=media-conversions
 
 ### User Types
 
-- **👤 Public Users** - Google OAuth authentication
-- **👨‍💼 Content Managers** - Email/password authentication
+- **👤 Public Users** - Email/password authentication
+- **👨‍💼 Content Managers** - Email/password authentication with content management access
 - **👑 Admins** - Email/password authentication with full access
 
 ### Test Credentials
@@ -203,8 +202,7 @@ vendor/bin/phpunit                   # Direct PHPUnit execution
 
 #### **Phase 0-2: Core Foundation**
 - ✅ **Laravel 11.x Migration** - Modern framework dengan TailwindCSS 4
-- ✅ **Google OAuth Integration** - Laravel Socialite
-- ✅ **Staff Authentication** - Email/password login
+- ✅ **Unified Authentication** - Email/password login untuk semua users
 - ✅ **Role-Based Access Control** - 3 user roles dengan granular permissions
 - ✅ **Custom TailwindCSS Theme** - OKLCH color palette dengan brand identity
 - ✅ **Responsive UI Components** - Mobile-first design
@@ -321,7 +319,6 @@ This project is open-sourced software licensed under the [MIT license](https://o
 - Built with [Laravel](https://laravel.com) framework
 - Styled with [TailwindCSS](https://tailwindcss.com)
 - Spec-driven development with [OpenSpec](https://openspec.dev)
-- Authentication powered by [Laravel Socialite](https://laravel.com/docs/socialite)
 - Rich text editing with [tonysm/rich-text-laravel](https://github.com/tonysm/rich-text-laravel)
 - SEO optimization with [ralphjsmit/laravel-seo](https://github.com/ralphjsmit/laravel-seo)
 - Permissions with [Spatie Laravel Permission](https://spatie.be/docs/laravel-permission)
