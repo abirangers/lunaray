@@ -7,7 +7,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 abstract class TestCase extends BaseTestCase
 {
-    use RefreshDatabase;
+    use CreatesApplication, RefreshDatabase;
 
     /**
      * Setup the test environment.
