@@ -43,10 +43,6 @@
                             class="text-neutral-600 hover:text-neutral-900 transition-colors {{ request()->routeIs('articles.*') ? 'text-neutral-900 font-medium' : '' }}">
                             Articles
                         </a>
-                        <a href="{{ route('user.chat') }}"
-                            class="text-neutral-600 hover:text-neutral-900 transition-colors">
-                            Chat
-                        </a>
                         <a href="#" class="text-neutral-600 hover:text-neutral-900 transition-colors">
                             About
                         </a>
@@ -77,11 +73,6 @@
                                         <a href="{{ route('admin.dashboard') }}"
                                             class="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50 transition-colors">
                                             Admin Dashboard
-                                        </a>
-                                    @else
-                                        <a href="{{ route('user.chat') }}"
-                                            class="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50 transition-colors">
-                                            Chat
                                         </a>
                                     @endcan
 
