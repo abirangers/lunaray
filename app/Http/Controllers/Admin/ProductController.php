@@ -115,21 +115,10 @@ class ProductController extends Controller
         $product = Product::create($validated);
 
         // Handle image upload
+        // Conversions to WebP are handled automatically by registerMediaConversions() in Product model
         if ($request->hasFile('product_image')) {
-            $file = $request->file('product_image');
-            $mimeType = $file->getMimeType();
-            $isWebP = $mimeType === 'image/webp';
-            
-            $mediaAdder = $product->addMediaFromRequest('product_image');
-            
-            // If not WebP, convert original to WebP
-            if (!$isWebP) {
-                $mediaAdder->performManipulations(function (Manipulations $manipulations) {
-                    $manipulations->format('webp');
-                });
-            }
-            
-            $mediaAdder->toMediaCollection('product_image');
+            $product->addMediaFromRequest('product_image')
+                ->toMediaCollection('product_image');
         }
 
         return redirect()
@@ -218,21 +207,10 @@ class ProductController extends Controller
         if ($request->hasFile('product_image')) {
             // Clear old image
             $product->clearMediaCollection('product_image');
-            
-            $file = $request->file('product_image');
-            $mimeType = $file->getMimeType();
-            $isWebP = $mimeType === 'image/webp';
-            
-            $mediaAdder = $product->addMediaFromRequest('product_image');
-            
-            // If not WebP, convert original to WebP
-            if (!$isWebP) {
-                $mediaAdder->performManipulations(function (Manipulations $manipulations) {
-                    $manipulations->format('webp');
-                });
-            }
-            
-            $mediaAdder->toMediaCollection('product_image');
+
+            // Conversions to WebP are handled automatically by registerMediaConversions() in Product model
+            $product->addMediaFromRequest('product_image')
+                ->toMediaCollection('product_image');
         }
 
         return redirect()

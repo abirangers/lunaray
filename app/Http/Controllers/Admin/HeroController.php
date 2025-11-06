@@ -83,21 +83,10 @@ class HeroController extends Controller
         $hero = Hero::create($validated);
 
         // Handle image upload
+        // Conversions to WebP are handled automatically by registerMediaConversions() in Hero model
         if ($request->hasFile('hero_image')) {
-            $file = $request->file('hero_image');
-            $mimeType = $file->getMimeType();
-            $isWebP = $mimeType === 'image/webp';
-            
-            $mediaAdder = $hero->addMediaFromRequest('hero_image');
-            
-            // If not WebP, convert original to WebP
-            if (!$isWebP) {
-                $mediaAdder->performManipulations(function (Manipulations $manipulations) {
-                    $manipulations->format('webp');
-                });
-            }
-            
-            $mediaAdder->toMediaCollection('hero_image');
+            $hero->addMediaFromRequest('hero_image')
+                ->toMediaCollection('hero_image');
         }
 
         return redirect()
@@ -154,22 +143,11 @@ class HeroController extends Controller
         if ($request->hasFile('hero_image')) {
             // Delete old image
             $hero->clearMediaCollection('hero_image');
-            
+
             // Add new image
-            $file = $request->file('hero_image');
-            $mimeType = $file->getMimeType();
-            $isWebP = $mimeType === 'image/webp';
-            
-            $mediaAdder = $hero->addMediaFromRequest('hero_image');
-            
-            // If not WebP, convert original to WebP
-            if (!$isWebP) {
-                $mediaAdder->performManipulations(function (Manipulations $manipulations) {
-                    $manipulations->format('webp');
-                });
-            }
-            
-            $mediaAdder->toMediaCollection('hero_image');
+            // Conversions to WebP are handled automatically by registerMediaConversions() in Hero model
+            $hero->addMediaFromRequest('hero_image')
+                ->toMediaCollection('hero_image');
         }
 
         return redirect()
