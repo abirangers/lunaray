@@ -238,7 +238,7 @@
                                         View Site
                                     </a>
                                     
-                                    <form method="POST" action="{{ route('staff.logout') }}" class="block">
+                                    <form method="POST" action="{{ route('logout') }}" class="block">
                                         @csrf
                                         <button type="submit" class="w-full text-left px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100 transition-colors duration-200">
                                             Sign Out

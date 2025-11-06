@@ -112,7 +112,7 @@
                                             class="block px-4 py-2 text-sm text-white hover:bg-neutral-800">
                                             Profile
                                         </a>
-                                        <form method="POST" action="{{ route('staff.logout') }}" class="block">
+                                        <form method="POST" action="{{ route('logout') }}" class="block">
                                             @csrf
                                             <button type="submit"
                                                 class="w-full text-left px-4 py-2 text-sm text-white hover:bg-neutral-800">
@@ -176,23 +176,13 @@
                                         class="block px-4 py-2 text-sm text-white hover:bg-neutral-800">
                                         Profile
                                     </a>
-                                    @can('view admin dashboard')
-                                        <form method="POST" action="{{ route('staff.logout') }}" class="block">
-                                            @csrf
-                                            <button type="submit"
-                                                class="w-full text-left px-4 py-2 text-sm text-white hover:bg-neutral-800">
-                                                Sign Out
-                                            </button>
-                                        </form>
-                                    @else
-                                        <form method="POST" action="{{ route('logout') }}" class="block">
-                                            @csrf
-                                            <button type="submit"
-                                                class="w-full text-left px-4 py-2 text-sm text-white hover:bg-neutral-800">
-                                                Sign Out
-                                            </button>
-                                        </form>
-                                    @endcan
+                                    <form method="POST" action="{{ route('logout') }}" class="block">
+                                        @csrf
+                                        <button type="submit"
+                                            class="w-full text-left px-4 py-2 text-sm text-white hover:bg-neutral-800">
+                                            Sign Out
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
                         @else
