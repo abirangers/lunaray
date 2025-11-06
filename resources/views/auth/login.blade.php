@@ -97,8 +97,3 @@
 </div>
 @endsection
 
-@section('footerLinks')
-    <a href="#" class="text-xs text-cyan-400 hover:text-cyan-300 transition duration-300">Privacy Policy</a>
-    <span class="text-neutral-600">|</span>
-    <a href="#" class="text-xs text-cyan-400 hover:text-cyan-300 transition duration-300">Terms of Service</a>
-@endsection
