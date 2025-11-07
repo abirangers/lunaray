@@ -56,9 +56,7 @@
 
                         {{-- Mobile Logo --}}
                         <a href="{{ route('home') }}" class="flex items-center gap-2">
-                            <div class="w-8 h-8 rounded-lg bg-white/10 backdrop-blur-sm flex items-center justify-center border border-white/20">
-                                <span class="text-white font-bold text-sm">L</span>
-                            </div>
+                            
                             <span class="text-white font-semibold text-lg">Lunaray</span>
                         </a>
                     </div>
@@ -78,9 +76,55 @@
                         <a href="#" class="text-white hover:text-cyan-400 transition duration-300">
                             PRODUCT
                         </a>
-                        <a href="#" class="text-white hover:text-cyan-400 transition duration-300">
-                            INNOVATION
-                        </a>
+                        {{-- Innovation Dropdown Menu --}}
+                        <div class="relative" x-data="{ open: false }">
+                            <button @click="open = !open" @mouseenter="open = true" @mouseleave="open = false"
+                                    class="text-white hover:text-cyan-400 transition duration-300 flex items-center gap-1">
+                                INNOVATION
+                                <svg class="w-4 h-4 transition-transform" :class="open ? 'rotate-180' : ''"
+                                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                </svg>
+                            </button>
+
+                            <div x-show="open"
+                                 @mouseenter="open = true"
+                                 @mouseleave="open = false"
+                                 x-transition:enter="transition ease-out duration-200"
+                                 x-transition:enter-start="opacity-0 translate-y-1"
+                                 x-transition:enter-end="opacity-100 translate-y-0"
+                                 x-transition:leave="transition ease-in duration-150"
+                                 x-transition:leave-start="opacity-100 translate-y-0"
+                                 x-transition:leave-end="opacity-0 translate-y-1"
+                                 class="absolute top-full left-0 mt-2 w-64 bg-neutral-900/95 backdrop-blur-sm rounded-md shadow-xl py-2 z-50 border border-neutral-700"
+                                 x-cloak>
+
+                                <a href="#section-innovation"
+                                   class="block px-4 py-3 text-sm text-white hover:bg-cyan-400/10 hover:text-cyan-400 transition">
+                                    <div class="font-semibold">Inovasi Bahan Aktif</div>
+                                    <div class="text-xs text-gray-400 mt-0.5">Active ingredient innovation</div>
+                                </a>
+
+                                <a href="#section-innovation"
+                                   class="block px-4 py-3 text-sm text-white hover:bg-cyan-400/10 hover:text-cyan-400 transition">
+                                    <div class="font-semibold">Inovasi Formulasi</div>
+                                    <div class="text-xs text-gray-400 mt-0.5">Formulation innovation</div>
+                                </a>
+
+                                <a href="#section-innovation"
+                                   class="block px-4 py-3 text-sm text-white hover:bg-cyan-400/10 hover:text-cyan-400 transition">
+                                    <div class="font-semibold">Inovasi AI dan Teknologi</div>
+                                    <div class="text-xs text-gray-400 mt-0.5">AI & technology innovation</div>
+                                </a>
+                                
+                                <a href="https://product-concept.lunaray.id"
+                                   class="block px-4 py-3 text-sm text-white hover:bg-cyan-400/10 hover:text-cyan-400 transition">
+                                    <div class="font-semibold">AI Product Concept</div>
+                                    <div class="text-xs text-gray-400 mt-0.5">Generate product concepts with AI</div>
+                                </a>
+
+                            </div>
+                        </div>
                         <a href="#" class="text-white hover:text-cyan-400 transition duration-300">
                             SIMULATION
                         </a>
@@ -152,8 +196,8 @@
                     </div>
 
                     {{-- Mobile Auth Button --}}
-                    <div class="lg:hidden">
-                        @auth
+                    @if(auth()->check())
+                        <div class="lg:hidden">
                             <div class="relative" x-data="{ open: false }">
                                 <button @click="open = !open"
                                         class="w-11 h-11 flex items-center justify-center text-white hover:text-cyan-400 transition-colors touch-manipulation">
@@ -185,15 +229,17 @@
                                     </form>
                                 </div>
                             </div>
-                        @else
+                        </div>
+                    @else
+                        <div class="lg:hidden">
                             <a href="{{ route('login') }}"
                                class="w-11 h-11 flex items-center justify-center text-white hover:text-cyan-400 transition-colors touch-manipulation">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
                                 </svg>
                             </a>
-                        @endauth
-                    </div>
+                        </div>
+                    @endif
                 </nav>
             </header>
 
@@ -235,10 +281,54 @@
                        class="text-white text-2xl font-medium hover:text-cyan-400 transition duration-300 touch-manipulation py-3">
                         PRODUCT
                     </a>
-                    <a href="#"
-                       class="text-white text-2xl font-medium hover:text-cyan-400 transition duration-300 touch-manipulation py-3">
-                        INNOVATION
-                    </a>
+                    {{-- Innovation Accordion Menu --}}
+                    <div x-data="{ innovationOpen: false }" class="w-full max-w-sm">
+                        {{-- Innovation Main Button --}}
+                        <button @click="innovationOpen = !innovationOpen"
+                                class="w-full text-white text-2xl font-medium hover:text-cyan-400 transition duration-300 touch-manipulation py-3 flex items-center justify-center gap-2">
+                            INNOVATION
+                            <svg class="w-6 h-6 transition-transform" :class="innovationOpen ? 'rotate-180' : ''"
+                                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </button>
+
+                        {{-- Innovation Submenu --}}
+                        <div x-show="innovationOpen"
+                             x-transition:enter="transition ease-out duration-300"
+                             x-transition:enter-start="opacity-0 -translate-y-2"
+                             x-transition:enter-end="opacity-100 translate-y-0"
+                             x-transition:leave="transition ease-in duration-200"
+                             x-transition:leave-start="opacity-100 translate-y-0"
+                             x-transition:leave-end="opacity-0 -translate-y-2"
+                             class="mt-2 space-y-2 px-4"
+                             x-cloak>
+
+                            <a href="#section-innovation"
+                               @click="mobileMenuOpen = false"
+                               class="block text-cyan-400 text-lg hover:text-white transition touch-manipulation py-2 border-l-2 border-cyan-400 pl-4">
+                                Inovasi Bahan Aktif
+                            </a>
+
+                            <a href="#section-innovation"
+                               @click="mobileMenuOpen = false"
+                               class="block text-cyan-400 text-lg hover:text-white transition touch-manipulation py-2 border-l-2 border-cyan-400 pl-4">
+                                Inovasi Formulasi
+                            </a>
+
+                            <a href="#section-innovation"
+                               @click="mobileMenuOpen = false"
+                               class="block text-cyan-400 text-lg hover:text-white transition touch-manipulation py-2 border-l-2 border-cyan-400 pl-4">
+                                Inovasi AI dan Teknologi
+                            </a>
+
+                            <a href="https://product-concept.lunaray.id"
+                               target="_blank"
+                               class="block text-cyan-300 text-lg hover:text-cyan-400 transition touch-manipulation py-2 border-l-2 border-cyan-300 pl-4">
+                                AI Product Concept
+                            </a>
+                        </div>
+                    </div>
                     <a href="#"
                        class="text-white text-2xl font-medium hover:text-cyan-400 transition duration-300 touch-manipulation py-3">
                         SIMULATION
