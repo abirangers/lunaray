@@ -32,7 +32,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // Chatbot API Routes - accessible to both authenticated and guest users
-Route::middleware(['chatbot.access', 'chatbot.rate_limit'])->prefix('api/chatbot')->group(function () {
+Route::middleware(['chatbot.access'])->prefix('api/chatbot')->group(function () {
     Route::get('/session', [ChatbotController::class, 'getSession'])->name('chatbot.session');
     Route::get('/history', [ChatbotController::class, 'getHistory'])->name('chatbot.history');
     Route::post('/send', [ChatbotController::class, 'sendMessage'])->name('chatbot.send');
