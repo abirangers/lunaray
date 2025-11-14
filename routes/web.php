@@ -50,20 +50,28 @@ Route::middleware(['auth', 'permission:view admin dashboard'])->group(function (
 // Article Management Routes
 Route::middleware(['auth', 'permission:edit articles'])->group(function () {
     Route::get('/admin/articles', [ArticleController::class, 'adminIndex'])->name('admin.articles.index');
-    Route::resource('articles', ArticleController::class)->except(['index']);
+    Route::get('/articles/create', [ArticleController::class, 'create'])->name('articles.create');
+    Route::post('/articles', [ArticleController::class, 'store'])->name('articles.store');
+    Route::get('/articles/{article}/edit', [ArticleController::class, 'edit'])->name('articles.edit');
+    Route::put('/articles/{article}', [ArticleController::class, 'update'])->name('articles.update');
+    Route::delete('/articles/{article}', [ArticleController::class, 'destroy'])->name('articles.destroy');
+
     Route::resource('categories', CategoryController::class);
-    
+
     // Additional article routes
     Route::post('/articles/bulk-action', [ArticleController::class, 'bulkAction'])->name('articles.bulk-action');
     Route::patch('/articles/{article}/toggle-status', [ArticleController::class, 'toggleStatus'])->name('articles.toggle-status');
     Route::patch('/articles/{article}/toggle-featured', [ArticleController::class, 'toggleFeatured'])->name('articles.toggle-featured');
-    
+
     // Enhanced article features
     Route::post('/articles/auto-save', [ArticleController::class, 'autoSave'])->name('articles.auto-save');
     Route::get('/articles/{article}/preview', [ArticleController::class, 'preview'])->name('articles.preview');
     Route::post('/articles/{article}/duplicate', [ArticleController::class, 'duplicate'])->name('articles.duplicate');
     Route::get('/articles/export', [ArticleController::class, 'export'])->name('articles.export');
 });
+
+// Public Article Routes (must be AFTER admin routes to avoid conflicts)
+Route::get('/articles/{article:slug}', [ArticleController::class, 'show'])->name('articles.show');
 
 // Product Management Routes - Content Managers & Admins
 Route::middleware(['auth', 'permission:manage products'])->prefix('admin')->name('admin.')->group(function () {

@@ -538,98 +538,83 @@
                 {{-- Section Header --}}
                 <div class="text-center mb-12 md:mb-16">
                     <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white">
-                        Beauty<span class="font-normal">versity</span>
+                        Beauty<span class="font-normal">verse</span>
                     </h2>
                 </div>
 
-                {{-- Cards Grid --}}
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10 lg:gap-12">
+                {{-- Dynamic Articles Grid --}}
+                @forelse($articles as $article)
+                    @if($loop->first)
+                        {{-- Start Grid Container --}}
+                        <div class="grid grid-cols-1 @if($articles->count() >= 2) md:grid-cols-2 @endif @if($articles->count() >= 3) lg:grid-cols-3 @endif gap-8 md:gap-10 lg:gap-12">
+                    @endif
 
-                    {{-- Card 1: Phytosync --}}
+                    {{-- Article Card --}}
                     <div class="flex flex-col">
-                        {{-- Image Container with Border --}}
+                        {{-- Image Container --}}
                         <div class="mb-4">
-                            <div class="aspect-[4/3] overflow-hidden rounded">
-                                <img src="{{ asset('images/lunaray-landing/articles/fruitable.webp') }}"
-                                    alt="Phytosync Inovasi Bahan Aktif" class="w-full h-full object-contain">
-                            </div>
+                            <a href="{{ route('articles.show', $article->slug) }}" class="block">
+                                <div class="aspect-[4/3] overflow-hidden rounded transition-transform hover:scale-105 duration-300">
+                                    @if($article->hasMedia('featured'))
+                                        <img src="{{ $article->getFirstMediaUrl('featured', 'medium') }}"
+                                            alt="{{ $article->title }}"
+                                            class="w-full h-full object-cover">
+                                    @else
+                                        <div class="w-full h-full bg-gradient-to-br from-blue-900 to-blue-600 flex items-center justify-center">
+                                            <svg class="w-16 h-16 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+                                            </svg>
+                                        </div>
+                                    @endif
+                                </div>
+                            </a>
                         </div>
 
                         {{-- Card Content --}}
-                        <div class="space-y-3">
-                            <h3 class="text-xl md:text-2xl font-bold text-blue-950">
-                                Phytosync : Inovasi Bahan Aktif dari Ekstrak hayati
-                            </h3>
-                            <p class="text-sm md:text-base text-blue-950 leading-relaxed">
-                                Kekayaan alam Indonesia melimpah ruah. LabCos Universitas Padjadjaran bekerjasama
-                                dengan Beautylatory dan Lunaray Beauty Factory memperkenalkan Beautylatory Phytosync Series—
-                                inovasi bahan aktif dari ekstrak hayati lokal yang dikembangkan melalui riset ilmiah
-                                mendalam.
-                            </p>
-                            <a href="#"
-                                class="inline-block text-blue-950 font-semibold hover:text-blue-600 transition">
-                                Baca selengkapnya >>
+                        <div class="space-y-3 flex-grow flex flex-col">
+                            <a href="{{ route('articles.show', $article->slug) }}" class="hover:text-blue-600 transition">
+                                <h3 class="text-xl md:text-2xl font-bold text-blue-950">
+                                    {{ $article->title }}
+                                </h3>
                             </a>
-                        </div>
-                    </div>
 
-                    {{-- Card 2: Cosmobeauté --}}
-                    <div class="flex flex-col">
-                        {{-- Image Container with Border --}}
-                        <div class="mb-4">
-                            <div class="aspect-[4/3] overflow-hidden rounded">
-                                <img src="{{ asset('images/lunaray-landing/articles/cosmebeauty.webp') }}"
-                                    alt="Cosmobeauté Indonesia 2025" class="w-full h-full object-contain">
+                            @if($article->excerpt)
+                                <p class="text-sm md:text-base text-blue-950 leading-relaxed flex-grow">
+                                    {{ Str::limit($article->excerpt, 200) }}
+                                </p>
+                            @endif
+
+                            <div class="pt-2">
+                                <a href="{{ route('articles.show', $article->slug) }}"
+                                    class="inline-block text-blue-950 font-semibold hover:text-blue-600 transition">
+                                    Baca selengkapnya >>
+                                </a>
                             </div>
                         </div>
-
-                        {{-- Card Content --}}
-                        <div class="space-y-3">
-                            <h3 class="text-xl md:text-2xl font-bold text-blue-950">
-                                Lunaray menghadirkan beragam inovasi di Cosmobeauté 2025
-                            </h3>
-                            <p class="text-sm md:text-base text-blue-950 leading-relaxed">
-                                Lunaray Beauty Factory memamerkan beragam inovasi terkini di ajang Cosmobeauté Indonesia
-                                2025—
-                                dari formulasi berbasis AI hingga bahan aktif lokal hasil riset kolaboratif.
-                                Event ini menjadi bukti komitmen kami dalam menghadirkan solusi kosmetik berkelas global.
-                            </p>
-                            <a href="#"
-                                class="inline-block text-blue-950 font-semibold hover:text-blue-600 transition">
-                                Baca selengkapnya >>
-                            </a>
-                        </div>
                     </div>
 
-                    {{-- Card 3: 5 Kesalahan Fatal --}}
-                    <div class="flex flex-col">
-                        {{-- Image Container with Border --}}
-                        <div class="mb-4">
-                            <div class="aspect-[4/3] overflow-hidden rounded">
-                                <img src="{{ asset('images/lunaray-landing/articles/brand.webp') }}"
-                                    alt="5 Kesalahan Fatal Brand Kosmetik" class="w-full h-full object-contain">
-                            </div>
+                    @if($loop->last)
+                        {{-- Close Grid Container --}}
                         </div>
+                    @endif
 
-                        {{-- Card Content --}}
-                        <div class="space-y-3">
-                            <h3 class="text-xl md:text-2xl font-bold text-blue-950">
-                                5 Kesalahan Fatal Saat Memulai Brand Kosmetik
-                            </h3>
-                            <p class="text-sm md:text-base text-blue-950 leading-relaxed">
-                                Memulai brand kosmetik tanpa persiapan matang berisiko merugikan. Dari pemilihan maklon yang
-                                salah
-                                hingga mengabaikan legalitas BPOM dan Halal—pelajari 5 kesalahan fatal yang sering terjadi
-                                dan cara menghindarinya untuk kesuksesan brand Anda.
-                            </p>
-                            <a href="#"
-                                class="inline-block text-blue-950 font-semibold hover:text-blue-600 transition">
-                                Baca selengkapnya >>
-                            </a>
-                        </div>
+                @empty
+                    {{-- Empty State --}}
+                    <div class="text-center py-12">
+                        <svg class="w-24 h-24 mx-auto text-white/50 mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+                        </svg>
+                        <h3 class="text-2xl md:text-3xl font-bold text-white mb-4">
+                            No Articles Yet
+                        </h3>
+                        <p class="text-lg text-white/90 max-w-2xl mx-auto">
+                            We're working on bringing you the latest insights and innovations in beauty manufacturing.
+                            Check back soon for exciting content!
+                        </p>
                     </div>
-
-                </div>
+                @endforelse
 
             </div>
         </div>

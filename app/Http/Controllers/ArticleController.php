@@ -196,11 +196,22 @@ class ArticleController extends Controller
      */
     public function show(Article $article)
     {
-        // Increment view count with session-based duplicate prevention
-        // $article->incrementViewCountWithSession();
+        // Check if article is published (or user has permission to view drafts)
+        if ($article->status !== 'published' && !auth()->check()) {
+            abort(404);
+        }
 
-        // return view('articles.show', compact('article'));
-        return redirect()->route('home');
+        if ($article->status !== 'published' && auth()->check() && !auth()->user()->can('edit articles')) {
+            abort(404);
+        }
+
+        // Increment view count with session-based duplicate prevention
+        $article->incrementViewCountWithSession();
+
+        // Load relationships
+        $article->load(['author', 'categories']);
+
+        return view('articles.show', compact('article'));
     }
 
     /**

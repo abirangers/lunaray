@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
-use Tonysm\RichTextLaravel\Models\Traits\HasRichText;
 use RalphJSmit\Laravel\SEO\Support\SEOData;
 use RalphJSmit\Laravel\SEO\Support\HasSEO;
 use RalphJSmit\Laravel\SEO\SchemaCollection;
@@ -38,10 +37,6 @@ class Article extends Model implements HasMedia
         'is_featured' => 'boolean',
         'published_at' => 'datetime',
         'view_count' => 'integer',
-    ];
-
-    protected $richTextAttributes = [
-        'content',
     ];
 
     /**
