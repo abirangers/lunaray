@@ -574,7 +574,7 @@
                         {{-- Card Content --}}
                         <div class="space-y-3 flex-grow flex flex-col">
                             <a href="{{ route('articles.show', $article->slug) }}" class="hover:text-blue-600 transition">
-                                <h3 class="text-xl md:text-2xl font-bold text-blue-950">
+                                <h3 class="text-xl md:text-2xl font-bold text-blue-950 line-clamp-3">
                                     {{ $article->title }}
                                 </h3>
                             </a>
